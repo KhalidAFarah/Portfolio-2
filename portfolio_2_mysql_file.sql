@@ -7,4 +7,7 @@ Password VARCHAR(50) NOT NULL,
 Email VARCHAR(70)
 );
  
-show TABLES;
+SHOW TABLES;
+
+/*CREATE USER  IF NOT EXISTS "general"@"localhost" IDENTIFIED WITH mysql_native_password BY "general";
+GRANT ALL privileges ON Webshop . * TO "general"@"localhost";*/
