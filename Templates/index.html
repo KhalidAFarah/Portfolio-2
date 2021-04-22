@@ -1,9 +1,10 @@
-<!Doctype html> 
-<html>
+ <html>
     
 <head>
 <title>Login Page</title>
-<meta charset= "utf-8">
+<link rel="stylesheet" href="{{url_for('static',filename='style.css') }}">
+
+<meta charset="utf-8">
 
 </head>
 <body>
@@ -11,7 +12,7 @@
         <h1>
             Login
         </h1>
-    <form method="post">
+    <form method="post"></form>
         <div class = "felt">
             <label for="usernm">Username</label>
             <input type="text" placeholder="Username" name="usernm" required>
@@ -23,11 +24,6 @@
             <label>
                 <input type="checkbox" name="remeb"> Remember me 
             </label>
-
-
-
-
-
 
     </div>
  </form> 
