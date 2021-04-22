@@ -3,5 +3,48 @@ body{
     padding:0;
     font-family: sans-serif;
     background:linear-gradient(135deg,#71b7e6,#9b59b6);
+}
+.box{
+width: 300px;
+padding: 30px;
+position: absolute;
+top: 20%;
+left: 40%;
+background: white;
+border-radius: 15px;
+text-align: center;
+}
+
+.box form{
+    box-sizing: border-box;
+    padding: 10%;
+    margin: 22px;
+
+}
+
+.felt{
+    border-bottom: 2px solid;
+    position: relative;
+    margin: 28px 1;
+
+}
+
+.felt input{
+    width: 80px;
+    padding: 1px;
+    border-block-color:purple;
+}
+
+.btn{
+    position: relative;
+    display: inline-block;
+    padding: 0px 93px;
+    background-image: repeating-linear-gradient(45deg,black,black);
+    border-block-end-style: revert;
+    color: white;
+    font-size: 17px;
+    font-family: sans-serif;
+    font-weight: 600;
+    margin: 12px;
 
 }
