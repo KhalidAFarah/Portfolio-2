@@ -19,6 +19,11 @@ mycursor = db.cursor()
 def renders_site():
     return render_template("index.html")
 
+#Rendering the base site
+@app.route("/admin/")
+def renders_site():
+    return render_template("addProduct.html")
+
 #status for restAPI
 @app.route("/status", methods=['GET'])
 def status():
@@ -56,8 +61,11 @@ class UserPost(Resource):
         parser.add_argument("Email")
         data = parser.parse_args()
 
-        mycursor.execute("INSERT INTO Customers (Username, Password, Email) VALUES ({}, {}, {})".format(data['Username'], data['Password'], data['Email']))
-        db.commit()
+        try:
+            mycursor.execute("INSERT INTO Customers (Username, Password, Email) VALUES ({}, {}, {})".format(data['Username'], data['Password'], data['Email']))
+            db.commit()
+        except:
+            abort(401, message = "Username or password is already taken.")
 
         return 200
 

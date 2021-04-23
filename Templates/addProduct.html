@@ -1,0 +1,75 @@
+<html>
+    
+    <head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../static/styleAdmin.css">
+    
+    <meta charset="utf-8">
+    
+    </head>
+    <body class="body">
+        <div class ="box"> 
+            <h1>Add a new product</h1>
+
+            <input type="file" value="">Product image</button>
+            <div class="subBox">
+                <h3>Name</h3>
+                <input type="text">
+            </div>
+            <div class="subBox">
+                <h3>Price</h3>
+                <input type="text">
+            </div>
+            <div class="subBox">
+                <h3>Category</h3>
+                <select>
+                    <option value="">Select a category</option>
+                </select>
+            </div>
+            <div class="subBox">
+                <h3>Description</h3>
+                <textarea></textarea>
+            </div>
+            <div class="spesBox">
+                <button class="btnaddTitle">Add specification</button>
+            </div>
+        </div>
+    
+    </body>
+
+    <script>
+        var times = 0;
+        function setupSpecifications(){
+            btnaddTitle =  document.getElementsByClassName("btnaddTitle");
+            btnaddTitle[0].onclick = function(){
+                
+                document.getElementsByClassName("spesBox")[0].innerHTML +=
+                "<div class=\"rowInfo\" >" +
+                    "<h3>Name</h3>" +
+                    "<input type=\"text\">" +
+                    "<div class=\"rowDetails\">" +
+                        "<div><input type=\"text\" class=\"rowDetailsName\"> <h3>:</h3> <input type=\"text\" class=\"rowDetailsValue\"></div>" +
+                    "</div>" +
+                    "<button class=\"btnMore\" value=\""+times+"\">More specifications</button>" +
+                "</div>";
+                
+                btns = document.getElementsByClassName("btnMore");
+                for(var i = 0; i < btns.length; i++){
+                    btns[i].onclick = function(){
+                        document.getElementsByClassName("rowDetails")[this.value].innerHTML +=
+                        "<div><input type=\"text\" class=\"rowDetailsName\"> " +
+                            "<h3>:</h3> <input type=\"text\" class=\"rowDetailsValue\"></div>";
+                    }
+                    //setupSpecifications()
+                }
+
+                
+                times++;
+                setupSpecifications()
+
+            }
+
+        }
+        setupSpecifications();
+    </script>
+    </html>
