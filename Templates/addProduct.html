@@ -14,24 +14,27 @@
             <input type="file" value="">Product image</button>
             <div class="subBox">
                 <h3>Name</h3>
-                <input type="text">
+                <input type="text" class="inputName">
             </div>
             <div class="subBox">
                 <h3>Price</h3>
-                <input type="text">
+                <input type="text" class="inputPrice">
             </div>
             <div class="subBox">
                 <h3>Category</h3>
-                <select>
+                <select class="selectCategory">
                     <option value="">Select a category</option>
                 </select>
             </div>
             <div class="subBox">
                 <h3>Description</h3>
-                <textarea></textarea>
+                <textarea class="inputDescription"></textarea>
             </div>
             <div class="spesBox">
-                <button class="btnaddTitle">Add specification</button>
+                <button class="btnaddTitle" onclick="setupSpecifications()">Add specification</button>
+            </div>
+            <div class="subBox">
+                <button onclick="submitProduct()">Submit product</button>
             </div>
         </div>
     
@@ -39,37 +42,125 @@
 
     <script>
         var times = 0;
+        var amountOfSpecs = [];
+
+        function newSpecificationTable() {}
+
         function setupSpecifications(){
-            btnaddTitle =  document.getElementsByClassName("btnaddTitle");
-            btnaddTitle[0].onclick = function(){
-                
-                document.getElementsByClassName("spesBox")[0].innerHTML +=
-                "<div class=\"rowInfo\" >" +
+            //btnaddTitle =  document.getElementsByClassName("btnaddTitle");
+            //btnaddTitle[0].onclick = function(){
+                var div1 = document.createElement("div");
+                div1.setAttribute("class", "rowInfo");
+                var inpT = document.createElement("input");
+                inpT.setAttribute("class", "inputTitle");
+
+                var div2 = document.createElement("div");
+                div2.setAttribute("class", "rowDetails");
+                var div3 = document.createElement("div");
+                var inpN = document.createElement("input");
+                inpN.setAttribute("class", "rowDetailsName"+times)
+                var inpV = document.createElement("input");
+                inpV.setAttribute("class", "rowDetailsValue"+times);
+                var h31 = document.createElement("h3");
+                h31.innerHTML = "Name";
+                var h32 = document.createElement("h3");
+                h32.innerHTML = ":";
+                var btn = document.createElement("button");
+                btn.innerHTML = "More specifications"
+                btn.setAttribute("class", "btnMore");
+                btn.setAttribute("value", times);
+
+                inpN.setAttribute("type", "text");
+                inpV.setAttribute("type", "text");
+
+                div3.appendChild(inpN);
+                div3.appendChild(h32);
+                div3.appendChild(inpV);
+
+                div2.appendChild(div3);
+
+                div1.appendChild(h31);
+                div1.appendChild(inpT);
+                div1.appendChild(div2);
+                div1.appendChild(btn);
+
+                /*document.getElementsByClassName("spesBox")[0] +=
+                "<div class=\"rowInfo\">" +
                     "<h3>Name</h3>" +
-                    "<input type=\"text\">" +
+                    "<input type=\"text\" class=\"inputTitle\">" +
                     "<div class=\"rowDetails\">" +
-                        "<div><input type=\"text\" class=\"rowDetailsName\"> <h3>:</h3> <input type=\"text\" class=\"rowDetailsValue\"></div>" +
+                        "<div><input type=\"text\" class=\"rowDetailsName"+times+"\"> <h3>:</h3> <input type=\"text\" class=\"rowDetailsValue"+times+"\"></div>" +
                     "</div>" +
                     "<button class=\"btnMore\" value=\""+times+"\">More specifications</button>" +
-                "</div>";
+                "</div>";*/
+                document.getElementsByClassName("spesBox")[0].appendChild(div1);
                 
                 btns = document.getElementsByClassName("btnMore");
+                //var rows = document.getElementsByClassName("rowInfo")
+                //amountOfSpecs[rows.length - 1] = 1;
+
                 for(var i = 0; i < btns.length; i++){
                     btns[i].onclick = function(){
-                        document.getElementsByClassName("rowDetails")[this.value].innerHTML +=
-                        "<div><input type=\"text\" class=\"rowDetailsName\"> " +
-                            "<h3>:</h3> <input type=\"text\" class=\"rowDetailsValue\"></div>";
+                        div1 = document.createElement("div");
+                        inpN = document.createElement("input");
+                        inpV = document.createElement("input");
+                        h3 = document.createElement("h3");
+
+                        inpN.setAttribute("class", "rowDetailsName"+this.value);
+                        inpV.setAttribute("class", "rowDetailsValue"+this.value);
+
+                        inpN.setAttribute("type", "text");
+                        inpV.setAttribute("type", "text");
+
+                        h3.innerHTML = ":"
+
+                        div1.appendChild(inpN);
+                        div1.appendChild(h3);
+                        div1.appendChild(inpV);
+
+                        /*document.getElementsByClassName("rowDetails")[this.value].innerHTML +=
+                        "<div><input type=\"text\" class=\"rowDetailsName"+this.value+"\"> " +
+                            "<h3>:</h3> <input type=\"text\" class=\"rowDetailsValue"+this.value+"\"></div>";*/
+                        document.getElementsByClassName("rowDetails")[this.value].appendChild(div1)
+
+                            //amountOfSpecs[i]++;
                     }
                     //setupSpecifications()
                 }
 
                 
                 times++;
-                setupSpecifications()
+                //setupSpecifications()
 
-            }
+            //}
 
         }
-        setupSpecifications();
+        //setupSpecifications();
+        function submitProduct() {
+            console.log("name: " + document.getElementsByClassName("inputName")[0].value);
+            console.log("price: " + document.getElementsByClassName("inputPrice")[0].value);
+            console.log("selected: " + document.getElementsByClassName("selectCategory")[0].value);
+            console.log("Description: " + document.getElementsByClassName("inputDescription")[0].value);
+
+            var specification = "";
+            var boxes = document.getElementsByClassName("rowInfo");
+            for(var i = 0; i < boxes.length; i++){
+
+                specification += document.getElementsByClassName("inputTitle")[i].value;
+                var rowDetailsName = document.getElementsByClassName("rowDetailsName"+i);
+                var rowDetailsValue = document.getElementsByClassName("rowDetailsValue"+i);
+
+                for(var j = 0; j < rowDetailsName.length; j++){ 
+                    specification += "," + rowDetailsName[j].value + ":" +
+                    rowDetailsValue[j].value;
+                }
+
+                if(specification != ""){
+                    specification += ";"
+                }
+            }
+
+            console.log("specifications: " + specification)
+        }
     </script>
     </html>
