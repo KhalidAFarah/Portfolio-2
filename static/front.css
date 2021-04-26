@@ -61,3 +61,69 @@ ol li a:hover{
 
 
 }
+.cover img{
+    background-size: cover;
+    height: 530px ;
+    width: 1328px;
+}
+
+.text{
+    position: absolute;
+    top:20%;
+    left:70%;
+}
+h1{
+   font-size: 70px;
+   font-family: 'Courier New', Courier, monospace;
+    text-transform: capitalize;
+    width: 400px; 
+
+}
+.image2{
+  position: absolute;
+  left: 5%;
+  top:85%;
+  border: 1px solid darkgray;
+  box-shadow: 1px 2px 4px;
+
+}
+h6{
+    color: black;
+    position:absolute;
+    left:20%;
+    top:5%;
+    border: 3px solid black;
+    width: 200px ;
+    font-size: 40px;
+    font-family: 'barlow', Courier, monospace;
+    background-color: whitesmoke;
+    font-weight:normal ;
+    text-align: center;
+
+}
+.image2:hover{
+box-shadow: 1px 3px 9px;
+}
+.image3{
+position: absolute;
+left: 60%;
+top: 80%;
+border: 1px solid darkgray;
+box-shadow: 1px 2px 4px;
+}
+.image3:hover{
+    box-shadow: 1px 3px 9px;
+    }
+h{
+    color: black;
+    position:absolute;
+    left:30%;
+    top:20%;
+    border: 3px solid black;
+    width: 200px ;
+    font-size: 40px;
+    font-family: 'barlow', Courier, monospace;
+    background-color: whitesmoke;
+    font-weight:normal ;
+    text-align: center; 
+}
