@@ -5,7 +5,7 @@ body{
     font-family: Arial, Helvetica, sans-serif;
 
 }
-.nav ul{
+.menu ul{
 list-style: none;
 background: black;
 padding: 0;
@@ -13,13 +13,13 @@ margin: 0;
 text-align: center;
 
 }
-.nav li{
+.menu li{
     display: inline-block;
 
 }
-.nav a{
+.menu a{
     text-decoration: none;
-    color: #fff;
+    color: rgb(0, 0, 0);
     width: 100px;
     display: block;
     padding: 25px 20px;
@@ -29,7 +29,35 @@ text-align: center;
     text-align: center;
 
 }
-.nav a:hover{
-    background: burlywood;
+
+ol li a:hover{
+    border-bottom: 4px solid red;
+}
+.fa-search{
+    position:absolute;
+    left:82%;
+    top:2%;
+    color: black;
+     
+}
+.fa-user{
+    position:absolute;
+    left:85%;
+    top:2%;
+    color: black;
+     
+}
+.fa-shopping-cart{
+    position: absolute;
+    left:88%;
+    top:2%;
+    color: black;
+    width: 25px;
+    height: -30px;
+    border-radius: 100px;
+    background-color: whitesmoke;
+    margin-top: -4px;
+    text-align: left;
+
 
 }
