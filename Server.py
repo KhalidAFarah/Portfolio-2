@@ -1,6 +1,7 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request, redirect
 from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
+import os
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,7 +22,7 @@ def renders_site():
 
 #Rendering the base site
 @app.route("/admin/")
-def renders_site():
+def renders_site_admin():
     return render_template("addProduct.html")
 
 #status for restAPI
@@ -78,12 +79,47 @@ class item(Resource):
         pass
 class itemPost(Resource):
     def post(self): # add an item to the db (admin)
-        pass
+        parser = reqparse.RequestParser()
+        
 
+        image = request.files['pictures']
+        if image.filename !=  "":
+            image.save(os.path.join(os.getcwd() + "/Portfolio-2/static/Pictures/", image.filename))
+
+        parser.add_argument("Name")
+        parser.add_argument("Price")
+        parser.add_argument("Category_id")
+        parser.add_argument("Description")
+        parser.add_argument("Specification")
+
+        data = parser.parse_args()
+        
+        try:   
+            mycursor.execute("INSERT INTO Products (Name, Price, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), int(data['Category_id']), data['Description'], data['Specification']))
+            db.commit()
+        except:
+            abort(401, message = "Product is already registered.")
+
+
+        url = request.url.split("?")[0].replace("/item/", "/admin/")
+        
+        return redirect(url)
+        
 
 api.add_resource(item, "/item/<int:item_id>/")
 api.add_resource(itemPost, "/item/")
     
+class Categories(Resource):
+    def get(self): #getting all categories
+        mycursor.execute("SELECT * FROM Categories")
+        response = {}
+        for value in mycursor:
+            response[value[0]] = value[1]
+        
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+api.add_resource(Categories, "/Categories/")
 
 
     
