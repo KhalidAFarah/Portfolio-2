@@ -11,4 +11,11 @@
     height: 80%;
     border-radius: 5px;
     padding: 2%;
+    display: block;
+}
+.subBox h3 {
+  display: flex;
+}
+.spesBox{
+  display: flex;
 }

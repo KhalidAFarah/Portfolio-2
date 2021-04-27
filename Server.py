@@ -82,9 +82,7 @@ class itemPost(Resource):
         parser = reqparse.RequestParser()
         
 
-        image = request.files['pictures']
-        if image.filename !=  "":
-            image.save(os.path.join(os.getcwd() + "/Portfolio-2/static/Pictures/", image.filename))
+        
 
         parser.add_argument("Name")
         parser.add_argument("Price")
@@ -95,8 +93,16 @@ class itemPost(Resource):
         data = parser.parse_args()
         
         try:   
-            mycursor.execute("INSERT INTO Products (Name, Price, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), int(data['Category_id']), data['Description'], data['Specification']))
-            db.commit()
+            image = request.files['pictures']
+            if image.filename !=  "":
+                image.save(os.path.join(os.getcwd() + "/Portfolio-2/static/Pictures/", image.filename))
+
+                mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), image.filename, int(data['Category_id']), data['Description'], data['Specification']))
+                db.commit()
+            else:
+                mycursor.execute("INSERT INTO Products (Name, Price, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), int(data['Category_id']), data['Description'], data['Specification']))
+                db.commit()
+
         except:
             abort(401, message = "Product is already registered.")
 

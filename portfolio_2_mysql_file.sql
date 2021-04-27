@@ -17,6 +17,7 @@ Product_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 Category_id INT UNSIGNED,
 Name VARCHAR(70) NOT NULL,
 Price INT NOT NULL,
+Image VARCHAR(70),
 Description TEXT,
 Specification TEXT,
 FOREIGN KEY (Category_id) REFERENCES Categories (Category_id)
@@ -35,8 +36,6 @@ INSERT INTO Categories (Name) VALUES ("Screen");
 
 use Webshop;
 SELECT * FROM Products;
-
-
 
 /*CREATE USER  IF NOT EXISTS "general"@"localhost" IDENTIFIED WITH mysql_native_password BY "general";
 GRANT ALL privileges ON Webshop . * TO "general"@"localhost";*/
