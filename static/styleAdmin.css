@@ -1,0 +1,21 @@
+* {
+  margin: 0%;
+  padding:  0%;
+
+}
+.box {
+    background-color: lightgray;
+    margin-top: 10%;
+    margin-left: 3%;
+    width: 90%;
+    height: 80%;
+    border-radius: 5px;
+    padding: 2%;
+    display: block;
+}
+.subBox h3 {
+  display: flex;
+}
+.spesBox{
+  display: flex;
+}
