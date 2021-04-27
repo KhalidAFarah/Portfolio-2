@@ -11,11 +11,58 @@
     height: 80%;
     border-radius: 5px;
     padding: 2%;
-    display: block;
+    display: table;
+    margin-bottom: 2%;
 }
-.subBox h3 {
+.subBox {
   display: flex;
+  margin-top: 2%;
 }
-.spesBox{
+.subBoxC {
   display: flex;
+  margin: 3% 0%;
+}
+
+.subBoxE {
+  margin-top: 2%;
+  margin-bottom: 4%;
+}
+.rowInfo{
+  padding: 1% 0%;
+}
+.inputname{
+  margin-left: 8%;
+}
+.inputprice{
+  margin-left: 8.7%;
+}
+.selectCategory{
+  margin-left: 5%;
+}
+.inputdescription{
+  margin-left: 3%;
+  margin-top: 1%;
+  width: 40%;
+  height: 10em;
+}
+
+.rowdetails div{
+  display: flex;
+  margin: 2% 0%;
+}
+.rowdetails div input{
+  margin-right: 1%; 
+}
+.rowdetails div h3{
+  margin-right: 1%; 
+}
+.spesboxT{
+  display: flex;
+  margin: 2% 0%;
+}
+.spesboxT input{
+  margin-left: 2%;
+}
+.imagechooser{
+  margin-top: 2%;
 }
