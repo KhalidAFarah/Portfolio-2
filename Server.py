@@ -33,6 +33,21 @@ def status():
     return response
 
 
+
+@app.route("/")
+def front_page():
+    return render_template("./front_page.html")
+
+@app.route("/livesearch",methods=["POST","GET"])
+def livesearch():
+    searchbox = request.form.get("text")#getting the request from the value
+    cursor = mysql.connection.cursor()
+    query="Select word Like '{}%".format(searchbox)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return jsonify(result)
+
+
 class UserGetAll(Resource):
     def get(self):
         mycursor.execute("SELECT * FROM Customers")
