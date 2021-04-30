@@ -16,7 +16,7 @@ db = mysql.connector.connect(
 mycursor = db.cursor()
 
 #Rendering the base site
-@app.route("/")
+@app.route("/Loggin/")
 def renders_site():
     return render_template("index.html")
 
@@ -41,10 +41,12 @@ def front_page():
 @app.route("/livesearch",methods=["POST","GET"])
 def livesearch():
     searchbox = request.form.get("text")#getting the request from the value
-    cursor = mysql.connection.cursor()
-    query="Select word Like '{}%".format(searchbox)
-    cursor.execute(query)
-    result = cursor.fetchall()
+
+    query="Select Name, Price, Image FROM Products WHERE Name LIKE \"%{}%\"".format(searchbox)
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    for Product in result:
+        print(Product)
     return jsonify(result)
 
 
