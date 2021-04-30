@@ -16,7 +16,7 @@ db = mysql.connector.connect(
 mycursor = db.cursor()
 
 #Rendering the base site
-@app.route("/")
+@app.route("/Loggin/")
 def renders_site():
     return render_template("index.html")
 
@@ -31,6 +31,23 @@ def status():
     response = jsonify({"Status": "Ok"})
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
+
+
+
+@app.route("/")
+def front_page():
+    return render_template("./front_page.html")
+
+@app.route("/livesearch",methods=["POST","GET"])
+def livesearch():
+    searchbox = request.form.get("text")#getting the request from the value
+
+    query="Select Name, Price, Image FROM Products WHERE Name LIKE \"%{}%\"".format(searchbox)
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    for Product in result:
+        print(Product)
+    return jsonify(result)
 
 
 class UserGetAll(Resource):
