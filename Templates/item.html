@@ -1,0 +1,29 @@
+<html>
+    
+    <head>
+    <title></title>
+    <link rel="stylesheet" href="../static/item.css">
+    
+    <meta charset="utf-8">
+    
+    </head>
+    <body>
+        <div class ="box">
+            
+        </div>
+
+        <script>
+            var v = window.location.href.split("/");
+            var id = v[v.length - 2];
+            var product;
+
+            var request = new XMLHttpRequest();
+            request.open("GET", "http://localhost:5000/item/"+id+"/")
+            request.onreadystatechange = function (){
+                var json = JSON.parse(this.responseText);
+                console.log(json);
+            }
+            request.send();
+        </script>
+    </body>
+    </html>

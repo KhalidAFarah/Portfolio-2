@@ -45,9 +45,11 @@ def livesearch():
     query="Select Name, Price, Image FROM Products WHERE Name LIKE \"%{}%\"".format(searchbox)
     mycursor.execute(query)
     result = mycursor.fetchall()
-    for Product in result:
-        print(Product)
     return jsonify(result)
+
+@app.route("/<int:Product_id>/")
+def itemPage(Product_id):
+    return render_template("item.html")
 
 
 class UserGetAll(Resource):
@@ -92,14 +94,21 @@ api.add_resource(UserPost, "/user/")
 api.add_resource(UserGetAll, "/users/")
 
 class item(Resource):
-    def get(self, item_id): # get an item from the db
-        pass
+    def get(self, Product_id): # get an item from the db
+        #try:
+        #    print(Product_id)
+        mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
+       # except:
+       #     abort(404, message="product not found")
+
+        respone = mycursor.fetchall()
+        response = jsonify(respone)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return respone
+
 class itemPost(Resource):
     def post(self): # add an item to the db (admin)
         parser = reqparse.RequestParser()
-        
-
-        
 
         parser.add_argument("Name")
         parser.add_argument("Price")
@@ -129,7 +138,7 @@ class itemPost(Resource):
         return redirect(url)
         
 
-api.add_resource(item, "/item/<int:item_id>/")
+api.add_resource(item, "/item/<int:Product_id>/")
 api.add_resource(itemPost, "/item/")
     
 class Categories(Resource):
@@ -143,6 +152,22 @@ class Categories(Resource):
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 api.add_resource(Categories, "/Categories/")
+
+class Category(Resource):
+    def get(self, Category_id): #getting a category
+        try:
+            mycursor.execute("SELECT * FROM Categories WHERE Category_id = %s", (Category_id))
+        except:
+            abort(404, message="invalid category was given")
+        response = {}
+        for value in mycursor:
+            response[value[0]] = value[1]
+            
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+        
+api.add_resource(Category, "/Category/<int:Category_id>/")
 
 
     
