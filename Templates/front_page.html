@@ -9,7 +9,8 @@
 </head>
 <body>
 
-<input type="text" id = "livebox">
+
+<input type="text" p id = "livebox">
 <p id ="list"></p>
 
 
@@ -77,7 +78,11 @@
                 success:function(res){
                     var data = "<ul>";
                     $.each(res,function(front_page,value){
-                        data += "<li>"+value[0]+"</li>";
+                        if(value[2]==null || value[2]==""){
+                         value[2]="placeholder.PNG"
+                        }
+                        var img="<img src=\"../static/Pictures/"+value[2]+"\" width=100px length=100px>"
+                        data += "<li>"+value[0]+" "+value[1]+"kr"+" "+img+"</li>";
                     });
                     data += "</ul>";
                     $("#list").html(data);
