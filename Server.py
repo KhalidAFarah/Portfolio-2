@@ -126,7 +126,7 @@ class itemPost(Resource):
                 mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), image.filename, int(data['Category_id']), data['Description'], data['Specification']))
                 db.commit()
             else:
-                mycursor.execute("INSERT INTO Products (Name, Price, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), int(data['Category_id']), data['Description'], data['Specification']))
+                mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, placeholder.PNG, %s, %s, %s)",(data['Name'], int(data['Price']), int(data['Category_id']), data['Description'], data['Specification']))
                 db.commit()
 
         except:
@@ -156,7 +156,7 @@ api.add_resource(Categories, "/Categories/")
 class Category(Resource):
     def get(self, Category_id): #getting a category
         try:
-            mycursor.execute("SELECT * FROM Categories WHERE Category_id = %s", (Category_id))
+            mycursor.execute("SELECT * FROM Categories WHERE Category_id = {}".format(Category_id))
         except:
             abort(404, message="invalid category was given")
         response = {}
@@ -169,8 +169,24 @@ class Category(Resource):
         
 api.add_resource(Category, "/Category/<int:Category_id>/")
 
+class CartPost(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        parser.add_argument("Product_id")
+        parser.add_argument("Amount")
+        
+        data = parser.parse_args()
+        
+        try:
+            mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
+            db.commit()
+        except:
+            abort(405, message="Unable to add product to cart")
 
-    
+        return 200
+
+api.add_resource(CartPost, "/Cart/")
 if __name__ == "__main__":
     app.run(debug=True)
 
