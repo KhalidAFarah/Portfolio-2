@@ -51,12 +51,12 @@
                     if(this.readyState == 4 && this.status){
                         var json2 = JSON.parse(this.responseText);
                         text = document.createElement("h4");
-                        text.innerHTML = json2[1];
+                        text.innerHTML = json2[json[1]];
                         //adding the product category
                         productHeader.appendChild(text);
 
                         var img = document.createElement("img");
-                        img.setAttribute("class", "productImg");
+                        img.setAttribute("class", "img-fluid productImg");
                          //displaying product image
                          if(json[4] == null || json[4] == ""){
                              json[4] = "placeholder.PNG"
@@ -85,7 +85,7 @@
                 div = document.createElement("div");
                 div.setAttribute("class", "row");
                 textA = document.createElement("h6");
-                textA.innerHTML="amount " + amount;
+                textA.innerHTML="Amount " + amount;
                 div.appendChild(textA);
                 productPricing.appendChild(div);
                 
@@ -97,7 +97,7 @@
                 btn.onclick = function(){//decrease amount of items
                     if(amount > 1){
                         amount--;
-                        textA.innerHTML="amount " + amount;
+                        textA.innerHTML="Amount " + amount;
                     }
                 }
                 div.appendChild(btn)
@@ -107,7 +107,7 @@
                 btn.setAttribute("class", "btn-outline-danger col-6 addAmount");
                 btn.onclick = function(){//increase amount of items
                     amount++;
-                    textA.innerHTML="amount " + amount;
+                    textA.innerHTML="Amount " + amount;
                 }
                 div.appendChild(btn)
                 productPricing.appendChild(div)
