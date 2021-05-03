@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     
     <head>
@@ -23,8 +24,8 @@
                 </div>
 
             </div>
-            <article class="productDescription"></article>
-            <article class="productSpecification"></article>
+            <div class="row productDescription"></div>
+            <div class="row productSpecification"></div>
         </div>
 
         <script>
@@ -39,7 +40,7 @@
 
             function view(json){
                 var productHeader = document.getElementsByClassName("productHeader")[0];
-                var text = document.createElement("h1");
+                var text = document.createElement("h2");
                 text.innerHTML = json[2];
                 //adding product name 
                 productHeader.appendChild(text);
@@ -49,7 +50,7 @@
                 request.onreadystatechange = function (){
                     if(this.readyState == 4 && this.status){
                         var json2 = JSON.parse(this.responseText);
-                        text = document.createElement("h3");
+                        text = document.createElement("h4");
                         text.innerHTML = json2[1];
                         //adding the product category
                         productHeader.appendChild(text);
@@ -139,34 +140,77 @@
 
 
                 //displaying product description
-                document.getElementsByClassName("productDescription")[0].innerHTML = json[5]
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+                text = document.createElement("h3");
+                text.innerHTML = "Product description";
+                div.appendChild(text)
+                document.getElementsByClassName("productDescription")[0].appendChild(div);
+
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+            
+                text = document.createElement("p");
+                text.setAttribute("style", "border-top: solid red;")
+                text.innerHTML = json[5];
+                div.appendChild(text)
+                document.getElementsByClassName("productDescription")[0].appendChild(div);
 
 
                 //displaying all of the products specifications
                 var tables = json[6].split(";");
                 var productSpecification = document.getElementsByClassName("productSpecification")[0];
-                for(var i = 0; i < tables.length; i++){
+                for(var i = 0; i < tables.length-1; i++){
                     var rows = tables[i].split(",");
 
-                    var div = document.createElement("div");
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "card p-0 border-danger mb-2")
+
+                    var divH = document.createElement("div");
+                    divH.setAttribute("class", "card-header border-danger bg-white")
+
+                    var divB = document.createElement("div");
+                    divB.setAttribute("class", "card-body p-0")
+
                     text = document.createElement("h3");
                     text.setAttribute("class", "productSpecicationTitle");
                     text.innerHTML = rows[0];
+                    divH.appendChild(text)
 
-                    var list = document.createElement("ul");
-                    list.setAttribute("class", "productSpecicationList");
+                    //var list = document.createElement("ul");
+                    //list.setAttribute("class", "productSpecicationList");
                     
                     for(var j = 1; j < rows.length; j++){
-                        var listValue = document.createElement("li");
-                        listValue.setAttribute("class", "productSpecicationListValue");
-                        listValue.innerHTML = rows[j];
-                        list.appendChild(listValue);
+                        var divR = document.createElement("div");
+                        divR.setAttribute("class", "row border border-bottom-danger-1");
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-6 p-0");
+                        var values = rows[j].split(":");
+
+                        text = document.createElement("p");
+                        text.innerHTML = values[0];
+                        div.appendChild(text);
+
+                        //divB.appendChild(div);
+                        divR.appendChild(div);
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-6 p-0");
+
+                        text = document.createElement("p");
+                        text.innerHTML = values[1];
+                        div.appendChild(text);
+                        divR.appendChild(div);
+
+                        
+                        divB.appendChild(divR);
                     }
 
-                    div.appendChild(text);
-                    div.appendChild(list);
+                    divC.appendChild(divH);
+                    divC.appendChild(divB);
 
-                    productSpecification.appendChild(div);
+                    productSpecification.appendChild(divC);
                 }
 
 
