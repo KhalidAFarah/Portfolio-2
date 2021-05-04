@@ -8,61 +8,50 @@
 
 </head>
 <body>
-    <form id="login"> 
     <div class ="box">
     <div class="btn-field">
         <div id="btn"></div>
        <button type="button" onclick="login" class="tgl-btn">Log in</button>
         <button type="button" onclick="Register" class="tgl-btn">Register</button>
     </div>
-    <form method="post"></form> 
+    <div id="post">
         <div class = "felt">
             <label for="usernm">Username</label>
-            <input type="text" placeholder="Enter username" name="usernm" required>
+            <input type="text" placeholder="Enter username" id="usernm" required>
 
             <label for="psswd">Password</label>
-            <input type="text" placeholder="Enter password" name="psswd" required>
+            <input type="password" placeholder="Enter password" id="psswd" required>
 
-            <button type="submit" class="btn">Log in</button>
+            <button onclick="submit()" class="btn">Log in</button>
             <label>
-                <input type="checkbox" name="remeb"> Remember me 
+                <input type="checkbox" name="remeb">Remember me 
             </label>
 
-
     </div>
-    </div>
-</form>
+</div>
+</div>
 
-    <form id="Register" class="Register-form">
-        <p>You are required to fill in this form to create an account</p>
-        <div class="reg-felt">
-        <input type="text" placeholder="Enter Firstname" required>
-       
-        <input type="text" placeholder="Enter Lastname" required>
-
-        <input type="email" placeholder="Enter email" required>
-
-        <input type="text" placeholder="Create username" required>
-
-        <input type="password" placeholder="Create password" required>
-
-        <input type="checkbox" class="checkbox"><span>I accept the terms and conditions</span> 
-
-        <button type="submit" class="btn">Register</button>
-
-        </div>
-    </form>
 <script>
-var log = document.getElementById ("login");
-var reg = document.getElementById("register");
-function register()
-{
+function submit(){
+    var username= document.getElementById("usernm");
+var password = document.getElementById("psswd");
+
+var http= new XMLHttpRequest()
+http.open("GET","http://localhost:5000/user/"+username.value+"/" +password.value+"/" )
+http.onreadystatechange=function(){
+
+    if(this.readyState == 4 && this.status === 200){
+    var json = JSON.parse(this.responseText)
+    console.log(json)
 
 }
-function login()
-{
-    
+
 }
+http.send();
+
+}
+
+
 </script>
 
 
