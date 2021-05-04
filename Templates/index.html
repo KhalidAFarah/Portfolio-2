@@ -1,5 +1,5 @@
-<!DOCTYPE html>
  <html>
+    
 <head>
 <title>Login Page</title>
 <link rel="stylesheet" href="../static/style.css">   <!---Linked my stylesheet---->
@@ -8,15 +8,16 @@
 
 </head>
 <body>
+    <form id="login"> 
     <div class ="box">
     <div class="btn-field">
         <div id="btn"></div>
-       <!---- <button type="button" onclick="login" class="tgl-btn">Log in</button>
+       <button type="button" onclick="login" class="tgl-btn">Log in</button>
         <button type="button" onclick="Register" class="tgl-btn">Register</button>
     </div>
-    <form method="post"></form> -->
+    <form method="post"></form> 
         <div class = "felt">
-           <!---- <label for="usernm">Username</label>
+            <label for="usernm">Username</label>
             <input type="text" placeholder="Enter username" name="usernm" required>
 
             <label for="psswd">Password</label>
@@ -27,11 +28,12 @@
                 <input type="checkbox" name="remeb"> Remember me 
             </label>
 
-    </div>
- </form> 
-    </div> -->
 
-    <form action="Register" class="Register-form">
+    </div>
+    </div>
+</form>
+
+    <form id="Register" class="Register-form">
         <p>You are required to fill in this form to create an account</p>
         <div class="reg-felt">
         <input type="text" placeholder="Enter Firstname" required>
@@ -48,11 +50,20 @@
 
         <button type="submit" class="btn">Register</button>
 
-
-
-    </div>
+        </div>
     </form>
+<script>
+var log = document.getElementById ("login");
+var reg = document.getElementById("register");
+function register()
+{
 
+}
+function login()
+{
+    
+}
+</script>
 
 
 </body>
