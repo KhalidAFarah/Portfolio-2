@@ -43,6 +43,8 @@ http.onreadystatechange=function(){
     if(this.readyState == 4 && this.status === 200){
     var json = JSON.parse(this.responseText)
     console.log(json)
+    window.localStorage.setItem("user",JSON.stringify(json));
+    window.location = "http://localhost:5000/"
 
 }
 
