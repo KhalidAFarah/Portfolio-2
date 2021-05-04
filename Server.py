@@ -16,9 +16,13 @@ db = mysql.connector.connect(
 mycursor = db.cursor()
 
 #Rendering the base site
-@app.route("/Loggin/")
+@app.route("/Login/")
 def renders_site():
     return render_template("index.html")
+
+@app.route("/Register/")
+def renders_site_register():
+    return render_template("Register.html")    
 
 #Rendering the base site
 @app.route("/admin/")
@@ -80,14 +84,18 @@ class UserPost(Resource):
         parser.add_argument("Password")
         parser.add_argument("Email")
         data = parser.parse_args()
+        print(data['Username'])
+        print(data['Password'])
+        print(data['Email'])
 
         try:
-            mycursor.execute("INSERT INTO Customers (Username, Password, Email) VALUES ({}, {}, {})".format(data['Username'], data['Password'], data['Email']))
+            mycursor.execute("INSERT INTO Customers (Username, Password, Email) VALUES (%s, %s, %s)",(data['Username'], data['Password'], data['Email']))
             db.commit()
         except:
-            abort(401, message = "Username or password is already taken.")
+           abort(401, message = "Username or password is already taken.")
+        url = request.url.split("/")[0]
+        return redirect(url+"/Loggin/")
 
-        return 200
 
 api.add_resource(UserGet, "/user/<Username>/<Password>/")
 api.add_resource(UserPost, "/user/")

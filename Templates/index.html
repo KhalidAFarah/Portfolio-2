@@ -12,7 +12,7 @@
     <div class="btn-field">
         <div id="btn"></div>
        <button type="button" onclick="login" class="tgl-btn">Log in</button>
-        <button type="button" onclick="Register" class="tgl-btn">Register</button>
+        <button type="button" onclick="Register()" class="tgl-btn">Register</button>
     </div>
     <div id="post">
         <div class = "felt">
@@ -32,6 +32,9 @@
 </div>
 
 <script>
+    function Register(){
+        window.location="http://localhost:5000/Register/"
+    }
 function submit(){
     var username= document.getElementById("usernm");
 var password = document.getElementById("psswd");
