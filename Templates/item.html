@@ -93,7 +93,7 @@
                 div.setAttribute("class", "row");
                 var btn = document.createElement("button")
                 btn.innerHTML = "<h3>-</h3>";
-                btn.setAttribute("class", "btn-outline-danger col-6 decreaseAmount");
+                btn.setAttribute("class", "btn-outline-secondary col-6 decreaseAmount");
                 btn.onclick = function(){//decrease amount of items
                     if(amount > 1){
                         amount--;
@@ -104,7 +104,7 @@
 
                 btn = document.createElement("button")
                 btn.innerHTML = "<h3>+</h3>";
-                btn.setAttribute("class", "btn-outline-danger col-6 addAmount");
+                btn.setAttribute("class", "btn-outline-secondary col-6 addAmount");
                 btn.onclick = function(){//increase amount of items
                     amount++;
                     textA.innerHTML="Amount " + amount;
@@ -113,7 +113,7 @@
                 productPricing.appendChild(div)
                 btn = document.createElement("button")
                 btn.innerHTML = "Add to cart";
-                btn.setAttribute("class", "btn btn-outline-danger btnAddToCart");
+                btn.setAttribute("class", "btn btn-outline-primary btnAddToCart");
 
                 /////////////////////Change later///////////////////////////////
                 var user_id = 1;
@@ -164,10 +164,10 @@
                     var rows = tables[i].split(",");
 
                     var divC = document.createElement("div");
-                    divC.setAttribute("class", "card p-0 border-danger mb-2")
+                    divC.setAttribute("class", "card p-0 border-primary mb-2")
 
                     var divH = document.createElement("div");
-                    divH.setAttribute("class", "card-header border-danger bg-white")
+                    divH.setAttribute("class", "card-header border-primary bg-white")
 
                     var divB = document.createElement("div");
                     divB.setAttribute("class", "card-body pt-0 pb-0")

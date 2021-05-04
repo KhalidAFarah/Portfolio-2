@@ -28,6 +28,11 @@ def renders_site_register():
 @app.route("/admin/")
 def renders_site_admin():
     return render_template("addProduct.html")
+    
+#Rendering the shopping cart site
+@app.route("/cart/")
+def renders_site_cart():
+    return render_template("shoppingcart.html")
 
 #status for restAPI
 @app.route("/status", methods=['GET'])
@@ -54,6 +59,8 @@ def livesearch():
 @app.route("/<int:Product_id>/")
 def itemPage(Product_id):
     return render_template("item.html")
+
+
 
 
 class UserGetAll(Resource):
@@ -176,6 +183,33 @@ class Category(Resource):
         return response
         
 api.add_resource(Category, "/Category/<int:Category_id>/")
+
+class getAllInCategory(Resource):
+    def get(self, Category_id):
+        mycursor.execute("SELECT * FROM Products WHERE Category_id={}".format(int(Category_id)))
+        
+        response = {}
+        for product in mycursor:
+
+            x = {
+                "Product_id":product[0],
+                "Category_id":product[1],
+                "Name":product[2],
+                "Price":product[3],
+                "Image":product[4],
+                "Description":product[5],
+                "Specification":product[6]
+            }
+            response[product[0]] = x
+        
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
+
+        
+
+
 
 class CartPost(Resource):
     def post(self):
