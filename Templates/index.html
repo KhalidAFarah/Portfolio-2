@@ -47,7 +47,11 @@ http.onreadystatechange=function(){
     var json = JSON.parse(this.responseText)
     console.log(json)
     window.localStorage.setItem("user",JSON.stringify(json));
-    window.location = "http://localhost:5000/"
+    if(window.localStorage.getItem("PrevPage") == null){
+        window.location = "http://localhost:5000/"
+    }else{
+        window.location = window.localStorage.getItem("PrevPage");
+    }
 
 }
 

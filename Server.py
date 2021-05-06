@@ -211,7 +211,7 @@ api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
 
 
 
-class CartPost(Resource):
+class Cart(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
@@ -227,8 +227,43 @@ class CartPost(Resource):
             abort(405, message="Unable to add product to cart")
 
         return 200
+    def get(self): #get all in a cart
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        data = parser.parse_args()
+        mycursor.execute("SELECT Carts.Cart_id, P.Product_id, P.Category_id, P.Name, P.Price, P.Image, P.Description, Carts.Amount FROM Products as P LEFT JOIN Carts ON P.Product_id = Carts.Product_id WHERE User_id={} AND Carts.Ordered=\"No\"".format(data['User_id']))
+        
+        response = {}
+        for product in mycursor:
 
-api.add_resource(CartPost, "/Cart/")
+            x = {
+                "Product_id":product[1],
+                "Category_id":product[2],
+                "Name":product[3],
+                "Price":product[4],
+                "Image":product[5],
+                "Description":product[6],
+                "Amount":product[7]
+            }
+            response[product[0]] = x
+
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        parser.add_argument("Cart_id")
+        data = parser.parse_args()
+
+        mycursor.execute("DELETE FROM Carts WHERE User_id={} AND Cart_id={}".format(data['User_id'], data['Cart_id']))
+        db.commit()
+
+        return 200
+
+
+api.add_resource(Cart, "/Cart/")
 if __name__ == "__main__":
     app.run(debug=True)
 

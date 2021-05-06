@@ -12,14 +12,195 @@
     <body>
         <nav></nav>
         <div class="container-fluid">
+            <div class="row" style="margin-top: 5%;">
+                <div class="items col-8"></div>
+                <div class="pricing col-4"></div>
+            </div>
+        </div>
 
         <script>
+
+            if(localStorage.getItem("user") == null){
+                window.localStorage.setItem("PrevPage", window.location.href)
+                window.location = "http://localhost:5000/Login/";
+            }
+            var sum = 0;
+
+            var request = new XMLHttpRequest();
+            user = JSON.parse(localStorage.getItem("user"));
+            request.open("GET","http://localhost:5000/Cart/?User_id="+user.user_id);
+            request.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var json = JSON.parse(this.responseText);
+                    console.log(json);
+
+                    var keys = Object.keys(json)
+
+                    
+                    
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "col-10 border p-2 pricingbox");
+                    divC.setAttribute("style", "margin-top:10%;")
+
+                    var div = document.createElement("div");
+                    div.setAttribute("class", "row");
+
+                    var text = document.createElement("p");
+                    text.setAttribute("class", "h4");
+                    text.innerHTML = "Sum";
+                    div.appendChild(text);
+                    divC.appendChild(div);
+
+
+
+
+                    for(var i = 0; i < keys.length; i++){
+                        var divR = document.createElement("div");
+                        divR.setAttribute("class", "row itemrow")
+                        
+                        var div = document.createElement("div");
+                        div.setAttribute("class", "col-2") 
+                        var img  = document.createElement("img");
+                        img.setAttribute("class", "img-fluid");
+                        img.setAttribute("src", "../static/Pictures/"+json[keys[i]].Image);
+                        div.appendChild(img);
+
+                        divR.appendChild(div);
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-4");
+
+                        var div2 = document.createElement("div");
+                        div2.setAttribute("class", "row");
+
+                        var text = document.createElement("p");
+                        text.setAttribute("class", "h6");
+                        text.innerHTML = json[keys[i]].Name;
+                        div2.appendChild(text);
+                        div.appendChild(div2);
+                        divR.appendChild(div);
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-2");
+                        text = document.createElement("p");
+                        text.setAttribute("class", "p");
+                        text.innerHTML = json[keys[i]].Price + " Kr";
+                        div.appendChild(text);
+                        divR.appendChild(div);
+
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-3");
+
+                        div2 = document.createElement("div");
+                        div2.setAttribute("class", "row")
+
+                        var btndesc = document.createElement("button");
+                        btndesc.setAttribute("class", "btn col-4 border");
+                        btndesc.setAttribute("value", i);
+                        btndesc.innerHTML = "-";
+                        btndesc.onclick = function(){
+
+                            json[keys[this.value]].Amount--;
+                            document.getElementsByClassName("textA")[this.value].innerHTML = json[keys[this.value]].Amount;
+                        }
+                        div2.appendChild(btndesc);
+
+                        var textA = document.createElement("p");
+                        textA.setAttribute("class", "h6 col-4 textA mt-2");
+                        textA.setAttribute("align", "center");
+                        textA.innerHTML = json[keys[i]].Amount;
+                        div2.appendChild(textA);
+
+
+                        var btnadd = document.createElement("button");
+                        btnadd.setAttribute("class", "btn col-4 border");
+                        btnadd.setAttribute("value", i);
+                        btnadd.innerHTML = "+";
+                        btnadd.onclick = function(){
+                            json[keys[this.value]].Amount++;
+                            document.getElementsByClassName("textA")[this.value].innerHTML = json[keys[this.value]].Amount;
+                        }
+                        div2.appendChild(btnadd);
+                        div.appendChild(div2);
+
+                        div2 = document.createElement("div");
+                        div2.setAttribute("class", "row");
+
+                        var btnremove = document.createElement("button");
+                        btnremove.setAttribute("class", "btn btn-outline-danger border");
+                        btnremove.setAttribute("style", "margin-top: 3%;")
+                        btnremove.setAttribute("value", i);
+                        btnremove.innerHTML = "Remove";
+                        btnremove.onclick = function(){
+                            var request = new XMLHttpRequest();
+                            var id = this.value;
+                            request.open("DELETE", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id], "true");
+                            request.onreadystatechange = function(){
+                                if(this.status === 200 && this.readyState === 4){
+                                    var itemrow = document.getElementsByClassName("itemrow")[id];
+                                    console.log(itemrow)
+                                    document.getElementsByClassName("items")[0].removeChild(itemrow);
+
+                                    var pricerow = document.getElementsByClassName("pricerow")[id];
+                                    document.getElementsByClassName("pricingbox")[0].removeChild(pricerow);
+
+                                    sum -= (json[keys[id]].Price*json[keys[id]].Amount);
+                                    document.getElementsByClassName("sum")[0].innerHTML = "Sum: " + sum;
+
+
+                                }
+                            }
+                            request.send()
+                            
+                        }
+                        div2.appendChild(btnremove);
+
+
+
+
+
+                        div.appendChild(div2);
+                        divR.appendChild(div);
+
+                        document.getElementsByClassName("items")[0].appendChild(divR);
+
+
+
+                        
+                        div = document.createElement("div");
+                        div.setAttribute("class", "row pricerow");
+
+                        text = document.createElement("p");
+                        text.setAttribute("class", "h6");
+                        sum += (json[keys[i]].Price*json[keys[i]].Amount);
+                        text.innerHTML = "+"+(json[keys[i]].Price*json[keys[i]].Amount);
+                        div.appendChild(text)
+                        divC.appendChild(div);
+
+                    }
+                    div = document.createElement("div");
+                    div.setAttribute("class", "row");
+                    text = document.createElement("p");
+                    text.setAttribute("class", "h6 sum");
+                    text.innerHTML = "Sum: "+sum;
+                    div.appendChild(text)
+                    divC.appendChild(div);
+                    document.getElementsByClassName("pricing")[0].appendChild(divC);
+
+                }
+            }
+            request.send();
+
+
+
+
 
 
             
 
         </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     </body>
     </html>
