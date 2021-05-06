@@ -41,13 +41,15 @@ function login(){
         alert("You account is being created")
 
         var form = document.getElementById("form");
+        var firstname = document.getElementById("firstname");
+        var lastname = document.getElementById("lastname");
         var email = document.getElementById("email");
         var username = document.getElementById("username");
         var password = document.getElementById("password");
 
         
 
-        form.action = "http://localhost:5000/user/?Username="+username.value+"&Password="+password.value+"&Email="+email.value
+        form.action = "http://localhost:5000/user/?Firstname="+firstname.value+"&Lastname="+lastname.value+"&Username="+username.value+"&Password="+password.value+"&Email="+email.value
 
 
     }

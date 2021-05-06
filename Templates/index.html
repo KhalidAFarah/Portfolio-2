@@ -37,23 +37,26 @@
     }
 function submit(){
     var username= document.getElementById("usernm");
-var password = document.getElementById("psswd");
+    var password = document.getElementById("psswd");
 
-var http= new XMLHttpRequest()
-http.open("GET","http://localhost:5000/user/"+username.value+"/" +password.value+"/" )
-http.onreadystatechange=function(){
+    var http= new XMLHttpRequest()
+    http.open("GET","http://localhost:5000/user/"+username.value+"/" +password.value+"/" )
+    http.onreadystatechange=function(){
 
-    if(this.readyState == 4 && this.status === 200){
-    var json = JSON.parse(this.responseText)
-    console.log(json)
-    window.localStorage.setItem("user",JSON.stringify(json));
-    window.location = "http://localhost:5000/"
+        if(this.readyState == 4 && this.status === 200){
+            var json = JSON.parse(this.responseText)
+            window.localStorage.setItem("user",JSON.stringify(json));
+            if(window.localStorage.getItem("PrevPage") == null){
+                window.location = "http://localhost:5000/"
+            }else{
+                var url = window.localStorage.getItem("PrevPage");
+                window.localStorage.removeItem("PrevPage");
+                window.location = url;
+            }
+        }
 
-}
-
-}
-http.send();
-
+    }
+    http.send();
 }
 
 

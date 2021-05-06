@@ -65,19 +65,19 @@ def itemPage(Product_id):
 
 class UserGetAll(Resource):
     def get(self):
-        mycursor.execute("SELECT * FROM Customers")
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Email FROM Customers")
         response = []
         for user  in mycursor:       
-            response.append({"user_id": user[0],"Username":user[1],"Password":user[2],"Email":user[3]})
+            response.append({"user_id": user[0], "Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4]})
         response = jsonify(response)
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
 class UserGet(Resource):
     def get(self, Username, Password):
-        mycursor.execute("SELECT * FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
         for user  in mycursor:       
-            response = {"user_id": user[0],"Username":user[1],"Password":user[2],"Email":user[3]}
+            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4]}
             response = jsonify(response)
             response.headers.add("Access-Control-Allow-Origin", "*")
             return response
@@ -87,21 +87,20 @@ class UserGet(Resource):
 class UserPost(Resource):
     def post(self):
         parser = reqparse.RequestParser()
+        parser.add_argument("Firstname")
+        parser.add_argument("Lastname")
         parser.add_argument("Username")
         parser.add_argument("Password")
         parser.add_argument("Email")
         data = parser.parse_args()
-        print(data['Username'])
-        print(data['Password'])
-        print(data['Email'])
 
         try:
-            mycursor.execute("INSERT INTO Customers (Username, Password, Email) VALUES (%s, %s, %s)",(data['Username'], data['Password'], data['Email']))
+            mycursor.execute("INSERT INTO Customers (Firstname, Lastname, Username, Password, Email) VALUES (%s, %s, %s, %s, %s)",(data['Firstname'], data['Lastname'] ,data['Username'], data['Password'], data['Email']))
             db.commit()
         except:
            abort(401, message = "Username or password is already taken.")
         url = request.url.split("/")[0]
-        return redirect(url+"/Loggin/")
+        return redirect(url+"/Login/")
 
 
 api.add_resource(UserGet, "/user/<Username>/<Password>/")
@@ -211,7 +210,7 @@ api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
 
 
 
-class CartPost(Resource):
+class Cart(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
@@ -227,8 +226,61 @@ class CartPost(Resource):
             abort(405, message="Unable to add product to cart")
 
         return 200
+    def get(self): #get all in a cart
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        data = parser.parse_args()
+        mycursor.execute("SELECT Carts.Cart_id, P.Product_id, P.Category_id, P.Name, P.Price, P.Image, P.Description, Carts.Amount FROM Products as P LEFT JOIN Carts ON P.Product_id = Carts.Product_id WHERE User_id={} AND Carts.Ordered=\"No\"".format(data['User_id']))
+        
+        response = {}
+        for product in mycursor:
 
-api.add_resource(CartPost, "/Cart/")
+            x = {
+                "Product_id":product[1],
+                "Category_id":product[2],
+                "Name":product[3],
+                "Price":product[4],
+                "Image":product[5],
+                "Description":product[6],
+                "Amount":product[7]
+            }
+            response[product[0]] = x
+
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        parser.add_argument("Cart_id")
+        data = parser.parse_args()
+        try:
+            mycursor.execute("DELETE FROM Carts WHERE User_id={} AND Cart_id={}".format(int(data['User_id']), int(data['Cart_id'])))
+            db.commit()
+        except:
+            abort(404, message="User og cart does not exist")
+
+        return 200
+
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        parser.add_argument("Cart_id")
+        parser.add_argument("Amount")
+        data = parser.parse_args()
+        try:
+            mycursor.execute("UPDATE Carts SET Amount={} WHERE User_id={} AND Cart_id={}".format(int(data['Amount']), int(data['User_id']), int(data['Cart_id'])))
+            db.commit()
+        except:
+            abort(404, message="Unable to update amount products selected user or cart may not exist")
+
+        return 200
+
+        
+
+
+api.add_resource(Cart, "/Cart/")
 if __name__ == "__main__":
     app.run(debug=True)
 
