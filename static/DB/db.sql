@@ -27,13 +27,13 @@ CREATE TABLE `carts` (
   `User_id` int unsigned NOT NULL,
   `Product_id` int unsigned NOT NULL,
   `Amount` int unsigned NOT NULL,
-  `Ordered` varchar(3) NOT NULL,
+  `Ordered` tinyint(1) NOT NULL,
   PRIMARY KEY (`Cart_id`),
   KEY `User_id` (`User_id`),
   KEY `Product_id` (`Product_id`),
   CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `customers` (`User_id`),
   CONSTRAINT `carts_ibfk_2` FOREIGN KEY (`Product_id`) REFERENCES `products` (`Product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,6 @@ CREATE TABLE `carts` (
 
 LOCK TABLES `carts` WRITE;
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
-INSERT INTO `carts` VALUES (1,1,1,2,'No'),(2,1,1,5,'No'),(3,1,1,3,'No');
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,11 +78,12 @@ DROP TABLE IF EXISTS `customers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customers` (
   `User_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `Firstname` varchar(50) NOT NULL,
+  `Lastname` varchar(50) NOT NULL,
   `Username` varchar(50) NOT NULL,
   `Password` varchar(50) NOT NULL,
   `Email` varchar(70) DEFAULT NULL,
   PRIMARY KEY (`User_id`),
-  UNIQUE KEY `Username` (`Username`),
   UNIQUE KEY `Password` (`Password`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -94,8 +94,38 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,'KD','KD2','');
+INSERT INTO `customers` VALUES (1,'Khalid','Kha','KD','KD2','Khal@sdd.com');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `Order_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `User_id` int unsigned NOT NULL,
+  `Product_id` int unsigned NOT NULL,
+  `Amount` int unsigned NOT NULL,
+  `Date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Order_id`),
+  KEY `User_id` (`User_id`),
+  KEY `Product_id` (`Product_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `customers` (`User_id`),
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`Product_id`) REFERENCES `products` (`Product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -138,4 +168,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-04 10:10:53
+-- Dump completed on 2021-05-06 14:19:49
