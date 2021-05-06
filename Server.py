@@ -276,11 +276,31 @@ class Cart(Resource):
             abort(404, message="Unable to update amount products selected user or cart may not exist")
 
         return 200
+api.add_resource(Cart, "/Cart/")
+class Order(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("User_id")
+        data = parser.parse_args()
+
+        mycursor.execute("SELECT Product_id, Amount FROM Carts WHERE User_id={} AND Ordered=\"No\"".format(int(data['User_id'])))
+        results = mycursor.fetchall()
+
+        for Product_id, Amount in results:
+            mycursor.execute("INSERT INTO Orders (User_id, Product_id, Amount) VALUES ({},{},{})".format(int(data['User_id']), int(Product_id), int(Amount)))
+
+        mycursor.execute("DELETE FROM Carts WHERE User_id={}".format(int(data['User_id'])))
+        db.commit()
+        
+        return 200
+
+
+
 
         
 
 
-api.add_resource(Cart, "/Cart/")
+api.add_resource(Order, "/Order/")
 if __name__ == "__main__":
     app.run(debug=True)
 

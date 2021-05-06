@@ -36,7 +36,18 @@
 
                     var keys = Object.keys(json)
 
-                    
+                    if(keys.length == 0){
+                        var div = document.createElement("div");
+                        div.setAttribute("class", "row");
+                        div.setAttribute("style", "margin-top:10%;color:grey;")
+
+                        var text = document.createElement("p");
+                        text.setAttribute("class", "h3 col-10 offset-2");
+                        text.innerHTML = "You currently have 0 products in your cart.";
+                        div.appendChild(text);
+                        document.getElementsByClassName("items")[0].appendChild(div);
+
+                    }                    
                     
                     var divC = document.createElement("div");
                     divC.setAttribute("class", "col-10 border p-3 pricingbox");
@@ -112,6 +123,10 @@
                                     if(this.readyState === 4 && this.status === 200 && json[keys[id]].Amount >=2){
                                         json[keys[id]].Amount--;
                                         document.getElementsByClassName("textA")[id].innerHTML = json[keys[id]].Amount;
+
+                                        document.getElementsByClassName("priceinfo")[id].innerHTML = "+ "+json[keys[id]].Price+" x "+json[keys[id]].Amount;
+                                        sum -= json[keys[id]].Price;
+                                        document.getElementsByClassName("sum")[0].innerHTML = "<del>Sum: "+sum+" Kr</del> Free";
                                     }
                                 }
                                 request.send();
@@ -139,6 +154,10 @@
                                     if(this.readyState === 4 && this.status === 200){
                                         json[keys[id]].Amount++;
                                         document.getElementsByClassName("textA")[id].innerHTML = json[keys[id]].Amount;
+
+                                        document.getElementsByClassName("priceinfo")[id].innerHTML = "+ "+json[keys[id]].Price+" x "+json[keys[id]].Amount;
+                                        sum += json[keys[id]].Price;
+                                        document.getElementsByClassName("sum")[0].innerHTML = "<del>Sum: "+sum+" Kr</del> Free";
                                     }
                                 }
                                 request.send();
@@ -195,9 +214,9 @@
                         div.setAttribute("class", "row pricerow");
 
                         text = document.createElement("p");
-                        text.setAttribute("class", "h6");
+                        text.setAttribute("class", "h6 priceinfo");
                         sum += (json[keys[i]].Price*json[keys[i]].Amount);
-                        text.innerHTML = "+"+(json[keys[i]].Price*json[keys[i]].Amount);
+                        text.innerHTML = "+ "+json[keys[i]].Price +" x "+ json[keys[i]].Amount;
                         div.appendChild(text)
                         divC.appendChild(div);
 
@@ -217,7 +236,15 @@
                     btn.innerHTML="Order products";
 
                     btn.onclick = function(){
-
+                        var request = new XMLHttpRequest();
+                        request.open("POST", "http://localhost:5000/Order/?User_id="+user.user_id, true);
+                        request.onreadystatechange = function(){
+                            if(this.readyState === 4 && this.status === 200){
+                                alert("Ordering products...")
+                                location.reload()
+                            }
+                        }
+                        request.send()
                     }
                     div.appendChild(btn);
                     divC.appendChild(div);
