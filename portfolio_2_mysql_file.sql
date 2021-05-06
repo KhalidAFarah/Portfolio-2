@@ -48,7 +48,7 @@ Cart_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 User_id INT UNSIGNED NOT NULL,
 Product_id INT UNSIGNED NOT NULL,
 Amount INT UNSIGNED NOT NULL,
-Ordered BOOLEAN NOT NULL,
+Ordered VARCHAR(10) NOT NULL,
 FOREIGN KEY (User_id) REFERENCES Customers (User_id),
 FOREIGN KEY (Product_id) REFERENCES Products (Product_id)
 );
@@ -64,7 +64,7 @@ FOREIGN KEY (Product_id) REFERENCES Products (Product_id)
 );
 
 use Webshop;
-SELECT * FROM Customers;
+SELECT * FROM Orders;
 
 /*CREATE USER  IF NOT EXISTS "general"@"localhost" IDENTIFIED WITH mysql_native_password BY "general";
 GRANT ALL privileges ON Webshop . * TO "general"@"localhost";*/

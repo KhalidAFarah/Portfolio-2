@@ -27,13 +27,13 @@ CREATE TABLE `carts` (
   `User_id` int unsigned NOT NULL,
   `Product_id` int unsigned NOT NULL,
   `Amount` int unsigned NOT NULL,
-  `Ordered` tinyint(1) NOT NULL,
+  `Ordered` varchar(10) NOT NULL,
   PRIMARY KEY (`Cart_id`),
   KEY `User_id` (`User_id`),
   KEY `Product_id` (`Product_id`),
   CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `customers` (`User_id`),
   CONSTRAINT `carts_ibfk_2` FOREIGN KEY (`Product_id`) REFERENCES `products` (`Product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `carts` (
 
 LOCK TABLES `carts` WRITE;
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
+INSERT INTO `carts` VALUES (8,1,7,3,'No');
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,7 +117,7 @@ CREATE TABLE `orders` (
   KEY `Product_id` (`Product_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `customers` (`User_id`),
   CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`Product_id`) REFERENCES `products` (`Product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,6 +126,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (1,1,1,1,'2021-05-06 18:51:14'),(2,1,1,4,'2021-05-06 18:53:34'),(3,1,3,3,'2021-05-06 18:53:34'),(4,1,6,3,'2021-05-06 18:53:34'),(5,1,7,3,'2021-05-06 18:53:34'),(6,1,1,4,'2021-05-06 19:03:50'),(7,1,7,5,'2021-05-06 19:03:50');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,4 +170,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-06 14:19:49
+-- Dump completed on 2021-05-06 19:16:36
