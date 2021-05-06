@@ -39,7 +39,7 @@
                     
                     
                     var divC = document.createElement("div");
-                    divC.setAttribute("class", "col-10 border p-2 pricingbox");
+                    divC.setAttribute("class", "col-10 border p-3 pricingbox");
                     divC.setAttribute("style", "margin-top:10%;")
 
                     var div = document.createElement("div");
@@ -99,10 +99,23 @@
                         btndesc.setAttribute("class", "btn col-4 border");
                         btndesc.setAttribute("value", i);
                         btndesc.innerHTML = "-";
-                        btndesc.onclick = function(){
 
-                            json[keys[this.value]].Amount--;
-                            document.getElementsByClassName("textA")[this.value].innerHTML = json[keys[this.value]].Amount;
+                        
+
+                        btndesc.onclick = function(){
+                            if(json[keys[this.value]].Amount >= 2){
+                                var id = this.value;
+                                var request = new XMLHttpRequest();
+                                var tmp = json[keys[id]].Amount - 1;
+                                request.open("PUT", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id]+"&Amount="+tmp, "true");
+                                request.onreadystatechange = function(){
+                                    if(this.readyState === 4 && this.status === 200 && json[keys[id]].Amount >=2){
+                                        json[keys[id]].Amount--;
+                                        document.getElementsByClassName("textA")[id].innerHTML = json[keys[id]].Amount;
+                                    }
+                                }
+                                request.send();
+                            }
                         }
                         div2.appendChild(btndesc);
 
@@ -118,8 +131,18 @@
                         btnadd.setAttribute("value", i);
                         btnadd.innerHTML = "+";
                         btnadd.onclick = function(){
-                            json[keys[this.value]].Amount++;
-                            document.getElementsByClassName("textA")[this.value].innerHTML = json[keys[this.value]].Amount;
+                            if(json[keys[this.value]].Amount >= 1){
+                                var id = this.value;
+                                var request = new XMLHttpRequest();
+                                request.open("PUT", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id]+"&Amount="+(json[keys[id]].Amount+1), "true");
+                                request.onreadystatechange = function(){
+                                    if(this.readyState === 4 && this.status === 200){
+                                        json[keys[id]].Amount++;
+                                        document.getElementsByClassName("textA")[id].innerHTML = json[keys[id]].Amount;
+                                    }
+                                }
+                                request.send();
+                            }
                         }
                         div2.appendChild(btnadd);
                         div.appendChild(div2);
@@ -183,10 +206,24 @@
                     div.setAttribute("class", "row");
                     text = document.createElement("p");
                     text.setAttribute("class", "h6 sum");
-                    text.innerHTML = "Sum: "+sum;
+                    text.innerHTML = "<del>Sum: "+sum+" Kr</del> Free";
                     div.appendChild(text)
                     divC.appendChild(div);
+
+                    div = document.createElement("div");
+                    div.setAttribute("class", "row");
+                    var btn = document.createElement("button");
+                    btn.setAttribute("class", "btn btn-outline-primary");
+                    btn.innerHTML="Order products";
+
+                    btn.onclick = function(){
+
+                    }
+                    div.appendChild(btn);
+                    divC.appendChild(div);
                     document.getElementsByClassName("pricing")[0].appendChild(divC);
+
+                    
 
                 }
             }
