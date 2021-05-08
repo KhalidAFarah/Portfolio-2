@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request, redirect
 from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
 import time
+import os
 
 app = Flask(__name__)
 #app = Flask(__name__, static_folder="/var/site/", static_url_path="")
@@ -118,11 +119,11 @@ api.add_resource(UserGetAll, "/users/")
 
 class item(Resource):
     def get(self, Product_id): # get an item from the db
-        #try:
-        #    print(Product_id)
-        mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
-       # except:
-       #     abort(404, message="product not found")
+        try:
+            mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
+        except:
+            abort(404, message="product not found")
+            
         response =  {}
         for product in mycursor:
             item = {
@@ -155,6 +156,8 @@ class itemPost(Resource):
         try:   
             image = request.files['pictures']
             if image.filename:
+                image.save(os.path.join(os.getcwd() + "/Portfolio-2/static/Pictures/", image.filename))
+
                 mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), image.filename, int(data['Category_id']), data['Description'], data['Specification']))
                 db.commit()
             else:
