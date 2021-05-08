@@ -3,8 +3,8 @@ from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
 import os
 
-#app = Flask(__name__)
-app = Flask(__name__, static_folder="/var/site/", static_url_path="")
+app = Flask(__name__)
+#app = Flask(__name__, static_folder="/var/site/", static_url_path="")
 api = Api(app)
 db = mysql.connector.connect(
     host="127.0.0.1", #comment out for docker
