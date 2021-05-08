@@ -64,7 +64,7 @@ FOREIGN KEY (Product_id) REFERENCES Products (Product_id)
 );
 
 use Webshop;
-SELECT * FROM Orders;
+SELECT * FROM Products;
 
 /*CREATE USER  IF NOT EXISTS "general"@"localhost" IDENTIFIED WITH mysql_native_password BY "general";
 GRANT ALL privileges ON Webshop . * TO "general"@"localhost";*/

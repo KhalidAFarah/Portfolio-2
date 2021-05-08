@@ -41,27 +41,27 @@
             function view(json){
                 var productHeader = document.getElementsByClassName("productHeader")[0];
                 var text = document.createElement("h2");
-                text.innerHTML = json[2];
+                text.innerHTML = json.Name;
                 //adding product name 
                 productHeader.appendChild(text);
 
                 var request = new XMLHttpRequest();
-                request.open("GET", "http://localhost:5000/Category/"+json[1]+"/")
+                request.open("GET", "http://localhost:5000/Category/"+json.Category_id+"/")
                 request.onreadystatechange = function (){
                     if(this.readyState == 4 && this.status){
-                        var json2 = JSON.parse(this.responseText);
+                        var json2 = JSON.parse(this.responseText)[json.Category_id];
                         text = document.createElement("h4");
-                        text.innerHTML = json2[json[1]];
+                        text.innerHTML = json2.Category;
                         //adding the product category
                         productHeader.appendChild(text);
 
                         var img = document.createElement("img");
                         img.setAttribute("class", "img-fluid productImg");
                          //displaying product image
-                         if(json[4] == null || json[4] == ""){
-                             json[4] = "placeholder.PNG"
+                         if(json.Image == null || json.Image == ""){
+                             json.Image = "placeholder.PNG"
                          }
-                        img.setAttribute("src", "../static/Pictures/"+json[4]);
+                        img.setAttribute("src", "../static/Pictures/"+json.Image);
                         productHeader.appendChild(img)
                     
                     }
@@ -77,7 +77,7 @@
                 div.setAttribute("class", "row");
                 text = document.createElement("h3");
                 //text.setAttribute("class", "justify-content-center")
-                text.innerHTML = json[3] + " Kr";
+                text.innerHTML = json.Price + " Kr";
                 //displaying product price
                 div.appendChild(text);
                 productPricing.appendChild(div);
@@ -122,7 +122,7 @@
 
                 btn.onclick = function(){//adds the product to the cart
                     var request = new XMLHttpRequest();
-                    request.open("POST", "http://localhost:5000/Cart/?User_id="+user_id+"&Product_id="+json[0]+"&Amount="+amount, true);
+                    request.open("POST", "http://localhost:5000/Cart/?User_id="+user_id+"&Product_id="+json.Product_id+"&Amount="+amount, true);
                     request.onreadystatechange = function(){
                         if(this.readyState == 4 && this.status === 200){
                             alert("Product added to your cart");
@@ -152,13 +152,13 @@
             
                 text = document.createElement("p");
                 text.setAttribute("style", "border-top: solid red;")
-                text.innerHTML = json[5];
+                text.innerHTML = json.Description;
                 div.appendChild(text)
                 document.getElementsByClassName("productDescription")[0].appendChild(div);
 
 
                 //displaying all of the products specifications
-                var tables = json[6].split(";");
+                var tables = json.Specification.split(";");
                 var productSpecification = document.getElementsByClassName("productSpecification")[0];
                 for(var i = 0; i < tables.length-1; i++){
                     var rows = tables[i].split(",");
@@ -221,7 +221,7 @@
             request.open("GET", "http://localhost:5000/item/"+id+"/")
             request.onreadystatechange = function (){
                 if(this.readyState == 4 && this.status){
-                    var json = JSON.parse(this.responseText)[0];
+                    var json = JSON.parse(this.responseText)[id];
                     view(json);
                 }
 

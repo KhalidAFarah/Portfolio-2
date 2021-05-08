@@ -114,11 +114,22 @@ class item(Resource):
         mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
        # except:
        #     abort(404, message="product not found")
+        response =  {}
+        for product in mycursor:
+            item = {
+                "Product_id":product[0],
+                "Category_id":product[1],
+                "Name":product[2],
+                "Price":product[3],
+                "Image":product[4],
+                "Description":product[5],
+                "Specification":product[6]
+            }
+            response[product[0]] = item
 
-        respone = mycursor.fetchall()
-        response = jsonify(respone)
+        response = jsonify(response)
         response.headers.add("Access-Control-Allow-Origin", "*")
-        return respone
+        return response
 
 class itemPost(Resource):
     def post(self): # add an item to the db (admin)
@@ -134,13 +145,14 @@ class itemPost(Resource):
         
         try:   
             image = request.files['pictures']
-            if image.filename !=  "":
+            if image.filename:
+                print("sd")
                 image.save(os.path.join(os.getcwd() + "/Portfolio-2/static/Pictures/", image.filename))
 
                 mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), image.filename, int(data['Category_id']), data['Description'], data['Specification']))
                 db.commit()
             else:
-                mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, placeholder.PNG, %s, %s, %s)",(data['Name'], int(data['Price']), int(data['Category_id']), data['Description'], data['Specification']))
+                mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), "placeholder.PNG", int(data['Category_id']), data['Description'], data['Specification']))
                 db.commit()
 
         except:
@@ -160,7 +172,7 @@ class Categories(Resource):
         mycursor.execute("SELECT * FROM Categories")
         response = {}
         for value in mycursor:
-            response[value[0]] = value[1]
+            response[value[0]] = {"Category_id":value[0], "Category":value[1]}
         
         response = jsonify(response)
         response.headers.add("Access-Control-Allow-Origin", "*")
@@ -175,7 +187,7 @@ class Category(Resource):
             abort(404, message="invalid category was given")
         response = {}
         for value in mycursor:
-            response[value[0]] = value[1]
+            response[value[0]] = {"Category_id":value[0], "Category":value[1]}
             
         response = jsonify(response)
         response.headers.add("Access-Control-Allow-Origin", "*")
