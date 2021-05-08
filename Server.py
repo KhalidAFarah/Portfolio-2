@@ -1,19 +1,26 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
-import os
+import time
 
 app = Flask(__name__)
 #app = Flask(__name__, static_folder="/var/site/", static_url_path="")
 api = Api(app)
-db = mysql.connector.connect(
-    host="127.0.0.1", #comment out for docker
-    #host="db", #leave in for docker
-    user="general",
-    passwd="general",
-    database="Webshop",
-    auth_plugin="mysql_native_password" #comment out for docker
-    )
+db = None
+while db is None:
+    try:
+        db = mysql.connector.connect(
+            host="127.0.0.1", #comment out for docker
+            #host="db", #leave in for docker
+            user="general",
+            passwd="general",
+            database="Webshop",
+            auth_plugin="mysql_native_password" #comment out for docker
+        )
+    except:
+        print("unable to connect to MySQL database waiting retrying in 5 seconds")
+        time.sleep(5)
+
 
 mycursor = db.cursor()
 
