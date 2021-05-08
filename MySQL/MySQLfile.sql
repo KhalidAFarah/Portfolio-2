@@ -63,8 +63,5 @@ FOREIGN KEY (User_id) REFERENCES Customers (User_id),
 FOREIGN KEY (Product_id) REFERENCES Products (Product_id)
 );
 
-use Webshop;
-SELECT * FROM Orders;
-
-CREATE USER  IF NOT EXISTS "general"@"localhost" IDENTIFIED WITH mysql_native_password BY "general";
-GRANT ALL privileges ON Webshop . * TO "general"@"localhost";
+CREATE USER  IF NOT EXISTS "general" IDENTIFIED BY "general";
+GRANT ALL privileges ON Webshop . * TO "general";

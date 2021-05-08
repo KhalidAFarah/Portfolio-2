@@ -3,14 +3,16 @@ from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
 import os
 
-app = Flask(__name__)
+#app = Flask(__name__)
+app = Flask(__name__, static_folder="/var/site/", static_url_path="")
 api = Api(app)
 db = mysql.connector.connect(
-    host="127.0.0.1",
+    host="127.0.0.1", #comment out for docker
+    #host="db", #leave in for docker
     user="general",
     passwd="general",
     database="Webshop",
-    auth_plugin="mysql_native_password"
+    auth_plugin="mysql_native_password" #comment out for docker
     )
 
 mycursor = db.cursor()
@@ -45,7 +47,7 @@ def status():
 
 @app.route("/")
 def front_page():
-    return render_template("./front_page.html")
+    return render_template("front_page.html")
 
 @app.route("/livesearch",methods=["POST","GET"])
 def livesearch():
@@ -314,5 +316,6 @@ class Order(Resource):
 
 api.add_resource(Order, "/Order/")
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) #comment out for docker
+    #app.run(host="0.0.0.0", debug=True) #leave in for docker
 
