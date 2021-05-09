@@ -1,7 +1,7 @@
 body{
     margin: 20px;
     padding: 10px;
-    background: rgb(163, 70, 159);
+    background: rgb(255, 255, 255);
     font-family: Arial, Helvetica, sans-serif;
     
 
@@ -34,10 +34,10 @@ text-align: center;
 ol li a:hover{
     border-bottom: 4px solid red;
 }
-.search-input .icon{
+.fa-search{
     position:absolute;
-    left:20%;
-    top:1%;
+    left:75%;
+    top:4%;
     padding: 12px 15px;
     margin-top: 20px;
     margin-right: 16px;
@@ -146,9 +146,8 @@ box-shadow: 1px 2px 4px;
 }
 input[type=text], select {
     position: absolute;
-    left:3%;
-    top: 14%;
-    width: 28%;
+    left: 55%;
+    width: 20%;
     padding: 12px 12px; 
     margin: 20px 0;
     display: inline-block;
@@ -156,25 +155,11 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
   }
-  
-.wrapper{
-    max-width: 450px;
-    margin: 150px auto;
+  p{
     position: absolute;
-    left: 3%;
-    top: 1%;
-
-}
-.wrapper .search-input{
-    background:white;
-    width: 100%;
-    border-radius: 5px;
-    box-shadow:0px 1px 1px 1px black ;
-}
-
-
-
-
+    left: 55%; 
+    top:5%;
+  }
   .input-group-btn{
     position: relative;
     left:77%;
@@ -199,7 +184,7 @@ input[type=text], select {
 .middle{
     position: absolute;
     top: 50%;
-    left: 40%;
+    left: 50%;
     transform:translate(-50%,-50%);
 
 }
