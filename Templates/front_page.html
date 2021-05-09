@@ -10,10 +10,18 @@
 
 </head>
 <body>
-
-
-    <input type="text" id = "livebox">
+     <input type="text" id = "livebox"placeholder="Type in an product..">
+  
+ <div class="wrapper">
+     <div class="search-input">   
+       
+    <div class="autocom-box">
     <p id ="list"></p>
+    </div>
+    <!----<div class="icon"><i class="fa fa-search"></i></div>--->
+</div>
+</div>
+</div>
 
 
 
@@ -101,10 +109,6 @@
 
 
 
-
-
-
-
 <script>
     //function to get the value
     $(document).ready(function(){
@@ -121,7 +125,7 @@
                          value[2]="placeholder.PNG"
                         }
                         var img="<img src=\"../static/Pictures/"+value[2]+"\" width=80px length=80px>"
-                        data += "<li>"+value[0]+" "+value[1]+"kr"+" "+img+"</li>";
+                        data += "<li>"+img+" "+value[1]+"kr"+" "+value[0]+"</li>";
                     });
                     data += "</ul>";
                     $("#list").html(data);
