@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/item.css">
+    
+    <meta charset="utf-8">
+    
+    </head>
+    <body>
+        <nav></nav>
+        <div class ="container">
+            <div class="row gx-5 align-items-center">
+                <div class="productHeader col-8"></div>
+
+                <div class="col-4">
+                    <div class="p-3 border">
+                        <div class="productPricing" align="center">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row productDescription"></div>
+            <div class="row productSpecification"></div>
+        </div>
+
+        <script>
+
+
+            var v = window.location.href.split("/");
+            var id = v[v.length - 2];
+            var product;
+            var amount = 1;
+
+
+
+            function view(json){
+                var productHeader = document.getElementsByClassName("productHeader")[0];
+                var text = document.createElement("h2");
+                text.innerHTML = json.Name;
+                //adding product name 
+                productHeader.appendChild(text);
+
+                var request = new XMLHttpRequest();
+                request.open("GET", "http://localhost:5000/Category/"+json.Category_id+"/")
+                request.onreadystatechange = function (){
+                    if(this.readyState == 4 && this.status){
+                        var json2 = JSON.parse(this.responseText)[json.Category_id];
+                        text = document.createElement("h4");
+                        text.innerHTML = json2.Category;
+                        //adding the product category
+                        productHeader.appendChild(text);
+
+                        var img = document.createElement("img");
+                        img.setAttribute("class", "img-fluid productImg");
+                         //displaying product image
+                         if(json.Image == null || json.Image == ""){
+                             json.Image = "placeholder.PNG"
+                         }
+                        img.setAttribute("src", "../static/Pictures/"+json.Image);
+                        productHeader.appendChild(img)
+                    
+                    }
+                }
+                request.send();
+               
+                
+                //document.getElementsByClassName("productImg")[0].src = "../static/Pictures/"+json[4];
+
+
+                var productPricing = document.getElementsByClassName("productPricing")[0];
+                var div = document.createElement("div");
+                div.setAttribute("class", "row");
+                text = document.createElement("h3");
+                //text.setAttribute("class", "justify-content-center")
+                text.innerHTML = json.Price + " Kr";
+                //displaying product price
+                div.appendChild(text);
+                productPricing.appendChild(div);
+
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+                textA = document.createElement("h6");
+                textA.innerHTML="Amount " + amount;
+                div.appendChild(textA);
+                productPricing.appendChild(div);
+                
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+                var btn = document.createElement("button")
+                btn.innerHTML = "<h3>-</h3>";
+                btn.setAttribute("class", "btn-outline-secondary col-6 decreaseAmount");
+                btn.onclick = function(){//decrease amount of items
+                    if(amount > 1){
+                        amount--;
+                        textA.innerHTML="Amount " + amount;
+                    }
+                }
+                div.appendChild(btn)
+
+                btn = document.createElement("button")
+                btn.innerHTML = "<h3>+</h3>";
+                btn.setAttribute("class", "btn-outline-secondary col-6 addAmount");
+                btn.onclick = function(){//increase amount of items
+                    amount++;
+                    textA.innerHTML="Amount " + amount;
+                }
+                div.appendChild(btn)
+                productPricing.appendChild(div)
+                btn = document.createElement("button")
+                btn.innerHTML = "Add to cart";
+                btn.setAttribute("class", "btn btn-outline-primary btnAddToCart");
+
+                
+
+
+                btn.onclick = function(){//adds the product to the cart
+
+                    var user = JSON.parse(localStorage.getItem("user"))
+                    if(user == null){
+                        localStorage.setItem("PrevPage", window.location.href);
+                        window.location = "http://localhost:5000/"
+                    }
+
+                    var request = new XMLHttpRequest();
+                    request.open("POST", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+json.Product_id+"&Amount="+amount, true);
+                    request.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status === 200){
+                            var answer = window.confirm("Product added to your cart, would you like to keep shopping? (cancel = no)")
+                            if(!answer){ //go to Cart
+                                window.location = "http://localhost:5000/cart/"
+                            }
+                        }
+                    }
+                    request.send()
+
+
+                }
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+                div.appendChild(btn)
+                productPricing.appendChild(div)
+
+
+                //displaying product description
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+                text = document.createElement("h3");
+                text.innerHTML = "Product description";
+                div.appendChild(text)
+                document.getElementsByClassName("productDescription")[0].appendChild(div);
+
+                div = document.createElement("div");
+                div.setAttribute("class", "row");
+            
+                text = document.createElement("p");
+                text.setAttribute("style", "border-top: solid red;")
+                text.innerHTML = json.Description;
+                div.appendChild(text)
+                document.getElementsByClassName("productDescription")[0].appendChild(div);
+
+
+                //displaying all of the products specifications
+                var tables = json.Specification.split(";");
+                var productSpecification = document.getElementsByClassName("productSpecification")[0];
+                for(var i = 0; i < tables.length-1; i++){
+                    var rows = tables[i].split(",");
+
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "card p-0 border-primary mb-2")
+
+                    var divH = document.createElement("div");
+                    divH.setAttribute("class", "card-header border-primary bg-white")
+
+                    var divB = document.createElement("div");
+                    divB.setAttribute("class", "card-body pt-0 pb-0")
+
+                    text = document.createElement("h3");
+                    text.setAttribute("class", "productSpecicationTitle");
+                    text.innerHTML = rows[0];
+                    divH.appendChild(text)
+
+                    //var list = document.createElement("ul");
+                    //list.setAttribute("class", "productSpecicationList");
+                    
+                    for(var j = 1; j < rows.length; j++){
+                        var divR = document.createElement("div");
+                        divR.setAttribute("class", "row border-bottom");
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-6 p-0");
+                        var values = rows[j].split(":");
+
+                        text = document.createElement("p");
+                        text.innerHTML = values[0];
+                        div.appendChild(text);
+
+                        //divB.appendChild(div);
+                        divR.appendChild(div);
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "col-6 p-0");
+
+                        text = document.createElement("p");
+                        text.innerHTML = values[1];
+                        div.appendChild(text);
+                        divR.appendChild(div);
+
+                        
+                        divB.appendChild(divR);
+                    }
+
+                    divC.appendChild(divH);
+                    divC.appendChild(divB);
+
+                    productSpecification.appendChild(divC);
+                }
+
+
+                
+            }
+
+            var request = new XMLHttpRequest();
+            request.open("GET", "http://localhost:5000/item/"+id+"/")
+            request.onreadystatechange = function (){
+                if(this.readyState == 4 && this.status){
+                    var json = JSON.parse(this.responseText)[id];
+                    view(json);
+                }
+
+            }
+            request.send();
+
+
+        </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    </body>
+    </html>

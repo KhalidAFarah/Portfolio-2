@@ -7,12 +7,14 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 </head>
 <body>
 
-<input type="text" id = "livebox">
-<p id ="list"></p>
 
+    <input type="text" id = "livebox">
+    <p id ="list"></p>
 
 
 
@@ -25,6 +27,7 @@
 
 
 </ol>
+
 <div class="icon">
     <i class="fa fa-user" aria-hidden="true"></i>
     <i class="fa fa-search" aria-hidden="true"></i> 
@@ -41,30 +44,67 @@
 
 
 
+<div class="slidershow middle">
+    
+        <div class="slides">
+        <input type="radio" name="r" id="r1" checked>
+        <input type="radio" name="r" id="r2">
+        <input type="radio" name="r" id="r3">
+        <div class="slide s1">
+            <img src="../static/Pictures/mac.png" alt="">
+        </div>
+        <div class="slide">
+            <img src="../static/Pictures/Acer.png" alt="">
+        </div>
+        <div class="slide">
+            <img src="../static/Pictures/lenovo.png" alt="img3">
+        </div>
+        
+    </div>
+    <div class="dots">
+        <label for="r1" class="bar"></label>
+        <label for="r2"   class="bar"></label>
+        <label for="r3"   class="bar"></label>
+
+    </div>
+</div>
 
 
 
-
-
-<div class="cover">
- <img src="./static/Pictures/mac.png"> 
-
- <div class="text">
+ <div class="txt">
      <h1>Supersalg på alle varer</h1>
  </div>
 </div>
     </div>
 
+
+    
+
+
+
+
+
+
+
+
+
     <div class="image2">
-        <image src="./static/Pictures/pc.jpg" height="300" width="300"></image>
+        <image src="../static/Pictures/pc.jpg" height="300" width="300"></image>
         <h6>PC</h6>
     </div>
     <div class="image3">
-        <image src="./static/Pictures/screen.png"></image>
-        <h>Skjermer</h>
+        <image src="../static/Pictures/screen.png"></image>
+        <h6>Skjermer</h6>
     </div>
 
 </body>
+
+
+
+
+
+
+
 
 <script>
     //function to get the value
@@ -78,7 +118,11 @@
                 success:function(res){
                     var data = "<ul>";
                     $.each(res,function(front_page,value){
-                        data += "<li>"+value.word_eng+"</li>";
+                        if(value[2]==null || value[2]==""){
+                         value[2]="placeholder.PNG"
+                        }
+                        var img="<img src=\"../static/Pictures/"+value[2]+"\" width=80px length=80px>"
+                        data += "<li>"+value[0]+" "+value[1]+"kr"+" "+img+"</li>";
                     });
                     data += "</ul>";
                     $("#list").html(data);

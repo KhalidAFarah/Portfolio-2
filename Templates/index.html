@@ -2,32 +2,66 @@
     
 <head>
 <title>Login Page</title>
-<link rel="stylesheet" href="../static/style.css">
+<link rel="stylesheet" href="../static/style.css">   <!---Linked my stylesheet---->
 
 <meta charset="utf-8">
 
 </head>
 <body>
     <div class ="box">
-        <h1>
-            Login
-        </h1>
-    <form method="post"></form>
+    <div class="btn-field">
+        <div id="btn"></div>
+       <button type="button" onclick="login" class="tgl-btn">Log in</button>
+        <button type="button" onclick="Register()" class="tgl-btn">Register</button>
+    </div>
+    <div id="post">
         <div class = "felt">
             <label for="usernm">Username</label>
-            <input type="text" placeholder="Enter username" name="usernm" required>
+            <input type="text" placeholder="Enter username" id="usernm" required>
 
             <label for="psswd">Password</label>
-            <input type="text" placeholder="Enter password" name="psswd" required>
+            <input type="password" placeholder="Enter password" id="psswd" required>
 
-            <button type="submit" class="btn">Log in</button>
+            <button onclick="submit()" class="btn">Log in</button>
             <label>
-                <input type="checkbox" name="remeb"> Remember me 
+                <input type="checkbox" name="remeb">Remember me 
             </label>
 
     </div>
- </form> 
-    </div>
+</div>
+</div>
+
+<script>
+    function Register(){
+        window.location="http://localhost:5000/Register/"
+    }
+function submit(){
+    var username= document.getElementById("usernm");
+    var password = document.getElementById("psswd");
+
+    var http= new XMLHttpRequest()
+    http.open("GET","http://localhost:5000/user/"+username.value+"/" +password.value+"/" )
+    http.onreadystatechange=function(){
+
+        if(this.readyState == 4 && this.status === 200){
+            var json = JSON.parse(this.responseText)
+            window.localStorage.setItem("user",JSON.stringify(json));
+            if(window.localStorage.getItem("PrevPage") == null){
+                window.location = "http://localhost:5000/"
+            }else{
+                var url = window.localStorage.getItem("PrevPage");
+                window.localStorage.removeItem("PrevPage");
+                window.location = url;
+            }
+        }
+
+    }
+    http.send();
+}
+
+
+</script>
+
 
 </body>
 </html>

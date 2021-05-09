@@ -1,18 +1,10 @@
 body{
-<<<<<<< Updated upstream
-    margin: 0;
-    padding: 0;
-    background: whitesmoke;
-    font-family: Arial, Helvetica, sans-serif;
-
-=======
     margin: 20px;
     padding: 10px;
     background: rgb(163, 70, 159);
     font-family: Arial, Helvetica, sans-serif;
->>>>>>> Stashed changes
+
 }
-    
 .menu ul{
 list-style: none;
 background: black;
@@ -43,11 +35,20 @@ ol li a:hover{
 }
 .fa-search{
     position:absolute;
-    left:82%;
-    top:2%;
-    color: black;
-     
+    left:75%;
+    top:4%;
+    padding: 12px 15px;
+    margin-top: 20px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    border-radius: 5px;
+    cursor: pointer;
 }
+.fa-search:hover{
+    background: #ccc;
+}
+
 .fa-user{
     position:absolute;
     left:85%;
@@ -75,16 +76,23 @@ ol li a:hover{
     width: 1328px;
 }
 
-.text{
+.txt{
     position: absolute;
-    top:20%;
+    top:30%;
     left:70%;
+    border: 1px solid rgb(0, 0, 0);
+
+    box-shadow: 1px 2px 2px;
+    text-align: center;
 }
 h1{
    font-size: 70px;
-   font-family: 'Courier New', Courier, monospace;
+   font-family: barlow condensed,sans-serif;
     text-transform: capitalize;
     width: 400px; 
+    word-spacing: 0px;
+    font-weight: lighter;
+    line-height: 72px;
 
 }
 .image2{
@@ -98,7 +106,7 @@ h1{
 h6{
     color: black;
     position:absolute;
-    left:20%;
+    left:25%;
     top:5%;
     border: 3px solid black;
     width: 200px ;
@@ -115,14 +123,14 @@ box-shadow: 1px 3px 9px;
 .image3{
 position: absolute;
 left: 60%;
-top: 80%;
+top: 85%;
 border: 1px solid darkgray;
 box-shadow: 1px 2px 4px;
 }
 .image3:hover{
     box-shadow: 1px 3px 9px;
     }
-h{
+.h{
     color: black;
     position:absolute;
     left:30%;
@@ -134,14 +142,20 @@ h{
     background-color: whitesmoke;
     font-weight:normal ;
     text-align: center; 
-<<<<<<< Updated upstream
-=======
+
 }
 input[type=text], select {
     position: absolute;
     left:4%;
     top: 14%;
     width: 28%;
+
+}
+input[type=text], select {
+    position: absolute;
+    left: 55%;
+    width: 20%;
+
     padding: 12px 12px; 
     margin: 20px 0;
     display: inline-block;
@@ -151,11 +165,16 @@ input[type=text], select {
   }
   p{
     position: absolute;
+
     width: 30%;
     left: 4%; 
     top:20%;
     background-color: white;
     border-radius: 5px;
+
+    left: 55%; 
+    top:5%;
+
   }
   .input-group-btn{
     position: relative;
@@ -167,6 +186,7 @@ input[type=text], select {
     max-width: 450px;
     margin: 150px auto;
   }
+
 
 
 
@@ -236,5 +256,3 @@ input[name="r"]{
 #r3:checked ~ .s1{
     margin-left: -40%;
     
->>>>>>> Stashed changes
-}

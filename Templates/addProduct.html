@@ -8,7 +8,7 @@
     
     </head>
     <body class="body">
-        <form class ="box" method="POST" action="" enctype="multipart/form-data"> 
+        <form class ="box" method="POST" action="http://localhost:5000/admin/" enctype="multipart/form-data"> 
             <h1>Add a new product</h1>
             <input type="file" class="imageChooser" accept="*/, .jpg, .png" name="pictures">
             <div class="subBox">
@@ -17,7 +17,7 @@
             </div>
             <div class="subBox">
                 <h3>Price</h3>
-                <input type="text" class="inputPrice">
+                <input type="number" class="inputPrice">
             </div>
             <div class="subBox">
                 <h3>Category</h3>
@@ -33,7 +33,7 @@
                 <button type="button" class="btnaddTitle" onclick="setupSpecifications()">Add specification</button>
             </div>
             <div class="subBoxE">
-                <input type="submit" onclick="submitProduct()" value="Submit product">
+                <input type="submit" onclick="return submitProduct()" value="Submit product">
             </div>
         </form>
     
@@ -52,8 +52,8 @@
                     var keys = Object.keys(json);
                     for(var i = 0; i < keys.length; i++){
                         var option = document.createElement("option");
-                        option.innerHTML = json[keys[i]];
-                        option.setAttribute("value", keys[i]);
+                        option.innerHTML = json[keys[i]].Category;
+                        option.setAttribute("value", json[keys[i]].Category_id);
 
                         select.appendChild(option);
                     }
@@ -163,18 +163,38 @@
                 }
             }
 
-            //console.log("specifications: " + specification)
+            //Validating the information given
+            var productName = document.getElementsByClassName("inputName")[0].value;
+            //Making sure the product name field is not empty
+            if(productName == null || productName == "" || !isNaN(productName)){
+                alert("Please write a valid product name.");
+                return false;
+            }
 
-            //var http = new XMLHttpRequest();
-            //http.open("POST", "http://localhost:5000/mi/", true);//?Name="+document.getElementsByClassName("inputName")[0].value + "&Price="+document.getElementsByClassName("inputPrice")[0].value+"&Category="+document.getElementsByClassName("selectCategory")[0].value + "&Description="+document.getElementsByClassName("inputDescription")[0].value +"&Specification="+specification, true);
-             //request.setRequestHeader("Access-Control-Allow-Origin","*");
-             //request.addRequestHeader("Content-Type", "application/json");
-            //var fo = new FormData()
-            //fo.append(document.getElementsByClassName("imageChooser")[0].value)
-            //http.send(fo)
-            document.getElementsByClassName("box")[0].action="http://localhost:5000/item/?Name="+document.getElementsByClassName("inputName")[0].value + "&Price="+document.getElementsByClassName("inputPrice")[0].value+"&Category_id="+document.getElementsByClassName("selectCategory")[0].value + "&Description="+document.getElementsByClassName("inputDescription")[0].value +"&Specification="+specification;
+            var productPrice = document.getElementsByClassName("inputPrice")[0].value;
+            //Checking if the product price field has an integer
+            if(productPrice == null || productPrice == "" || isNaN(productPrice) || productPrice < 0) {
+                alert("Please write a valid integer as the product price.");
+                return false;
+            }
 
-        
+            var productCategory = document.getElementsByClassName("selectCategory")[0].value;
+            //Making sure a category has been selected
+            if(productCategory == ""){
+                alert("Please select a category.");
+                return false;
+            }
+
+            var productDescription = document.getElementsByClassName("inputDescription")[0].value;
+            //Product description must be filled with a string
+            if(productDescription == null || Number.isInteger(productDescription) || productDescription == ""){
+                alert("Please fill the product description with informative text.")
+                return false;
+            }
+            
+            //Not validating specification since it can be very broad 
+            document.getElementsByClassName("box")[0].action="http://localhost:5000/item/?Name="+productName+"&Price="+productPrice+"&Category_id="+productCategory+ "&Description="+productDescription+"&Specification="+specification;
+            return true;
         }
     </script>
     </html>
