@@ -30,6 +30,10 @@ mycursor = db.cursor()
 def renders_site():
     return render_template("index.html")
 
+@app.route("/category/<catid>/")
+def renders_site_category(catid):
+    return render_template("category.html")    
+
 @app.route("/Register/")
 def renders_site_register():
     return render_template("Register.html")    
