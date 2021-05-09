@@ -115,25 +115,18 @@
                 btn.innerHTML = "Add to cart";
                 btn.setAttribute("class", "btn btn-outline-primary btnAddToCart");
 
-                
+                /////////////////////Change later///////////////////////////////
+                var user_id = 1;
+                ///////////////////////////////////////////////////////////////
 
 
                 btn.onclick = function(){//adds the product to the cart
-
-                    var user = JSON.parse(localStorage.getItem("user"))
-                    if(user == null){
-                        localStorage.setItem("PrevPage", window.location.href);
-                        window.location = "http://localhost:5000/"
-                    }
-
                     var request = new XMLHttpRequest();
-                    request.open("POST", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+json.Product_id+"&Amount="+amount, true);
+                    request.open("POST", "http://localhost:5000/Cart/?User_id="+user_id+"&Product_id="+json.Product_id+"&Amount="+amount, true);
                     request.onreadystatechange = function(){
                         if(this.readyState == 4 && this.status === 200){
-                            var answer = window.confirm("Product added to your cart, would you like to keep shopping? (cancel = no)")
-                            if(!answer){ //go to Cart
-                                window.location = "http://localhost:5000/cart/"
-                            }
+                            alert("Product added to your cart");
+                            //go to Cart
                         }
                     }
                     request.send()
