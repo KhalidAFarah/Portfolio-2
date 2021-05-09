@@ -1,133 +1,3 @@
-<<<<<<< Updated upstream
-<html>
-<head>
-    <title>Welcome</title>
-    <link rel="stylesheet" href="../static/front.css">
-    
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
-</head>
-<body>
-
-
-    <input type="text" id = "livebox">
-    <p id ="list"></p>
-
-
-
-<div class="menu">
-<ol>
-<li><a href="">PC</a></li>
-<li><a href="">Skjerm</a></li>
-<li><a href="">Grafikkort</a></li>
-<li><a href="">Skjermkort</a></li>
-
-
-</ol>
-
-<div class="icon">
-    <i class="fa fa-user" aria-hidden="true"></i>
-    <i class="fa fa-search" aria-hidden="true"></i> 
-
-<div class="background">
-    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-</div>
-</div>
-
-</div>
-
-
-
-
-
-
-<div class="slidershow middle">
-    
-        <div class="slides">
-        <input type="radio" name="r" id="r1" checked>
-        <input type="radio" name="r" id="r2">
-        <input type="radio" name="r" id="r3">
-        <div class="slide s1">
-            <img src="../static/Pictures/mac.png" alt="">
-        </div>
-        <div class="slide">
-            <img src="../static/Pictures/Acer.png" alt="">
-        </div>
-        <div class="slide">
-            <img src="../static/Pictures/lenovo.png" alt="img3">
-        </div>
-        
-    </div>
-    <div class="dots">
-        <label for="r1" class="bar"></label>
-        <label for="r2"   class="bar"></label>
-        <label for="r3"   class="bar"></label>
-
-    </div>
-</div>
-
-
-
- <div class="txt">
-     <h1>Supersalg på alle varer</h1>
- </div>
-</div>
-    </div>
-
-
-    
-
-
-
-
-
-
-
-
-
-    <div class="image2">
-        <image src="../static/Pictures/pc.jpg" height="300" width="300"></image>
-        <h6>PC</h6>
-    </div>
-    <div class="image3">
-        <image src="../static/Pictures/screen.png"></image>
-        <h6>Skjermer</h6>
-    </div>
-
-</body>
-
-
-
-
-
-
-
-
-<script>
-    //function to get the value
-    $(document).ready(function(){
-        $("#livebox").on("input",function(e){
-            $("#list").empty();
-            $.ajax({
-                method:"post",
-                url:"/livesearch",
-                data:{text:$("#livebox").val()},
-                success:function(res){
-                    var data = "<ul>";
-                    $.each(res,function(front_page,value){
-                        if(value[2]==null || value[2]==""){
-                         value[2]="placeholder.PNG"
-                        }
-                        var img="<img src=\"../static/Pictures/"+value[2]+"\" width=80px length=80px>"
-                        data += "<li>"+value[0]+" "+value[1]+"kr"+" "+img+"</li>";
-                    });
-                    data += "</ul>";
-                    $("#list").html(data);
-                }
-=======
 
 <html>
     <head>
@@ -141,19 +11,8 @@
     
     </head>
     <body>
-        <input type="text" id = "livebox"placeholder="Type in an product..">
-      
-        <div class="wrapper">
-            <div class="search-input">   
-                <p id ="list"></p>
-           <div class="autocom-box">
-           
-           </div>
-           <!----<div class="icon"><i class="fa fa-search"></i></div>--->
-       </div>
-       </div>
-       </div>
-    <!-----
+       
+  <header>
     <div class="menu">
     <ol>
     <li><a href="">PC</a></li>
@@ -174,8 +33,21 @@
     </div>
     
     </div>
+
+    <input type="text" id = "livebox"placeholder="Type in an product..">
+      
+    <div class="wrapper">
+        <div class="search-input">   
+            <p id ="list"></p>
+       <div class="autocom-box">
+       
+       </div>
+       <!----<div class="icon"><i class="fa fa-search"></i></div>--->
+   </div>
+   </div>
+   </div>
     
-    
+  </header>
     
     
     
@@ -239,7 +111,7 @@
     
     
     
-    --->
+
     
     
     <script>
@@ -254,17 +126,22 @@
                     success:function(res){
                         var data = "<ul>";
                         $.each(res,function(front_page,value){
-                            if(value[2]==null || value[2]==""){
+                            if($(livebox).val().length>3){
+                                list.setAttribute("style","display:block;")
+                                if(value[2]==null || value[2]==""){
                              value[2]="placeholder.PNG"
                             }
                             var img="<img src=\"../static/Pictures/"+value[2]+"\" width=80px length=80px>"
-                            data += "<li>"+img+" "+value[1]+"kr"+" "+value[0]+"</li>";
+                            data += "<li>"+img+" "+value[1]+"kr"+" "+value[0]+"</li>"; 
+                            } 
+                            else{
+                                list.setAttribute("style","display:none;")
+                            }
                         });
                         data += "</ul>";
                         $("#list").html(data);
                     }
                 });
->>>>>>> Stashed changes
             });
         });
     </script>
