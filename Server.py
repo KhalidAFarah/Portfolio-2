@@ -38,9 +38,13 @@ def renders_site_category(catid):
 def renders_site_register():
     return render_template("Register.html")    
 
-#Rendering the base site
+#Rendering the admin sites
 @app.route("/admin/")
 def renders_site_admin():
+    return render_template("adminSite.html")
+
+@app.route("/admin/addProduct/")
+def renders_site_admin_product():
     return render_template("addProduct.html")
     
 #Rendering the shopping cart site
@@ -89,9 +93,9 @@ class UserGetAll(Resource):
 
 class UserGet(Resource):
     def get(self, Username, Password):
-        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
         for user  in mycursor:       
-            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4]}
+            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
             response = jsonify(response)
             response.headers.add("Access-Control-Allow-Origin", "*")
             return response

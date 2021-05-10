@@ -46,12 +46,19 @@ function submit(){
         if(this.readyState == 4 && this.status === 200){
             var json = JSON.parse(this.responseText)
             window.localStorage.setItem("user",JSON.stringify(json));
-            if(window.localStorage.getItem("PrevPage") == null){
-                window.location = "http://localhost:5000/"
-            }else{
-                var url = window.localStorage.getItem("PrevPage");
-                window.localStorage.removeItem("PrevPage");
-                window.location = url;
+            if(json.Access_level == 1){
+                if(window.localStorage.getItem("PrevPage") == null){
+                    window.location = "http://localhost:5000/"
+                }else{
+                    var url = window.localStorage.getItem("PrevPage");
+                    window.localStorage.removeItem("PrevPage");
+                    window.location = url;
+                }
+            }else if(json.Access_level == 2){
+                if(window.localStorage.getItem("PrevPage") != null){
+                    window.localStorage.removeItem("PrevPage");
+                }
+                window.location = "http://localhost:5000/admin/"
             }
         }
 
