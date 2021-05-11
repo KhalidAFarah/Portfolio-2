@@ -39,30 +39,34 @@ text-align: center;
 .btn{
     position: relative;
     display: inline-block;
-    padding: 1px 100px;
+    padding: 1% 30%;
     background-image: repeating-linear-gradient(45deg,black,black);
     border-block-end-style: revert;
     color: white;
     font-size: 17px;
     font-family: sans-serif;
     font-weight: 600;
-    margin: 20px;
+    margin: 2%;
 
 }
 
 .btn-field{
     position: relative;
     display: inline-block;
-    padding: 1px 100px;
+    padding: 5% 10%;
     background-image: repeating-linear-gradient(135deg,#0f1213,#0892d0, #23b2ee);
     border-block-end-style: revert;
     color: white;
     font-size: 17px;
     font-family: sans-serif;
     font-weight: 600;
-    margin: 20px;
-
 }
 .reg-felt{
     background: linear-gradient(135deg,#7df9ff,#0892d0, #23b2ee );
+    padding: 1% 5%;
+}
+.reg-felt input{
+    width: 100%;
+    padding: 2% 2%;
+    margin: 2% 0%;
 }

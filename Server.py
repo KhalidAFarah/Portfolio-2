@@ -127,8 +127,6 @@ class UserPost(Resource):
             db.commit()
         except:
            abort(401, message = "Username or password is already taken.")
-        url = request.url.split("/")[0]
-        return redirect(url+"/Login/")
 
 
 api.add_resource(Login_with_username_and_password, "/user/<Username>/<Password>/")

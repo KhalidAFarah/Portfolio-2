@@ -10,7 +10,6 @@
 <body>
     <div class ="box">
     <div class="btn-field">
-        <div id="btn"></div>
        <button type="button" onclick="login()" id="choose" class="tgl-btn">Log in with username & email</button>
         <button type="button" onclick="Register()" class="tgl-btn">Register</button>
     </div>
@@ -23,9 +22,9 @@
             <input type="password" placeholder="Enter password" id="interchangeable" required>
 
             <button onclick="submit()" class="btn">Log in</button>
-            <label>
-                <input type="checkbox" name="remeb">Remember me 
-            </label>
+            <!--<label>
+                <input type="checkbox" name="remeb" id="check">Remember me 
+            </label>-->
 
         </div>
     </div>
@@ -62,7 +61,19 @@
     }
 
     function submit(){
-        
+
+        //validation
+        if(username == null || username.value == null || username.value == ""){
+            alert("Please write a valid username")
+            return
+        }else if(regular == true && (interchangeable == null || interchangeable.value == null || interchangeable.value == "")){
+            alert("Please write a valid password");
+            return
+        }else if(regular == false && (interchangeable == null || interchangeable.value == null ||
+                interchangeable.value == "" || interchangeable.value.indexOf("@") == -1)){
+            alert("Please write a valid email");
+            return
+        }
         
         
         var http= new XMLHttpRequest()
@@ -91,6 +102,8 @@
                     }
                     window.location = "http://localhost:5000/admin/"
                 }
+            }else if(this.status != 200 && this.readyState === 4){
+                alert("Invalid values given");
             }
 
         }
