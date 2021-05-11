@@ -256,12 +256,24 @@ class Cart(Resource):
         parser.add_argument("Amount")
         
         data = parser.parse_args()
-        
-        try:
-            mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
-            db.commit()
+
+        try:#checking if user has the product in their cart
+            mycursor.execute("SELECT Amount FROM Carts WHERE User_id=%s AND Product_id=%s AND Ordered=%s",(int(data['User_id']),int(data['Product_id']), "No"))
         except:
-            abort(405, message="Unable to add product to cart")
+            abort(404, message="Unable to check your cart")
+        result = mycursor.fetchall()
+        
+          
+        if(len(result) < 1):
+            try:
+                mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
+                db.commit()
+            except:
+                abort(405, message="Unable to add product to cart")
+        else:   
+            amount = result[0][0] + int(data['Amount'])
+            mycursor.execute("UPDATE Carts SET Amount={} WHERE User_id={} AND Product_id={}".format(amount, int(data['User_id']), int(data['Product_id'])))
+            db.commit()
 
         return 200
     def get(self): #get all in a cart
