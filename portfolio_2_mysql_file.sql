@@ -13,7 +13,7 @@ Firstname VARCHAR(50) NOT NULL,
 Lastname VARCHAR(50) NOT NULL,
 Username VARCHAR(50) NOT NULL,
 Password VARCHAR(50) UNIQUE,
-Email VARCHAR(70),
+Email VARCHAR(70) UNIQUE,
 Access_level INT NOT NULL DEFAULT 1
 );
 INSERT INTO Customers (Firstname, Lastname, Username, Password, Access_level) VALUES 

@@ -91,9 +91,19 @@ class UserGetAll(Resource):
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
-class UserGet(Resource):
+class Login_with_username_and_password(Resource):
     def get(self, Username, Password):
         mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
+        for user  in mycursor:       
+            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
+            response = jsonify(response)
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            return response
+
+        abort(404, message="User not found")
+class Login_with_username_and_email(Resource):
+    def get(self, Username, Email):
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
         for user  in mycursor:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
             response = jsonify(response)
@@ -121,7 +131,8 @@ class UserPost(Resource):
         return redirect(url+"/Login/")
 
 
-api.add_resource(UserGet, "/user/<Username>/<Password>/")
+api.add_resource(Login_with_username_and_password, "/user/<Username>/<Password>/")
+api.add_resource(Login_with_username_and_email, "/userM/<Username>/<Email>/")
 api.add_resource(UserPost, "/user/")
 api.add_resource(UserGetAll, "/users/")
 

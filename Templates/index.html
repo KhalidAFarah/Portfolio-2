@@ -11,60 +11,91 @@
     <div class ="box">
     <div class="btn-field">
         <div id="btn"></div>
-       <button type="button" onclick="login" class="tgl-btn">Log in</button>
+       <button type="button" onclick="login()" id="choose" class="tgl-btn">Log in with username & email</button>
         <button type="button" onclick="Register()" class="tgl-btn">Register</button>
     </div>
-    <div id="post">
+    <div id="login">
         <div class = "felt">
             <label for="usernm">Username</label>
             <input type="text" placeholder="Enter username" id="usernm" required>
 
-            <label for="psswd">Password</label>
-            <input type="password" placeholder="Enter password" id="psswd" required>
+            <label for="interchangeable" id="interchangeabletext">Password</label>
+            <input type="password" placeholder="Enter password" id="interchangeable" required>
 
             <button onclick="submit()" class="btn">Log in</button>
             <label>
                 <input type="checkbox" name="remeb">Remember me 
             </label>
 
+        </div>
     </div>
-</div>
 </div>
 
 <script>
+    //boolean to track wether to login with username and password(or email) 
+    var regular = true;
+
+    var username= document.getElementById("usernm");
+    var interchangeable = document.getElementById("interchangeable");
+
     function Register(){
         window.location="http://localhost:5000/Register/"
     }
-function submit(){
-    var username= document.getElementById("usernm");
-    var password = document.getElementById("psswd");
 
-    var http= new XMLHttpRequest()
-    http.open("GET","http://localhost:5000/user/"+username.value+"/" +password.value+"/" )
-    http.onreadystatechange=function(){
-
-        if(this.readyState == 4 && this.status === 200){
-            var json = JSON.parse(this.responseText)
-            window.localStorage.setItem("user",JSON.stringify(json));
-            if(json.Access_level == 1){
-                if(window.localStorage.getItem("PrevPage") == null){
-                    window.location = "http://localhost:5000/"
-                }else{
-                    var url = window.localStorage.getItem("PrevPage");
-                    window.localStorage.removeItem("PrevPage");
-                    window.location = url;
-                }
-            }else if(json.Access_level == 2){
-                if(window.localStorage.getItem("PrevPage") != null){
-                    window.localStorage.removeItem("PrevPage");
-                }
-                window.location = "http://localhost:5000/admin/"
-            }
+    function login(){
+        
+        if(regular){
+            regular = false;
+            document.getElementById("choose").innerHTML = "Log in with username & password";
+            interchangeable.value = "";
+            interchangeable.placeholder = "Enter email adress"
+            interchangeable.type = "email";
+            document.getElementById("interchangeabletext").innerHTML = "Email"
+        }else{
+            regular = true;
+            document.getElementById("choose").innerHTML = "Log in with username & email";
+            interchangeable.value = "";
+            interchangeable.placeholder = "Enter password"; 
+            interchangeable.type = "password";
+            document.getElementById("interchangeabletext").innerHTML = "Password"
         }
-
     }
-    http.send();
-}
+
+    function submit(){
+        
+        
+        
+        var http= new XMLHttpRequest()
+        if(regular){
+            http.open("GET","http://localhost:5000/user/"+username.value+"/" +interchangeable.value+"/" );
+        }else{
+            http.open("GET","http://localhost:5000/userM/"+username.value+"/" +interchangeable.value+"/" );
+        }
+        
+        http.onreadystatechange=function(){
+
+            if(this.readyState == 4 && this.status === 200){
+                var json = JSON.parse(this.responseText)
+                window.localStorage.setItem("user",JSON.stringify(json));
+                if(json.Access_level == 1){
+                    if(window.localStorage.getItem("PrevPage") == null){
+                        window.location = "http://localhost:5000/"
+                    }else{
+                        var url = window.localStorage.getItem("PrevPage");
+                        window.localStorage.removeItem("PrevPage");
+                        window.location = url;
+                    }
+                }else if(json.Access_level == 2){
+                    if(window.localStorage.getItem("PrevPage") != null){
+                        window.localStorage.removeItem("PrevPage");
+                    }
+                    window.location = "http://localhost:5000/admin/"
+                }
+            }
+
+        }
+        http.send();
+    }
 
 
 </script>
