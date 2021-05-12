@@ -2,7 +2,7 @@
     
     <head>
     <title>Login Page</title>
-    <link rel="stylesheet" href="../static/styleAdmin.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='styleAdmin.css')}}">
     
     <meta charset="utf-8">
     
@@ -40,6 +40,13 @@
     </body>
 
     <script>
+
+        var user = JSON.parse(window.localStorage.getItem("user"));
+        if(user == null || user.Access_level != 2){
+            window.localStorage.removeItem("user");
+            window.location = "http://localhost:5000/Login/";   
+        }
+
         var times = 0;
         var amountOfSpecs = [];
 

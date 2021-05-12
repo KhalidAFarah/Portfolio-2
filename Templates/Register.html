@@ -2,7 +2,7 @@
     <head>
 
     </head>
-    <titler>Registration</titler>
+    <title>Registration</title>
     <link rel="stylesheet" href="../static/style.css">
 
     <meta charset="utf-8">
@@ -11,10 +11,12 @@
 <body>
 
     <div class= "box">
-        <form method="post" id = "form" action=""> 
+        <!--<form method="post" id = "form" action="" on> -->
         
-        <p>You are required to fill in this form to create an account</p>
+        
         <div class="reg-felt">
+            <p>You are required to fill in this form to create an account</p>
+            
         <input type="text" placeholder="Enter Firstname" id= "firstname" required>
        
         <input type="text" placeholder="Enter Lastname" id= "lastname" required>
@@ -23,14 +25,14 @@
 
         <input type="text" placeholder="Create username" id = "username" required>
 
-        <input type="password" placeholder="Create password" id= "password" required>
+        <input type="password" placeholder="Create password" id= "password" required><br>
 
-        <input type="checkbox" class="checkbox"><span>I accept the terms and conditions</span> 
+        <input type="checkbox" class="checkbox"><span>I accept the terms and conditions</span>
 
-        <button type="submit" onclick="submit2()" class="btn">Register</button>
-        <button type="button" onclick="login()" class="tgl-btn">Log in</button>
+        <button type="submit" onclick="submit2()" class="btn ">Register</button>
+        <button type="button" onclick="login()" class="tgl-btn">Go to log in page</button>
         </div>
-        </form>
+        <!--</form>-->
     </div>
 <script>
      
@@ -38,8 +40,6 @@ function login(){
     window.location="http://localhost:5000/Login/"
 }
     function submit2(){
-        alert("You account is being created")
-
         var form = document.getElementById("form");
         var firstname = document.getElementById("firstname");
         var lastname = document.getElementById("lastname");
@@ -47,11 +47,39 @@ function login(){
         var username = document.getElementById("username");
         var password = document.getElementById("password");
 
-        
+        //validation
+        if(firstname == null || firstname.value == null || firstname.value == ""){
+            alert("Please fill in the firstname field");
+            return;
+        }
+        if(lastname == null || lastname.value == null || lastname.value == ""){
+            alert("Please fill in the lastname field");
+            return;
+        }
+        if(email == null || email.value == null || email.value == "" || email.value.indexOf("@") == -1){
+            alert("Please fill in the email field");
+            return;
+        }
+        if(username == null || username.value == null || username.value == ""){
+            alert("Please fill in the username field");
+            return;
+        }
+        if(password == null || password.value == null || password.value == ""){
+            alert("Please fill in the password field");
+            return;
+        }
 
-        form.action = "http://localhost:5000/user/?Firstname="+firstname.value+"&Lastname="+lastname.value+"&Username="+username.value+"&Password="+password.value+"&Email="+email.value
-
-
+        var request = new XMLHttpRequest();
+        request.open("POST","http://localhost:5000/user/?Firstname="+firstname.value+"&Lastname="+lastname.value+"&Username="+username.value+"&Password="+password.value+"&Email="+email.value,true)
+        request.onreadystatechange = function(){
+            if(this.status === 200 && this.readyState === 4){
+                alert("You account is being created");
+                window.location = "http://localhost:5000/Login/";
+            }else if(this.status != 200 && this.readyState === 4){
+                alert("Password or email is already in use!");
+            }
+        }
+        request.send();
     }
 
 </script>
