@@ -223,14 +223,14 @@ api.add_resource(Category, "/Category/<int:Category_id>/")
 
 class getAllInCategory(Resource):
     def get(self, Category_id):
-        mycursor.execute("SELECT * FROM Products WHERE Category_id={}".format(int(Category_id)))
+        mycursor.execute("SELECT p.Product_id, Categories.Name, p.Name, p.Price, p.Image, p.Description, p.Specification FROM Products as p LEFT JOIN Categories ON p.Category_id = Categories.Category_id  WHERE p.Category_id={}".format(int(Category_id)))
         
         response = {}
         for product in mycursor:
 
             x = {
                 "Product_id":product[0],
-                "Category_id":product[1],
+                "Category_Name":product[1],
                 "Name":product[2],
                 "Price":product[3],
                 "Image":product[4],

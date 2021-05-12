@@ -19,6 +19,18 @@
                 color: black;
                 border-collapse: separate;
             }
+            .itemcol{
+                border: solid whitesmoke 2px;
+            }
+            .itemcol:hover{
+                border: solid lightgrey 2px;
+                cursor: pointer;
+            }
+            .row img{
+                object-fit:cover;
+                height: 150px;
+                width: 150px;
+            }
             .p{
                  color:red;
                  position: absolute;
@@ -28,7 +40,7 @@
             
             }
             .container{
-                background-color:skyblue;
+                
                 max-width: 90%;
                 
             }
@@ -36,68 +48,115 @@
 
         <body>
             <div class = "container">
-                <div class="row" style="margin-top: 5%;">
-                    <div class="items col-8"></div>
-                    <div class="pricing col-4"></div>
-                </div>
+                <p id="categoryname" class="h3" align="center"></p>
                   
             </div>
             <script>
         
         function displayproducts(json,keys){
-            for (var i =0; i < keys.length; i++){
+            var container = document.getElementsByClassName("container")[0]
+            document.getElementById("categoryname").innerHTML = "Our " + json[keys[0]].Category_Name+"'s"
+            var divR = null;
+            for (var i = 0; i < keys.length; i++){
                 console.log(json[keys[i]].Image);
                 var div = document.createElement("div");
                 var img = document.createElement("img");
                 //img.setAttribute("src", "../static/Pictures/"+json[keys[i]].Image);
                 var image = "Pictures/"+json[keys[i]].Image;
-                console.log(image)
                 img.src = "http://localhost:5000/static/"+image
                 div.appendChild(img);
              //   document.getElementsByClassName("box")[0].appendChild(div);
+                
 
-                var divR = document.createElement("div");
-                        divR.setAttribute("class", "column");
+                if(i % 3 == 0){
+                    divR = document.createElement("div");
+                    divR.setAttribute("class", "row itemrow");
+                }
+                container.appendChild(divR)
+                
 
                         
+                        var divC = document.createElement("div");
+                        divC.setAttribute("class", "col-4 itemcol p-5")
+
                         var div = document.createElement("div");
-                        div.setAttribute("class", "col-2") 
+                        div.setAttribute("class", "row");
+                        div.onclick = function(){
+                            console.log(this.parentElement.children[3].children[0].value)
+                            window.location = "http://localhost:5000/"+this.parentElement.children[3].children[0].value;
+                        }
+
+
                         var img  = document.createElement("img");
-                        img.setAttribute("class", "img-fluid");
+                        img.setAttribute("class", "img-fluid offset-1 col-8 itemimg");
                         img.setAttribute("src", "http://localhost:5000/static/Pictures/"+json[keys[i]].Image);
                         div.appendChild(img);
 
-                        divR.appendChild(div);
+                        divC.appendChild(div);
 
                         div = document.createElement("div");
-                        div.setAttribute("class", "col-7");
-
-                        var div2 = document.createElement("div");
-                        div2.setAttribute("class", "column");
+                        div.setAttribute("class", "row");
+                        div.onclick = function(){
+                            console.log(this.parentElement.children[3].children[0].value)
+                            window.location = "http://localhost:5000/"+this.parentElement.children[3].children[0].value;
+                        }
 
                         var text = document.createElement("p");
-                        text.setAttribute("class", "h4");
+                        text.setAttribute("class", "h6");
                         text.innerHTML = json[keys[i]].Name;
-                        div2.appendChild(text);
-                        div.appendChild(div2);
-                        divR.appendChild(div);
-                        var div2 = document.createElement("div");
-                       
-                        div2.setAttribute("class", "row");
-                        var text = document.createElement("p")
-                        text.innerHTML = json[keys[i]].Description;
-                        div2.appendChild(text);
-                        div.appendChild(div2);
-
-                        div = document.createElement("column");
-                        div.setAttribute("class", "col-2");
-                        text = document.createElement("p");
-                        text.setAttribute("class", "p h4");
-                        text.innerHTML = json[keys[i]].Price + " Kr";
                         div.appendChild(text);
-                        divR.appendChild(div);
 
-                        document.getElementsByClassName("container")[0].appendChild(divR)
+                        divC.appendChild(div);
+                    
+                        
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "row");
+                        div.onclick = function(){
+                            console.log(this.parentElement.children[3].children[0].value)
+                            window.location = "http://localhost:5000/"+this.parentElement.children[3].children[0].value;
+                        }
+
+                        text = document.createElement("p");
+                        text.setAttribute("class", "h6");
+                        text.setAttribute("align", "center")
+                        text.innerHTML = json[keys[i]].Price + ",-";
+                        div.appendChild(text);
+                        divC.appendChild(div);
+
+                        div = document.createElement("div");
+                        div.setAttribute("class", "row");
+
+                        btn = document.createElement("btn");
+                        btn.setAttribute("class", "btn btn-primary");
+                        btn.setAttribute("align", "center")
+                        btn.value = keys[i];
+                        btn.innerHTML = "Add to cart";
+
+                        btn.onclick = function(){
+                            var user = JSON.parse(localStorage.getItem("user"))
+                            if(user == null){
+                                localStorage.setItem("PrevPage", window.location.href);
+                                window.location = "http://localhost:5000/"
+                            }
+
+                            var request = new XMLHttpRequest();
+                            var id = this.value;
+                            request.open("POST", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+id+"&Amount="+1, true);
+                            request.onreadystatechange = function(){
+                                if(this.readyState == 4 && this.status === 200){
+                                    var answer = window.confirm("Product added to your cart, would you like to keep shopping? (cancel = no)")
+                                    if(!answer){ //go to Cart
+                                        window.location = "http://localhost:5000/cart/"
+                                    }
+                                }
+                            }
+                            request.send()
+                        }
+                        div.appendChild(btn);
+                        divC.appendChild(div);
+
+                        divR.appendChild(divC);
 
 
             }
@@ -112,15 +171,13 @@
  
         if(this.readyState == 4 && this.status === 200){
             var json = JSON.parse(this.responseText)
-            console.log(json)
-            
             var keys = Object.keys(json)
-            console.log(keys)
+            if(keys.length == 0){
+                window.location = "http://localhost:5000/";
+            }
             displayproducts(json,keys)
-            
-            
-
-          
+        }else if(this.status != 200 && this.readyState == 4){
+            window.location = "http://localhost:5000/";
         }
     }
           http.send()
