@@ -3,8 +3,10 @@ body{
     padding: 10px;
     background: rgb(255, 255, 255);
     font-family: Arial, Helvetica, sans-serif;
-    
 
+}
+header{
+    background-color:black;
 }
 .menu ul{
 list-style: none;
@@ -20,7 +22,7 @@ text-align: center;
 }
 .menu a{
     text-decoration: none;
-    color: rgb(0, 0, 0);
+    color:white;
     width: 100px;
     display: block;
     padding: 25px 20px;
@@ -28,7 +30,8 @@ text-align: center;
     text-transform: uppercase;
     font-weight: bold;
     text-align: center;
-
+    white-space: nowrap;
+    border: solid black;
 }
 
 ol li a:hover{
@@ -37,7 +40,7 @@ ol li a:hover{
 .fa-search{
     position:absolute;
     left:75%;
-    top:4%;
+    top:5%;
     padding: 12px 15px;
     margin-top: 20px;
     margin-right: 16px;
@@ -50,35 +53,38 @@ ol li a:hover{
     background: #ccc;
 }
 
-.fa-user{
-    position:absolute;
-    left:85%;
-    top:2%;
-    color: black;
-     
-}
-.fa-shopping-cart{
+.login{
     position: absolute;
-    left:88%;
-    top:2%;
+    left:83%;
+    top:6%;
     color: black;
-    width: 25px;
-    height: -30px;
-    border-radius: 100px;
+    width: 4%;
     background-color: whitesmoke;
     margin-top: -4px;
     text-align: left;
-
-
+    z-index: 2;
+     
 }
-.cover img{
-    background-size: cover;
-    height: 530px ;
-    width: 1328px;
-}
-
-.txt{
+.login img{
+    width: 100%; 
     position: absolute;
-    top:20%;
-    left:70%;
+    top: 3%;
+    left: 1%; 
+}
+.shopping-cart{
+    position: absolute;
+    left:90%;
+    top:6%;
+    color: black;
+    width: 4%;
+    background-color: whitesmoke;
+    margin-top: -4px;
+    text-align: left;
+    z-index: 2;
+
+
+}
+.shopping-cart img{
+width: 100%;
+border-radius: 10px;
 }
