@@ -12,15 +12,25 @@
             margin: 0;
             padding:0;
             font-family: sans-serif;
-            background:linear-gradient(135deg, #7df9ff,#0892d0, #23b2ee );
+            background-color: whitesmoke;
             }
             .row{
-                border: 1px solid rgb(2, 2, 2);
-        
+               /* border: 1px solid rgb(22, 22, 22);*/
+                color: black;
+                border-collapse: separate;
+            }
+            .p{
+                 color:red;
+                 position: absolute;
+                 left:78%;
+                 margin-top: 52px;
 
+            
             }
             .container{
-                background-color: white;
+                background-color:skyblue;
+                max-width: 90%;
+                
             }
         </style>
 
@@ -47,11 +57,11 @@
              //   document.getElementsByClassName("box")[0].appendChild(div);
 
                 var divR = document.createElement("div");
-                        divR.setAttribute("class", "row itemrow border border-dark");
+                        divR.setAttribute("class", "column");
 
                         
                         var div = document.createElement("div");
-                        div.setAttribute("class", "col-2 border border-dark ") 
+                        div.setAttribute("class", "col-2") 
                         var img  = document.createElement("img");
                         img.setAttribute("class", "img-fluid");
                         img.setAttribute("src", "http://localhost:5000/static/Pictures/"+json[keys[i]].Image);
@@ -60,10 +70,10 @@
                         divR.appendChild(div);
 
                         div = document.createElement("div");
-                        div.setAttribute("class", "col-7 border border-dark");
+                        div.setAttribute("class", "col-7");
 
                         var div2 = document.createElement("div");
-                        div2.setAttribute("class", "row");
+                        div2.setAttribute("class", "column");
 
                         var text = document.createElement("p");
                         text.setAttribute("class", "h4");
@@ -79,10 +89,10 @@
                         div2.appendChild(text);
                         div.appendChild(div2);
 
-                        div = document.createElement("div");
-                        div.setAttribute("class", "col-2 border border-black");
+                        div = document.createElement("column");
+                        div.setAttribute("class", "col-2");
                         text = document.createElement("p");
-                        text.setAttribute("class", "p");
+                        text.setAttribute("class", "p h4");
                         text.innerHTML = json[keys[i]].Price + " Kr";
                         div.appendChild(text);
                         divR.appendChild(div);
