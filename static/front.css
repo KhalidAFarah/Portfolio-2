@@ -53,18 +53,20 @@ h6{
 
 }
 h4{
-    font-family: 'barlow', Courier, monospace;
-    font-size: 15px;
+    font-family: barlow condensed,sans-serif;
+    font-size: 12px;
     position: absolute;
-    top:12%;
+    top:10%;
     left: 91%;
+    color: white;
 }
 h5{
-    font-family: 'barlow', Courier, monospace;
-    font-size: 15px;
+    font-family: barlow condensed,sans-serif;
+    font-size: 12px;
     position: absolute;
-    top:11%;
-    left: 83%;
+    top:9%;
+    left: 84%;
+    color: white;
 }
 .image2:hover{
 box-shadow: 1px 3px 9px;
