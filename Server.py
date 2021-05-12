@@ -38,9 +38,13 @@ def renders_site_category(catid):
 def renders_site_register():
     return render_template("Register.html")    
 
-#Rendering the base site
+#Rendering the admin sites
 @app.route("/admin/")
 def renders_site_admin():
+    return render_template("adminSite.html")
+
+@app.route("/admin/addProduct/")
+def renders_site_admin_product():
     return render_template("addProduct.html")
     
 #Rendering the shopping cart site
@@ -87,11 +91,21 @@ class UserGetAll(Resource):
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
 
-class UserGet(Resource):
+class Login_with_username_and_password(Resource):
     def get(self, Username, Password):
-        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
         for user  in mycursor:       
-            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4]}
+            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
+            response = jsonify(response)
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            return response
+
+        abort(404, message="User not found")
+class Login_with_username_and_email(Resource):
+    def get(self, Username, Email):
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
+        for user  in mycursor:       
+            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
             response = jsonify(response)
             response.headers.add("Access-Control-Allow-Origin", "*")
             return response
@@ -113,11 +127,10 @@ class UserPost(Resource):
             db.commit()
         except:
            abort(401, message = "Username or password is already taken.")
-        url = request.url.split("/")[0]
-        return redirect(url+"/Login/")
 
 
-api.add_resource(UserGet, "/user/<Username>/<Password>/")
+api.add_resource(Login_with_username_and_password, "/user/<Username>/<Password>/")
+api.add_resource(Login_with_username_and_email, "/userM/<Username>/<Email>/")
 api.add_resource(UserPost, "/user/")
 api.add_resource(UserGetAll, "/users/")
 
@@ -243,12 +256,24 @@ class Cart(Resource):
         parser.add_argument("Amount")
         
         data = parser.parse_args()
-        
-        try:
-            mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
-            db.commit()
+
+        try:#checking if user has the product in their cart
+            mycursor.execute("SELECT Amount FROM Carts WHERE User_id=%s AND Product_id=%s AND Ordered=%s",(int(data['User_id']),int(data['Product_id']), "No"))
         except:
-            abort(405, message="Unable to add product to cart")
+            abort(404, message="Unable to check your cart")
+        result = mycursor.fetchall()
+        
+          
+        if(len(result) < 1):
+            try:
+                mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
+                db.commit()
+            except:
+                abort(405, message="Unable to add product to cart")
+        else:   
+            amount = result[0][0] + int(data['Amount'])
+            mycursor.execute("UPDATE Carts SET Amount={} WHERE User_id={} AND Product_id={}".format(amount, int(data['User_id']), int(data['Product_id'])))
+            db.commit()
 
         return 200
     def get(self): #get all in a cart
