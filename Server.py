@@ -69,10 +69,13 @@ def front_page():
 def livesearch():
     searchbox = request.form.get("text")#getting the request from the value
 
-    query="Select Name, Price, Image FROM Products WHERE Name LIKE \"%{}%\"".format(searchbox)
+    query="Select Name, Price, Image, Product_id FROM Products WHERE Name LIKE \"%{}%\"".format(searchbox)
     mycursor.execute(query)
     result = mycursor.fetchall()
-    return jsonify(result)
+    response = {}
+    for x in result:
+        response[x[3]] = {"Name":x[0], "Price":x[1], "Image":x[2], "Product_id":x[3]}
+    return jsonify(response)
 
 @app.route("/<int:Product_id>/")
 def itemPage(Product_id):
@@ -83,7 +86,7 @@ def itemPage(Product_id):
 
 class UserGetAll(Resource):
     def get(self):
-        mycursor.execute("SELECT User_id, Firstname, Lastname, Email FROM Customers")
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Password, Email FROM Customers")
         response = []
         for user  in mycursor:       
             response.append({"user_id": user[0], "Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4]})
@@ -355,3 +358,4 @@ if __name__ == "__main__":
     app.run(debug=True) #comment out for docker
     #app.run(host="0.0.0.0", debug=True) #leave in for docker
 
+    

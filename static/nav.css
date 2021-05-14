@@ -1,4 +1,4 @@
-body{
+/*body{
     margin: 20px;
     padding: 10px;
     background: rgb(255, 255, 255);
@@ -8,6 +8,7 @@ body{
 header{
     background-color:black;
 }
+
 .menu ul{
 list-style: none;
 background: black;
@@ -18,40 +19,26 @@ text-align: center;
 }
 .menu li{
     display: inline-block;
-
+    margin: 3% 1%;   
 }
 .menu a{
     text-decoration: none;
     color:white;
-    width: 100px;
+    width: 100%;
     display: block;
-    padding: 25px 20px;
+      
     font-size: 15px;
     text-transform: uppercase;
     font-weight: bold;
     text-align: center;
     white-space: nowrap;
-    border: solid black;
+    
 }
 
 ol li a:hover{
     border-bottom: 4px solid red;
 }
-.fa-search{
-    position:absolute;
-    left:75%;
-    top:5%;
-    padding: 12px 15px;
-    margin-top: 20px;
-    margin-right: 16px;
-    background: #ddd;
-    font-size: 17px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.fa-search:hover{
-    background: #ccc;
-}
+
 
 .login{
     position: absolute;
@@ -87,4 +74,109 @@ ol li a:hover{
 .shopping-cart img{
 width: 100%;
 border-radius: 10px;
+}
+input[type=text], select {
+    position: absolute;
+    top: 3%;
+    left:58%;
+    width: 20%;
+    padding: 12px 12px; 
+    margin: 20px 0;
+    display: inline-block;
+    border: 1px solid rgb(27, 27, 27);
+    border-radius: 4px;
+    box-sizing: border-box;
+  }*/
+
+  
+  .navlink{
+      text-decoration: none;
+      color: white;
+      white-space: nowrap;
+  }
+  .navlink:hover{
+        color: #106cfc;
+    }
+  .wrapper{
+    max-width: 450px;
+    margin: 150px auto;
+  }
+
+  /*shooping cart dropdown*/
+
+.cartdata{
+    width: 30%;
+    position: relative;
+    z-index: 2;
+    background-color: lightgrey;
+    margin-top: -9rem;
+    margin-left: 68%;
+    max-height: 0%;
+
+    transition: 1s;
+  }
+  .cartdatarow{
+    padding: 2%;
+    border-bottom: solid lightgrey;
+  }
+  .cartdatarowimg{
+    width: 25%;
+}
+.cartdatarowtext{
+    font-size: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+/*search box*/
+#list{
+    position: absolute;
+    width: 70%;
+    left: 17%; 
+    top:11%;
+    background-color:whitesmoke;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px black;
+    z-index: 1;
+
+
+  }
+
+  .listeditem{
+      text-decoration: none;
+      color: black;
+  }
+  .listeditem li{
+      list-style: none;
+      padding: 1% 0%;
+  }
+  .cartnumber{
+    margin-left: -2.4rem;
+    margin-top: -0.1rem;
+    border-radius: 100%;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .cartnumberelement{
+    color: white;
+    width: 100%;
+    margin-left: -0.3rem;
+    font-size: 1rem;
+  }
+
+.accessories-menu{
+    background-color: white;
+    display: none;
+    margin-left: 23rem;
+    border: solid black;
+    width: 10rem;
+    z-index: 4;
+    position: relative;
+    border-radius: 5%;
+    margin-top: -9.6rem;
+}
+.accessories-item{
+    list-style: none;
+    color: black;
 }

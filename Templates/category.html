@@ -173,7 +173,8 @@
             var json = JSON.parse(this.responseText)
             var keys = Object.keys(json)
             if(keys.length == 0){
-                window.location = "http://localhost:5000/";
+                //window.location = "http://localhost:5000/";
+                console.log(json)
             }
             displayproducts(json,keys)
         }else if(this.status != 200 && this.readyState == 4){

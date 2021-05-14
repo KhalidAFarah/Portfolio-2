@@ -1,3 +1,25 @@
+//checking if the user is logged inn
+function loggedin(){
+    var user = JSON.parse(window.localStorage.getItem("user"));
+    if(user == null){
+        document.getElementsByClassName("sendto")[0].setAttribute("href", "http://localhost:5000/Login/");
+        document.getElementsByClassName("sendtotext")[0].innerHTML="Login";
+    }else{
+        document.getElementsByClassName("sendto")[0].setAttribute("href", "http://localhost:5000/")
+        document.getElementsByClassName("sendtotext")[0].innerHTML="Log out";
+    }
+}loggedin();
+
+//for accessories
+
+$(".dropdown-toggle").on("focusin", function(){
+    $(".accessories-menu").show()
+});
+$(".dropdown-toggle").on("focusout", function(){
+    $(".accessories-menu").hide()
+});
+
+
 //for the searchbar
 $(document).ready(function(){
     $("#livebox").on("input",function(e){
@@ -10,12 +32,15 @@ $(document).ready(function(){
                 var data = "<ul>";
                 $.each(res,function(front_page,value){
                     if($(livebox).val().length>3){
+                        //console.log(value)
                         list.setAttribute("style","display:block;")
-                        if(value[2]==null || value[2]==""){
-                     value[2]="placeholder.PNG"
-                    }
-                    var img="<img src=\"../static/Pictures/"+value[2]+"\" width=80px length=80px>"
-                    data += "<li>"+img+" "+value[1]+"kr"+" "+value[0]+"</li>"; 
+                        if(value.Image==null || value.Image==""){
+                            value[2]="placeholder.PNG"
+                        }
+                    var img="<div class=\"col-3\"><img src=\"../static/Pictures/"+value.Image+"\" width=80px length=80px></div>";
+                    var name = "<div class=\"col-7\"><p>"+value.Name+"</p></div>";
+                    var price = "<div class=\"col-2\"><p>"+value.Price+",-</p></div>";
+                    data += "<a class=\"listeditem\" href=\"http://localhost:5000/"+value.Product_id+"\"><li class=\"row\">"+img+" "+name+" "+price+"</li>"; 
                     } 
                     else{
                         list.setAttribute("style","display:none;")
@@ -30,98 +55,139 @@ $(document).ready(function(){
 
 //for the shopping cart
 
-var user = JSON.parse(localStorage.getItem("user"))
-    //var cartdata = document.getElementsByClassName("cartdata");
-   // console.log(cartdata);
-    //var pressed = false;
-    function showcart(){
-        var user = JSON.parse(localStorage.getItem("user"))
-        var cartdata = document.getElementsByClassName("cartdata")[0];
-        console.log(cartdata);
-        var pressed = false;
-        function displaycart(data){
+var user = JSON.parse(localStorage.getItem("user"));
+var pressed = false;
+var data = null;
+var cartdata = document.getElementsByClassName("cartdata")[0];
+var items = 0;
 
-            console.log(data);
-            var keys = Object.keys(data);
-            if(pressed==false){
-                var times = 0;
-                $.each(data, function(front_page, value){
-                    if(times < 3){
-                        var divRow = document.createElement("div");
-                        divRow.setAttribute("class", "cartdatarow");
-
-                        var div = document.createElement("div")
-                        div.setAttribute("class", "col1");
-                        
-                        var img = document.createElement("img");
-                        img.setAttribute("class", "cartdatarowimg");
-                        img.setAttribute("src", "../static/Pictures/"+value.Image);
-                        div.appendChild(img);
-                        divRow.appendChild(div);
-
-                        var div = document.createElement("div")
-                        div.setAttribute("class", "col2");
-
-                        var a = document.createElement("a");
-                        a.innerHTML = value.Name;
-                        a.setAttribute("class", "cartdatarowtext");
-                        a.setAttribute("style", "display: inline; width: 75%; font-size: 13px;padding: 0%;")
-                        a.setAttribute("href", "http://localhost:5000/"+value.Product_id)
-                        div.appendChild(a);
-                        divRow.appendChild(div);
-
-                        var div = document.createElement("div")
-                        div.setAttribute("class", "col3");
-                        
-                        a = document.createElement("a");
-                        a.innerHTML = value.Price + " Kr";
-                        a.setAttribute("class", "cartdatarowtext");
-                        a.setAttribute("style", "display: inline; width: 75%; font-size: 13px;padding: 0%;")
-                        a.setAttribute("href", "http://localhost:5000/"+value.Product_id+"/")
-                        console.log(cartdata);
-                        div.appendChild(a);
-                        divRow.appendChild(div);
-
-
-                        cartdata.appendChild(divRow)
-                        
-                    }
-                    times++;
-                    
-                });
-                if(times >= 3){
-                    divRow = document.createElement("div");
-                    divRow.setAttribute("class", "cartdatarow");
-
-                    var p = document.createElement("p");
-                    p.innerHTML = "...";
-                    p.setAttribute("style", "position:relative;padding:0%;left:0%;top:0%;margin:0%;")
-                    p.setAttribute("align", "center")
-                    divRow.appendChild(p);
-                    cartdata.appendChild(divRow);
-
-                }
-                var divRow = document.createElement("div");
-                divRow.setAttribute("class", "cartdatarow");
-                var btn = document.createElement("a");
-                btn.innerHTML = "Go to Cart"
-                btn.setAttribute("style", "padding: 2%; color: dodgerblue")
-                btn.setAttribute("href", "http://localhost:5000/cart/")
-                divRow.appendChild(btn);
-                cartdata.appendChild(divRow);
-                cartdata.setAttribute("style", "max-height: 100%;")
-                pressed = true;
-            }else{
-                pressed = false;
-                cartdata.setAttribute("style", "max-height: 0%;")
-                $(".cartdata").empty().delay(800).fadeIn(400)
-            }
+function updatecartnumber(items){
+    var cartnumberelement = document.getElementsByClassName("cartnumberelement")[0];
+    var cartnumber = document.getElementsByClassName("cartnumber")[0];
+    
+    if(items == 0){
+        cartnumber.setAttribute("style", "display: none;")
+    }else if(items > 0){
+        cartnumber.setAttribute("style", "display: block;")
         
-            
-        }
-        if(user==null){
-            window.location="http://localhost:5000/Login/"
-        }
-        $.get("http://localhost:5000/Cart/?User_id="+user.user_id,displaycart)
-
+        cartnumberelement.innerHTML = items;
+        console.log(items)
     }
+
+}
+
+function getcart(){
+    var user = JSON.parse(localStorage.getItem("user"))
+    
+        
+    if(user==null){
+        window.location="http://localhost:5000/Login/"
+    }
+
+    function updatecartdata(value){
+        data = value;
+        var amount = 0;
+        $.each(value,function(front_page, val){
+            amount+=val.Amount;
+        })
+        if(amount != items){
+            items = amount;
+            updatecartnumber(items);
+        }
+    }
+    $.get("http://localhost:5000/Cart/?User_id="+user.user_id, updatecartdata)
+}
+function getAmount(){
+    return items;
+}
+
+
+getcart();
+setInterval(getcart, 10000)
+
+function displaycart(){
+
+    var keys = Object.keys(data);
+    if(pressed==false){
+        pressed = true;
+        var times = 0;
+        $.each(data, function(front_page, value){
+            if(times < 3){
+                var divRow = document.createElement("div");
+                divRow.setAttribute("class", "cartdatarow row");
+
+                var p = document.createElement("a");
+                p.setAttribute("href", "http://localhost:5000/"+value.Product_id)
+
+                var div = document.createElement("div")
+                div.setAttribute("class", "col1 col-3");
+                
+                var img = document.createElement("img");
+                img.setAttribute("class", "cartdatarowimg");
+                img.setAttribute("src", "../static/Pictures/"+value.Image);
+                img.setAttribute("style", "width:100%;")
+                div.appendChild(img);
+                divRow.appendChild(div);
+
+                var div = document.createElement("div")
+                div.setAttribute("class", "col2 col-7");
+
+                
+
+                var a = document.createElement("p");
+                a.innerHTML = value.Name;
+                a.setAttribute("class", "cartdatarowtext cartdatarowitemname");
+                //a.setAttribute("style", " font-size: 18px;padding: 0%;")
+                //a.setAttribute("href", "http://localhost:5000/"+value.Product_id)
+                div.appendChild(a);
+                divRow.appendChild(div);
+                
+
+                var div = document.createElement("div")
+                div.setAttribute("class", "col3 col-2");
+                
+                a = document.createElement("p");
+                a.innerHTML = value.Price + ",-";
+                a.setAttribute("class", "cartdatarowtext");
+                a.setAttribute("style", " font-size: 13px;padding: 0%;")
+                //a.setAttribute("href", "http://localhost:5000/"+value.Product_id+"/")
+                div.appendChild(a);
+                divRow.appendChild(div)
+                p.appendChild(divRow);
+
+
+                cartdata.appendChild(p)
+                
+            }
+            times++;
+            
+        });
+        if(times >= 3){
+            divRow = document.createElement("div");
+            divRow.setAttribute("class", "cartdatarow row");
+
+            var p = document.createElement("p");
+            p.innerHTML = "...";
+            p.setAttribute("style", "position:relative;padding:0%;left:0%;top:0%;margin:0%;")
+            p.setAttribute("align", "center")
+            divRow.appendChild(p);
+            cartdata.appendChild(divRow);
+
+        }
+        var divRow = document.createElement("div");
+        divRow.setAttribute("class", "cartdatarow row");
+        var btn = document.createElement("a");
+        btn.innerHTML = "Go to Cart"
+        btn.setAttribute("style", "padding: 2%; color: dodgerblue")
+        btn.setAttribute("href", "http://localhost:5000/cart/")
+        divRow.appendChild(btn);
+        cartdata.appendChild(divRow);
+        cartdata.setAttribute("style", "max-height: 100%;")
+        
+    }else{
+        pressed = false;
+        $(".cartdata").empty();
+        
+    }
+}
+
