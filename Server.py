@@ -173,7 +173,7 @@ class itemPost(Resource):
         try:   
             image = request.files['pictures']
             if image.filename:
-                image.save(os.path.join(os.getcwd() + "/Portfolio-2/static/Pictures/", image.filename))
+                image.save(os.path.join(os.getcwd() + "/static/Pictures/", image.filename))
 
                 mycursor.execute("INSERT INTO Products (Name, Price, Image, Category_id, Description, Specification) VALUES (%s, %s, %s, %s, %s, %s)",(data['Name'], int(data['Price']), image.filename, int(data['Category_id']), data['Description'], data['Specification']))
                 db.commit()
