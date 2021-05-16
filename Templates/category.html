@@ -165,7 +165,7 @@
         var http= new XMLHttpRequest()
         var link = window.location.href.split("/")
         var id = link[link.length-2]
-        http.open("GET","http://localhost:5000/Sort/"+id+"/")
+        http.open("GET","http://localhost:5000/Sort/"+id+"/", true)
         http.onreadystatechange=function(){
          
  
@@ -175,8 +175,9 @@
             if(keys.length == 0){
                 //window.location = "http://localhost:5000/";
                 console.log(json)
+            }else{
+                displayproducts(json,keys)
             }
-            displayproducts(json,keys)
         }else if(this.status != 200 && this.readyState == 4){
             window.location = "http://localhost:5000/";
         }

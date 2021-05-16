@@ -4,19 +4,19 @@ import mysql.connector
 import time
 import os
 
-app = Flask(__name__)
-#app = Flask(__name__, static_folder="/var/site/", static_url_path="")
+#app = Flask(__name__)
+app = Flask(__name__, static_folder="/var/site/", static_url_path="")
 api = Api(app)
 db = None
 while db is None:
     try:
         db = mysql.connector.connect(
-            host="127.0.0.1", #comment out for docker
-            #host="db", #leave in for docker
+            #host="127.0.0.1", #comment out for docker
+            host="db", #leave in for docker
             user="general",
             passwd="general",
             database="Webshop",
-            auth_plugin="mysql_native_password" #comment out for docker
+            #auth_plugin="mysql_native_password" #comment out for docker
         )
     except:
         print("unable to connect to MySQL database waiting retrying in 5 seconds")
@@ -226,7 +226,7 @@ api.add_resource(Category, "/Category/<int:Category_id>/")
 
 class getAllInCategory(Resource):
     def get(self, Category_id):
-        mycursor.execute("SELECT p.Product_id, Categories.Name, p.Name, p.Price, p.Image, p.Description, p.Specification FROM Products as p LEFT JOIN Categories ON p.Category_id = Categories.Category_id  WHERE p.Category_id={}".format(int(Category_id)))
+        mycursor.execute("SELECT p.Product_id, Categories.Name, p.Name, p.Price, p.Image, p.Description, p.Specification FROM Products as p, Categories WHERE p.Category_id={} AND p.Category_id=Categories.Category_id".format(int(Category_id)))
         
         response = {}
         for product in mycursor:
@@ -244,6 +244,7 @@ class getAllInCategory(Resource):
         
         response = jsonify(response)
         response.headers.add("Access-Control-Allow-Origin", "*")
+
         return response
 api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
 
@@ -355,7 +356,7 @@ class Order(Resource):
 
 api.add_resource(Order, "/Order/")
 if __name__ == "__main__":
-    app.run(debug=True) #comment out for docker
-    #app.run(host="0.0.0.0", debug=True) #leave in for docker
+    #app.run(debug=True) #comment out for docker
+    app.run(host="0.0.0.0", debug=True) #leave in for docker
 
     
