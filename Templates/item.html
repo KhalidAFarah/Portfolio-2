@@ -75,11 +75,12 @@
                 var productPricing = document.getElementsByClassName("productPricing")[0];
                 var div = document.createElement("div");
                 div.setAttribute("class", "row");
-                text = document.createElement("h3");
+                textp = document.createElement("h3");
                 //text.setAttribute("class", "justify-content-center")
-                text.innerHTML = json.Price + " Kr";
+
+                textp.innerHTML = json.Price + " Kr";
                 //displaying product price
-                div.appendChild(text);
+                div.appendChild(textp);
                 productPricing.appendChild(div);
 
                 div = document.createElement("div");
@@ -97,6 +98,7 @@
                 btn.onclick = function(){//decrease amount of items
                     if(amount > 1){
                         amount--;
+                        textp.innerHTML= json.Price*amount + " Kr";
                         textA.innerHTML="Amount " + amount;
                     }
                 }
@@ -107,6 +109,7 @@
                 btn.setAttribute("class", "btn-outline-secondary col-6 addAmount");
                 btn.onclick = function(){//increase amount of items
                     amount++;
+                    textp.innerHTML= json.Price*amount + " Kr";
                     textA.innerHTML="Amount " + amount;
                 }
                 div.appendChild(btn)
@@ -149,7 +152,7 @@
                 //displaying product description
                 div = document.createElement("div");
                 div.setAttribute("class", "row");
-                text = document.createElement("h3");
+                var text = document.createElement("h3");
                 text.innerHTML = "Product description";
                 div.appendChild(text)
                 document.getElementsByClassName("productDescription")[0].appendChild(div);

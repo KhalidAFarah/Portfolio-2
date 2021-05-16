@@ -127,7 +127,7 @@ function getAmount(){
 
 if(user != null){
     getcart();
-    setInterval(getcart, 10000)
+    setInterval(getcart, 300)
     $(".cartbtn").on("click", displaycart)
 
     
