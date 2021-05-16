@@ -18,7 +18,7 @@ $(".loginbtn").on("click",function(){
 })
 //for accessories
 var shown = false;
-$(".dropdown-toggle").on("click", function(){
+$(".accessories-toggle").on("click", function(){
     
     if(shown == false){
         $(".accessories-menu").show();
@@ -29,8 +29,13 @@ $(".dropdown-toggle").on("click", function(){
     }
     
 });
-$(".dropdown-toggle").on("focusout", function(){
-    $(".accessories-menu").hide();
+var accessories = document.getElementsByClassName("accessories-menu")[0];
+$(".accessories-toggle").on("focusout", function(){
+        $(document).ready(function(){
+            if(!accessories.contains(document.activeElement)){
+                $(".accessories-menu").hide();
+            }
+        })
 });
 
 
@@ -127,9 +132,15 @@ if(user != null){
 
     
     $(".cartbtn").on("focusout", function(){
-        pressed = false;
-        $(".cartdata").hide();
-        $(".cartdata").empty();
+
+        $(document).ready(function(){
+            if(!cartdata.contains(document.activeElement)){
+                pressed = false;
+                $(".cartdata").hide();
+                $(".cartdata").empty();
+            }
+        })
+        
     });
 
 }else{
@@ -149,6 +160,7 @@ function displaycart(){
                 divRow.setAttribute("class", "cartdatarow row");
 
                 var p = document.createElement("a");
+                p.setAttribute("class", "cartdatarowlink")
                 p.setAttribute("href", "http://localhost:5000/"+value.Product_id)
 
                 var div = document.createElement("div")
@@ -196,7 +208,7 @@ function displaycart(){
         });
         if(times >= 3){
             divRow = document.createElement("div");
-            divRow.setAttribute("class", "cartdatarow row");
+            divRow.setAttribute("class", "cartdatarow row border-bottom-1");
 
             var p = document.createElement("p");
             p.innerHTML = "...";
