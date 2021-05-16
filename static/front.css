@@ -29,12 +29,6 @@ h1{
     line-height: 72px;
 
 }
-.image2{
-  position: absolute;
-  left: 5%;
-  top:85%;
-  border: 1px solid darkgray;
-  box-shadow: 1px 2px 4px;
 
 }
 h6{
@@ -67,19 +61,6 @@ h5{
     left: 84%;
     color: white;
 }
-.image2:hover{
-box-shadow: 1px 3px 9px;
-}
-.image3{
-position: absolute;
-left: 60%;
-top: 85%;
-border: 1px solid darkgray;
-box-shadow: 1px 2px 4px;
-}
-.image3:hover{
-    box-shadow: 1px 3px 9px;
-    }
 .h{
     color: black;
     position:absolute;
