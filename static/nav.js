@@ -2,22 +2,37 @@
 function loggedin(){
     var user = JSON.parse(window.localStorage.getItem("user"));
     if(user == null){
-        document.getElementsByClassName("sendto")[0].setAttribute("href", "http://localhost:5000/Login/");
         document.getElementsByClassName("sendtotext")[0].innerHTML="Login";
     }else{
-        document.getElementsByClassName("sendto")[0].setAttribute("href", "http://localhost:5000/")
         document.getElementsByClassName("sendtotext")[0].innerHTML="Log out";
     }
 }loggedin();
-
+$(".loginbtn").on("click",function(){
+    var user = JSON.parse(window.localStorage.getItem("user"));
+    if(user == null){
+        window.location = "http://localhost:5000/Login/";
+    }else{
+        window.localStorage.removeItem("user");
+        window.location = "http://localhost:5000/";
+    }
+})
 //for accessories
-
-$(".dropdown-toggle").on("focusin", function(){
-    $(".accessories-menu").show()
+var shown = false;
+$(".dropdown-toggle").on("click", function(){
+    
+    if(shown == false){
+        $(".accessories-menu").show();
+        shown = true;
+    }else{
+        $(".accessories-menu").hide()
+        shown = false;
+    }
+    
 });
 $(".dropdown-toggle").on("focusout", function(){
-    $(".accessories-menu").hide()
+    $(".accessories-menu").hide();
 });
+
 
 
 //for the searchbar
@@ -75,7 +90,6 @@ function updatecartnumber(items){
     }
 
 }
-
 function getcart(){
     var user = JSON.parse(localStorage.getItem("user"))
     
@@ -91,6 +105,11 @@ function getcart(){
             amount+=val.Amount;
         })
         if(amount != items){
+            if(amount > 0){
+                $("cartnumber").show();
+            }else{
+                $("cartnumber").hide();
+            }
             items = amount;
             updatecartnumber(items);
         }
@@ -101,10 +120,23 @@ function getAmount(){
     return items;
 }
 
+if(user != null){
+    getcart();
+    setInterval(getcart, 10000)
+    $(".cartbtn").on("click", displaycart)
 
-getcart();
-setInterval(getcart, 10000)
+    
+    $(".cartbtn").on("focusout", function(){
+        pressed = false;
+        $(".cartdata").hide();
+        $(".cartdata").empty();
+    });
 
+}else{
+    $(".cartbtn").on("click", function(){
+        window.location = "http://localhost:5000/"
+    })
+}
 function displaycart(){
 
     var keys = Object.keys(data);
@@ -186,8 +218,8 @@ function displaycart(){
         
     }else{
         pressed = false;
+        $(".cartdata").hide();
         $(".cartdata").empty();
-        
     }
 }
 

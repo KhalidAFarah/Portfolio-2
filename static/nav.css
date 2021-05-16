@@ -156,6 +156,7 @@ input[type=text], select {
     border-radius: 100%;
     width: 1.5rem;
     height: 1.5rem;
+    display: none;
   }
 
   .cartnumberelement{
@@ -178,5 +179,6 @@ input[type=text], select {
 }
 .accessories-item{
     list-style: none;
+    text-decoration: none;
     color: black;
 }
