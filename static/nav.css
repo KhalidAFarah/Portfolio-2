@@ -108,24 +108,28 @@ input[type=text], select {
     width: 30%;
     position: relative;
     z-index: 2;
-    background-color: lightgrey;
-    margin-top: -9rem;
+    border: solid black;
+    margin-top: -9.7rem;
     margin-left: 68%;
     max-height: 0%;
-
+    background-color: white;
     transition: 1s;
   }
   .cartdatarow{
     padding: 2%;
-    border-bottom: solid lightgrey;
+  }
+  .cartdatarowlink{
+    text-decoration: none;
   }
   .cartdatarowimg{
     width: 25%;
 }
 .cartdatarowtext{
     font-size: 15px;
-    text-decoration: none;
     color: black;
+}
+.cartdatarowtext:hover{
+    color:#106cfc;
 }
 
 /*search box*/
@@ -169,16 +173,21 @@ input[type=text], select {
 .accessories-menu{
     background-color: white;
     display: none;
-    margin-left: 23rem;
+    margin-left: 36.5%;
     border: solid black;
     width: 10rem;
     z-index: 4;
     position: relative;
     border-radius: 5%;
-    margin-top: -9.6rem;
+    margin-top: -0.6rem;
+}
+.accessories-menu a{
+    text-decoration: none;
 }
 .accessories-item{
     list-style: none;
-    text-decoration: none;
     color: black;
+}
+.accessories-item:hover{
+    color: 106cfc;
 }
