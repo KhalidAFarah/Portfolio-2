@@ -130,7 +130,7 @@
                     request.open("POST", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+json.Product_id+"&Amount="+amount, true);
                     request.onreadystatechange = function(){
                         if(this.readyState == 4 && this.status === 200){
-                            var answer = window.confirm("Product added to your cart, would you like to keep shopping? (cancel = no)")
+                            var answer = window.confirm("Product added to cart, would you like to keep shopping?")
                             if(!answer){ //go to Cart
                                 window.location = "http://localhost:5000/cart/"
                             }
