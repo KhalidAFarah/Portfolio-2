@@ -16,7 +16,7 @@ services:
             - ./static/:/var/site/static/
         ports:
             - 5000:5000
-        command: python /var/site/Server.py
+        command: python3 /var/site/Server.py
         depends_on:
             - db
     
