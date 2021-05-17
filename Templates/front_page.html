@@ -122,9 +122,9 @@
      <div class="txt align-self-center">
          <h1 class="align-self-center">Supersale on all products</h1>
      </div>
-    </div>
-        </div>
+
     
+        <div class="container displayableproducts" style="margin-top: 50%;"></div>
     
         
     
@@ -135,6 +135,135 @@
     
     
         <script src="../static/nav.js"></script>
+        <script>
+            //5 chosen wares being displayed
+            var products = [1,6,9,15,12,20];
+            var counter = 0;
+            var divRimg = null;
+            var divRtext = null;
+            var divRprice = null;
+            var divRbtn = null;
+            
+            var items = "";
+            for(var i = 0; i < products.length-1; i++){
+                items += products[i] + ",";
+            }items+=""+products[products.length-1];
+
+            $.get("http://localhost:5000/item/?Items="+items, function(value){
+                
+                $.each(value, function(id,data){
+                    if(counter % 3 == 0){
+                        divRimg = document.createElement("div");
+                        divRimg.setAttribute("class", "row");
+                        document.getElementsByClassName("displayableproducts")[0].appendChild(divRimg);
+                        
+                        divRtext = document.createElement("div");
+                        divRtext.setAttribute("class", "row");
+                        document.getElementsByClassName("displayableproducts")[0].appendChild(divRtext);
+
+                        divRprice = document.createElement("div");
+                        divRprice.setAttribute("class", "row");
+                        document.getElementsByClassName("displayableproducts")[0].appendChild(divRprice);
+
+                        divRbtn = document.createElement("div");
+                        divRbtn.setAttribute("class", "row");
+                        document.getElementsByClassName("displayableproducts")[0].appendChild(divRbtn);
+                    }
+
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "col-4 itemcol")
+
+                    var div = document.createElement("div");
+                    div.setAttribute("class", "row");
+                    div.onclick = function(){
+                        window.location = "http://localhost:5000/"+id+"/";
+                    }
+
+                    var img  = document.createElement("img");
+                    img.setAttribute("class", "img offset-2 col-8 itemimg");
+                    img.setAttribute("style","object-fit:scale-down;")
+                    img.setAttribute("src", "http://localhost:5000/static/Pictures/"+data.Image);
+                    div.appendChild(img);
+
+                    divC.appendChild(div);
+                    divRimg.appendChild(divC);
+
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "col-4 itemcol p-1")
+
+                    div = document.createElement("div");
+                    div.setAttribute("class", "row");
+                    div.onclick = function(){
+                        window.location = "http://localhost:5000/"+id+"/";
+                    }
+
+                    var text = document.createElement("p");
+                    text.setAttribute("class", "h6");
+                    text.setAttribute("align", "center");
+                    text.innerHTML = data.Name;
+                    div.appendChild(text);
+
+                    divC.appendChild(div);
+                    divRtext.appendChild(divC)
+                    
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "col-4 itemcol pl-5 pr-5")
+
+                    div = document.createElement("div");
+                    div.setAttribute("class", "row");
+                    div.setAttribute("value", id);
+                    div.onclick = function(){
+                        window.location = "http://localhost:5000/"+id+"/";
+                    }
+
+                    text = document.createElement("p");
+                    text.setAttribute("class", "h6");
+                    text.setAttribute("align", "center")
+                    text.innerHTML = data.Price + ",-";
+                    div.appendChild(text);
+                    divC.appendChild(div);
+                    divRprice.appendChild(divC);
+
+                    var divC = document.createElement("div");
+                    divC.setAttribute("class", "col-4 itemcol p-3")
+
+                    div = document.createElement("div");
+                    div.setAttribute("class", "row");
+
+                    btn = document.createElement("btn");
+                    btn.setAttribute("class", "btn btn-primary");
+                    btn.setAttribute("align", "center")
+                    btn.value = id;
+                    btn.innerHTML = "Add to cart";
+
+                    btn.onclick = function(){
+                        var user = JSON.parse(localStorage.getItem("user"))
+                        if(user == null){
+                            window.location = "http://localhost:5000/"
+                        }
+
+                        var request = new XMLHttpRequest();
+                        var id = this.value;
+                        request.open("POST", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+id+"&Amount="+1, true);
+                        request.onreadystatechange = function(){
+                            if(this.readyState == 4 && this.status === 200){
+                                var answer = window.confirm("Added to cart, would you like to keep shopping?")
+                                if(!answer){ //go to Cart
+                                    window.location = "http://localhost:5000/cart/"
+                                }
+                            }
+                        }
+                        request.send();
+                    }
+                    div.appendChild(btn);
+                    divC.appendChild(div);
+                    divRbtn.appendChild(divC)
+                        
+                    //divR.appendChild(divC);
+                    counter++;
+                })
+            })
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     </body>
 

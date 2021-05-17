@@ -231,7 +231,7 @@
             request.open("GET", "http://localhost:5000/item/"+id+"/")
             request.onreadystatechange = function (){
                 if(this.readyState == 4 && this.status){
-                    var json = JSON.parse(this.responseText)[id];
+                    var json = JSON.parse(this.responseText);
                     view(json);
                 }
 

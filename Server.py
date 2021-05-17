@@ -143,9 +143,10 @@ class item(Resource):
             mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
         except:
             abort(404, message="product not found")
+        result = mycursor.fetchall()
             
-        response =  {}
-        for product in mycursor:
+        #response =  {}
+        for product in result:
             item = {
                 "Product_id":product[0],
                 "Category_id":product[1],
@@ -155,13 +156,45 @@ class item(Resource):
                 "Description":product[5],
                 "Specification":product[6]
             }
-            response[product[0]] = item
+            #response[product[0]] = item
 
-        response = jsonify(response)
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        return response
+            response = jsonify(item)
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            return response
 
 class itemPost(Resource):
+    def get(self):#getting multiple items
+        parser = reqparse.RequestParser()
+        parser.add_argument("Items")
+        data = parser.parse_args()
+        items = data['Items'].split(",")
+
+        response = {}
+
+        for Product_id in items:
+            try:
+                mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
+            except:
+                abort(404, message="product not found")
+            result = mycursor.fetchall()
+                
+            
+            for product in result:
+                item = {
+                    "Product_id":product[0],
+                    "Category_id":product[1],
+                    "Name":product[2],
+                    "Price":product[3],
+                    "Image":product[4],
+                    "Description":product[5],
+                    "Specification":product[6]
+                }
+                response[product[0]] = item
+
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")       
+        return response
+
     def post(self): # add an item to the db (admin)
         parser = reqparse.RequestParser()
 
@@ -198,7 +231,10 @@ api.add_resource(itemPost, "/item/")
     
 class Categories(Resource):
     def get(self): #getting all categories
-        mycursor.execute("SELECT * FROM Categories")
+        try:
+            mycursor.execute("SELECT * FROM Categories")
+        except:
+            abort(404, message="Unable to fetch Categories")
         response = {}
         for value in mycursor:
             response[value[0]] = {"Category_id":value[0], "Category":value[1]}
@@ -357,6 +393,6 @@ class Order(Resource):
 api.add_resource(Order, "/Order/")
 if __name__ == "__main__":
     #app.run(debug=True) #comment out for docker
-    app.run(host="0.0.0.0", debug=True) #leave in for docker
+    app.run(host="0.0.0.0", debug=True, threaded=True) #leave in for docker
 
     
