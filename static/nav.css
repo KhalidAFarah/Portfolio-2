@@ -106,7 +106,7 @@ input[type=text], select {
 
 .cartdata{
     width: 30%;
-    position: relative;
+    position: absolute;
     z-index: 2;
     border: solid black;
     margin-top: -9.7rem;
@@ -177,9 +177,9 @@ input[type=text], select {
     border: solid black;
     width: 10rem;
     z-index: 4;
-    position: relative;
+    position: absolute;
     border-radius: 5%;
-    margin-top: -0.6rem;
+    margin-top: -10.5%;
 }
 .accessories-menu a{
     text-decoration: none;

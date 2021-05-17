@@ -127,7 +127,7 @@ function getAmount(){
 
 if(user != null){
     getcart();
-    setInterval(getcart, 300)
+    setInterval(getcart, 4000)
     $(".cartbtn").on("click", displaycart)
 
     
@@ -145,7 +145,7 @@ if(user != null){
 
 }else{
     $(".cartbtn").on("click", function(){
-        window.location = "http://localhost:5000/"
+        window.location = "http://localhost:5000/Login/"
     })
 }
 function displaycart(){

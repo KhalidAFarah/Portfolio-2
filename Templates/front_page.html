@@ -61,7 +61,7 @@
                             
                         </div>
                         <div class="row">
-                            <h4 cclass="h5" style="font-size: 15px;position: relative;top: 0%;left: 0%;" align="center">Cart</h4>
+                            <h4 cclass="h5" style="font-size: 15px;position: relative;top: 0%;left: 0%;color: white;" align="center">Cart</h4>
                         </div>
                     </div>
                     <div class="col-4 bg-primary cartnumber">
@@ -239,6 +239,7 @@
                     btn.onclick = function(){
                         var user = JSON.parse(localStorage.getItem("user"))
                         if(user == null){
+                            localStorage.setItem("PrevPage", window.location.href);
                             window.location = "http://localhost:5000/"
                         }
 
