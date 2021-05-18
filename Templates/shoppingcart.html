@@ -27,11 +27,11 @@
                 <div class="col-1 align-self-center p-1 " style="margin-left: 4%;">
                     <a class="a navlink" href="http://localhost:5000/category/1/">Processor</a>
                 </div>
-                <div class="col-2 dropdown p-1">
+                <div class="col-2 dropdown p-1 align-self-center">
                     
     
                     
-                    <button class="navlink btn btn-dark dropdown-toggle accessories-toggle" style="margin-top: 0.8rem;">Accessories</button>
+                    <button class="navlink btn btn-dark dropdown-toggle accessories-toggle">Accessories</button>
                     
     
                 </div>
@@ -85,7 +85,6 @@
             <a href="http://localhost:5000/category/7/"><li class="accessories-item">Keyboard</li></a>
             <a href="http://localhost:5000/category/8/"><li class="accessories-item">LED light</li></a>
         </ul>
-        <nav></nav>
         <div class="container-fluid" style="margin-top: -7%;">
             <div class="row" style="margin-top: 5%;">
                 <div class="items col-8"></div>
@@ -229,13 +228,18 @@
                                 request.open("PUT", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id]+"&Amount="+(json[keys[id]].Amount+1), "true");
                                 request.onreadystatechange = function(){
                                     if(this.readyState === 4 && this.status === 200){
+                                        getcart()
                                         json[keys[id]].Amount++;
                                         document.getElementsByClassName("textA")[id].innerHTML = json[keys[id]].Amount;
 
                                         document.getElementsByClassName("priceinfo")[id].innerHTML = "+ "+json[keys[id]].Price+" x "+json[keys[id]].Amount;
                                         sum += json[keys[id]].Price;
                                         document.getElementsByClassName("sum")[0].innerHTML = "<del>Sum: "+sum+" Kr</del> Free";
-                                    }
+                                    }else if(this.readyState == 4 && this.status != 200){
+                            
+                                        window.location = "http://localhost:5000/Login/"
+                                        
+                                    }   
                                 }
                                 request.send();
                             }
@@ -257,6 +261,7 @@
                             request.open("DELETE", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id], "true");
                             request.onreadystatechange = function(){
                                 if(this.status === 200 && this.readyState === 4){
+                                    getcart()
                                     var itemrow = document.getElementsByClassName("itemrow")[id];
                                     console.log(itemrow)
                                     document.getElementsByClassName("items")[0].removeChild(itemrow);
@@ -268,6 +273,10 @@
                                     document.getElementsByClassName("sum")[0].innerHTML = "Sum: " + sum;
 
 
+                                }else if(this.readyState == 4 && this.status != 200){
+                            
+                                 window.location = "http://localhost:5000/Login/"
+                            
                                 }
                             }
                             request.send()
@@ -317,9 +326,14 @@
                         request.open("POST", "http://localhost:5000/Order/?User_id="+user.user_id, true);
                         request.onreadystatechange = function(){
                             if(this.readyState === 4 && this.status === 200){
+                                getcart()
                                 alert("Ordering products...")
                                 location.reload()
-                            }
+                            }else if(this.readyState == 4 && this.status != 200){
+                            
+                            window.location = "http://localhost:5000/Login/"
+                       
+                           }
                         }
                         request.send()
                     }

@@ -251,9 +251,16 @@
                         request.onreadystatechange = function(){
                             if(this.readyState == 4 && this.status === 200){
                                 var answer = window.confirm("Added to cart, would you like to keep shopping?")
+                                getcart()
                                 if(!answer){ //go to Cart
+                                    
                                     window.location = "http://localhost:5000/cart/"
                                 }
+                            }
+                            else if(this.readyState == 4 && this.status != 200){
+                            
+                            window.location = "http://localhost:5000/Login/"
+                            
                             }
                         }
                         request.send();
