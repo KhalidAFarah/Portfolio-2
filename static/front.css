@@ -12,11 +12,12 @@ body{
 
 .txt{
     position: absolute;
-    top:30%;
+    top:40%;
     left:50%;
     border: 1px solid rgb(0, 0, 0);
     box-shadow: 1px 2px 2px;
     text-align: center;
+    
 }
 .txt h1{
     margin-top: 15%;
@@ -85,12 +86,6 @@ h5{
 
 
 
-
-
-
-
-
-
   /*image slides*/
 .slider{
     width: 700px;
@@ -104,6 +99,7 @@ z-index: 0;
     width: 700px;
     height: 400px;
     overflow: hidden;
+    margin-top: 5%;
 }
 .middle{
     position: absolute;
@@ -142,6 +138,7 @@ input[name="r"]{
 .slide{
     width: 20%;
     transition: 0.6s;
+    
 }
 .slide img{
     width: 100%;
@@ -160,3 +157,19 @@ input[name="r"]{
     margin-left: -40%;
     
 }
+.img-logo{
+    margin-top: -9%;
+    margin-right: 30%;
+    margin-left: 34%;
+    float: left;
+    border-bottom: solid;
+    border-color:blue;
+    position: relative;
+    z-index: 3;
+    
+    
+}
+.img-logo img{
+    width: 80%;
+}
+
