@@ -13,6 +13,7 @@
     </head>
 
         <body>
+        
             <header class="container-fluid p-0">
                 <div class="container-fluid bg-Dark" style="background-color: #212529;">
                     <div class="row">
@@ -90,6 +91,38 @@
                 <p id="categoryname" class="h3" align="center"></p>
                   
             </div>
+            <style>
+                
+            body{
+            margin: 0;
+            padding:0;
+            font-family: sans-serif;
+            background-color: whitesmoke;
+            }
+            .itemcol{
+                border: solid whitesmoke 2px;
+            }
+            .itemcol:hover{
+                border: solid lightgrey 2px;
+                cursor: pointer;
+            }
+            .itemcol img{
+                object-fit:cover;
+                height: 150px;
+                width: 150px;
+            }
+            .p{
+                 color:red;
+                 position: absolute;
+                 left:78%;
+                 margin-top: 52px;
+                  }
+            .container{
+                
+                max-width: 90%;
+                
+            }
+            </style>
 
             <script src="http://localhost:5000/JS/nav.js/"></script>
 
@@ -102,16 +135,6 @@
             document.getElementById("title").innerHTML=json[keys[0]].Category_Name+"'s";
             var divR = null;
             for (var i = 0; i < keys.length; i++){
-                console.log(json[keys[i]].Image);
-                var div = document.createElement("div");
-                var img = document.createElement("img");
-                //img.setAttribute("src", "../static/Pictures/"+json[keys[i]].Image);
-                var image = "Pictures/"+json[keys[i]].Image;
-                img.src = "http://localhost:5000/static/"+image
-                div.appendChild(img);
-             //   document.getElementsByClassName("box")[0].appendChild(div);
-                
-
                 if(i % 3 == 0){
                     divR = document.createElement("div");
                     divR.setAttribute("class", "row itemrow");
@@ -132,7 +155,7 @@
 
 
                         var img  = document.createElement("img");
-                        img.setAttribute("class", "img-fluid offset-1 col-8 itemimg");
+                        img.setAttribute("class", "img-fluid offset-3 col-8 itemimg");
                         img.setAttribute("src", "http://localhost:5000/static/Pictures/"+json[keys[i]].Image);
                         div.appendChild(img);
 
@@ -147,6 +170,7 @@
 
                         var text = document.createElement("p");
                         text.setAttribute("class", "h6");
+                        text.setAttribute("align", "center");
                         text.innerHTML = json[keys[i]].Name;
                         div.appendChild(text);
 
