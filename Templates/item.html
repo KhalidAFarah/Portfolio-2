@@ -132,6 +132,7 @@
 
                         var img = document.createElement("img");
                         img.setAttribute("class", "img-fluid productImg");
+                        img.setAttribute("style", "width:50%;");
                          //displaying product image
                          if(json.Image == null || json.Image == ""){
                              json.Image = "placeholder.PNG"
@@ -213,6 +214,11 @@
                             if(!answer){ //go to Cart
                                 window.location = "http://localhost:5000/cart/"
                             }
+                        }
+                        else if(this.readyState == 4 && this.status != 200){
+                            
+                            window.location = "http://localhost:5000/Login/"
+                            
                         }
                     }
                     request.send()
@@ -302,17 +308,22 @@
 
                 
             }
-
+          
+               
             var request = new XMLHttpRequest();
             request.open("GET", "http://localhost:5000/item/"+id+"/")
             request.onreadystatechange = function (){
                 if(this.readyState == 4 && this.status){
                     var json = JSON.parse(this.responseText);
                     view(json);
+                    //getcart();
                 }
 
             }
+            
+            //getcart();
             request.send();
+        
 
 
         </script>

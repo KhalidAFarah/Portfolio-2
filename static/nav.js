@@ -13,7 +13,7 @@ $(".loginbtn").on("click",function(){
         window.location = "http://localhost:5000/Login/";
     }else{
         window.localStorage.removeItem("user");
-        window.location = "http://localhost:5000/";
+        location.reload();
     }
 })
 //for accessories
@@ -57,7 +57,7 @@ $(document).ready(function(){
                         if(value.Image==null || value.Image==""){
                             value[2]="placeholder.PNG"
                         }
-                    var img="<div class=\"col-3\"><img src=\"../static/Pictures/"+value.Image+"\" width=80px length=80px></div>";
+                    var img="<div class=\"col-3\"><img src=\"http://localhost:5000/img/"+value.Image+"/\" width=80px length=80px></div>";
                     var name = "<div class=\"col-7\"><p>"+value.Name+"</p></div>";
                     var price = "<div class=\"col-2\"><p>"+value.Price+",-</p></div>";
                     data += "<a class=\"listeditem\" href=\"http://localhost:5000/"+value.Product_id+"\"><li class=\"row\">"+img+" "+name+" "+price+"</li>"; 
@@ -91,8 +91,8 @@ function updatecartnumber(items){
         cartnumber.setAttribute("style", "display: block;")
         
         cartnumberelement.innerHTML = items;
-        console.log(items)
     }
+    
 
 }
 function getcart(){
@@ -119,7 +119,12 @@ function getcart(){
             updatecartnumber(items);
         }
     }
-    $.get("http://localhost:5000/Cart/?User_id="+user.user_id, updatecartdata)
+    $.ajax({
+        type: "GET",
+        url:"http://localhost:5000/Cart/?User_id="+user.user_id,
+        async:false,
+        success: updatecartdata
+    });
 }
 function getAmount(){
     return items;
@@ -168,7 +173,7 @@ function displaycart(){
                 
                 var img = document.createElement("img");
                 img.setAttribute("class", "cartdatarowimg");
-                img.setAttribute("src", "../static/Pictures/"+value.Image);
+                img.setAttribute("src", "http://localhost:5000/img/"+value.Image+"/");
                 img.setAttribute("style", "width:100%;")
                 div.appendChild(img);
                 divRow.appendChild(div);
