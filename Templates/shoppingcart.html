@@ -328,12 +328,13 @@
                     btn.innerHTML="Order products";
 
                     btn.onclick = function(){
+                        if(keys.length!=0){
                         var request = new XMLHttpRequest();
                         request.open("POST", "http://localhost:5000/Order/?User_id="+user.user_id, true);
                         request.onreadystatechange = function(){
-                            if(this.readyState === 4 && this.status === 200){
+                            if(this.readyState === 4 && this.status === 200 ){
                                 getcart()
-                                alert("Ordering products...")
+                                alert("Thank you. Your order has been received.")
                                 location.reload()
                             }else if(this.readyState == 4 && this.status != 200){
                             
@@ -342,7 +343,10 @@
                            }
                         }
                         request.send()
+                    }else{
+                        alert("Sorry, You have to add a product in to your shopping cart to order!")
                     }
+                }
                     div.appendChild(btn);
                     divC.appendChild(div);
                     document.getElementsByClassName("pricing")[0].appendChild(divC);
