@@ -119,7 +119,12 @@ function getcart(){
             updatecartnumber(items);
         }
     }
-    $.get("http://localhost:5000/Cart/?User_id="+user.user_id, updatecartdata)
+    $.ajax({
+        type: "GET",
+        url:"http://localhost:5000/Cart/?User_id="+user.user_id,
+        async:false,
+        success: updatecartdata
+    });
 }
 function getAmount(){
     return items;

@@ -30,7 +30,6 @@ services:
             - 9090:9090
         command:  
             --config.file=/etc/prometheus/prometheus.yml
-            #--storage.tsdb.path=/data/prometheus
         restart: always
         depends_on:
             - server
@@ -43,17 +42,21 @@ services:
             - 3000:3000
         depends_on:
             - prometheus
-    node_exporter: #https://github.com/stefanprodan/dockprom/blob/master/docker-compose.yml
+    node_exporter:
         image: quay.io/prometheus/node-exporter:latest
         ports:
             - 9100:9100
         restart: always
-        #network_mode: host
         pid: host
         volumes:
-            - /:/host:ro
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /:/rootfs:ro
         command:
-            - '--path.rootfs=/host'
+            - '--path.procfs=/host/proc'
+            - '--path.rootfs=/rootfs'
+            - '--path.sysfs=/host/sys'
+            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
         depends_on:
             - grafana
 
