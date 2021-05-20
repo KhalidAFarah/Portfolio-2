@@ -4,9 +4,18 @@ import mysql.connector
 import time
 import os
 
+
+#sdsds
+from google.oauth2 import id_token
+from google.auth.transport import requests as greq
+
+client_id = "952836639002-aejo8mld9o48v0rrqnruo4jbuisgas2b.apps.googleusercontent.com"
+#from prometheus_flask_exporter import PrometheusMetrics
+
 #app = Flask(__name__)
 app = Flask(__name__, static_folder="/var/site/", static_url_path="")
 api = Api(app)
+#metrics = PrometheusMetrics(app)
 db = None
 while db is None:
     try:
@@ -24,6 +33,22 @@ while db is None:
 
 
 #mycursor = db.cursor()
+
+counter = {
+    'getitem': 0,
+    'addtocart': 0,
+    'orderitem': 0,
+    'loggedin':0
+}
+
+#Counter for cart
+#Counter for items
+#Counter for orders
+#Most popular ordered items
+#Most popular carted items
+#CPU usage
+#Memory usage
+
 
 @app.route("/CSS/<filename>/")
 def get_CSS(filename):
@@ -63,11 +88,21 @@ def renders_site_cart():
     return render_template("shoppingcart.html")
 
 #status for restAPI
-@app.route("/status", methods=['GET'])
-def status():
-    response = jsonify({"Status": "Ok"})
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
+@app.route("/status/", methods=['GET'])
+def server_status():
+    return 'Online'
+
+#metrics endpoint for prometheus
+@app.route("/metrics")
+def server_metrics():
+    metrics = ""
+    #amount of times user went to the product page
+    metrics+= 'product_page_request_total %s\n' %  (counter['getitem'],)
+    metrics+= 'item_added_to_cart_request_total %s\n' % (counter['addtocart'],)
+    metrics+= 'item_ordered_request_total %s\n' % (counter['orderitem'],)
+    metrics+= 'user_logged_in_request_total %s\n'% (counter['loggedin'],)
+
+    return metrics 
 
 
 
@@ -111,9 +146,15 @@ class UserGetAll(Resource):
 
 class Login_with_username_and_password(Resource):
     def get(self, Username, Password):
+        global counter
         mycursor = db.cursor()
-        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
+        try:
+            mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
+        except:
+            abort(404, message="User not found")
+
         result = mycursor.fetchall()
+        counter['loggedin']+=1
         mycursor.close()
         for user  in result:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -124,9 +165,14 @@ class Login_with_username_and_password(Resource):
         abort(404, message="User not found")
 class Login_with_username_and_email(Resource):
     def get(self, Username, Email):
+        global counter
         mycursor = db.cursor()
-        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
+        try:
+            mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
+        except:
+            abort(404, message="User not found")
         result = mycursor.fetchall()
+        counter['loggedin']+=1
         mycursor.close()
         for user  in result:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -162,6 +208,7 @@ api.add_resource(UserGetAll, "/users/")
 
 class item(Resource):
     def get(self, Product_id): # get an item from the db
+        global counter
         mycursor = db.cursor(buffered=True)
         try:
             mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
@@ -169,10 +216,11 @@ class item(Resource):
             abort(404, message="product not found")
         result = mycursor.fetchall()
         mycursor.close()
-        
+        counter['getitem']+=1
             
         #response =  {}
         for product in result:
+            
             item = {
                 "Product_id":product[0],
                 "Category_id":product[1],
@@ -194,7 +242,6 @@ class itemPost(Resource):
         parser.add_argument("Items")
         data = parser.parse_args()
         items = data['Items'].split(",")
-
         response = {}
         mycursor = None
         try:
@@ -332,6 +379,7 @@ api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
 
 class Cart(Resource):
     def post(self):
+        global counter
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
         parser.add_argument("Product_id")
@@ -345,7 +393,7 @@ class Cart(Resource):
             abort(404, message="Unable to check your cart")
         result = mycursor.fetchall()
         
-          
+        counter['addtocart']+=int(data['Amount'])
         if(len(result) < 1):
             try:
                 mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
@@ -420,6 +468,7 @@ class Cart(Resource):
 api.add_resource(Cart, "/Cart/")
 class Order(Resource):
     def post(self):
+        global counter
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
         data = parser.parse_args()
@@ -431,6 +480,7 @@ class Order(Resource):
         
 
         for Product_id, Amount in results:
+            counter['orderitem']+=Amount
             mycursor.execute("INSERT INTO Orders (User_id, Product_id, Amount) VALUES ({},{},{})".format(int(data['User_id']), int(Product_id), int(Amount)))
 
         mycursor.execute("DELETE FROM Carts WHERE User_id={}".format(int(data['User_id'])))

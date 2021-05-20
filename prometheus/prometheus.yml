@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 1m
+
+scrape_configs:
+- job_name: 'prometheus'
+  static_configs:
+    - targets: ['localhost:9090']
+    
+- job_name: 'product_page_request_total'
+  static_configs:
+    - targets: ['server:5000']
+
+- job_name: 'item_added_to_cart_request_total'
+  static_configs:
+    - targets: ['server:5000']
+
+- job_name: 'item_ordered_request_total'
+  static_configs:
+    - targets: ['server:5000']
+
+- job_name: 'user_logged_in_request_total'
+  static_configs:
+    - targets: ['server:5000']
+
+- job_name: 'node_exporter'
+  static_configs:
+    - targets: ['node_exporter:9100']

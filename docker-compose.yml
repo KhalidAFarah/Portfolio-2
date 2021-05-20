@@ -1,4 +1,5 @@
 version: "3.3"
+
 services: 
     db:
         image: mysql
@@ -20,4 +21,45 @@ services:
         command: python3 /var/site/Server.py
         depends_on:
             - db
+    prometheus:
+        image: prom/prometheus
+        volumes:
+            - ./prometheus:/etc/prometheus
+            - ./prometheus/data:/data/prometheus
+        ports:
+            - 9090:9090
+        command:  
+            --config.file=/etc/prometheus/prometheus.yml
+            #--storage.tsdb.path=/data/prometheus
+        restart: always
+        depends_on:
+            - server
+    grafana:
+        image: grafana/grafana
+        restart: always
+        volumes:
+            - ./grafana:/var/lib/grafana
+        ports: 
+            - 3000:3000
+        depends_on:
+            - prometheus
+    node_exporter: #https://github.com/stefanprodan/dockprom/blob/master/docker-compose.yml
+        image: quay.io/prometheus/node-exporter:latest
+        ports:
+            - 9100:9100
+        restart: always
+        #network_mode: host
+        pid: host
+        volumes:
+            - /:/host:ro
+        command:
+            - '--path.rootfs=/host'
+        depends_on:
+            - grafana
+
+#networks:
+#    nett:
+#        driver: bridge
+    
+
     
