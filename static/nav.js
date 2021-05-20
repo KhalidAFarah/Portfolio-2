@@ -150,7 +150,7 @@ if(user != null){
 
 }else{
     $(".cartbtn").on("click", function(){
-        window.location = "http://localhost:5000/"
+        window.location = "http://localhost:5000/Login/"
     })
 }
 function displaycart(){
