@@ -5,6 +5,20 @@ function onSignIn(googleUser){
    remove_users();
    render_users(users);
 
+   $.ajax({
+       method:"Post",
+       url:"https://localhost:5000/userg/"+id_token+"/",
+       success:function(res){
+        window.localStorage.setItem("user",JSON.stringify(json));
+        if(window.localStorage.getItem("PrevPage") == null){
+            window.location = "http://localhost:5000/"}
+            else{
+                window.location=window.localStorage.getItem("PrevPage");
+            }
+            
+        }
+       })
+
 }
 function signOut(){
     var auth2=gapi.auth2.getAuthInstance();
