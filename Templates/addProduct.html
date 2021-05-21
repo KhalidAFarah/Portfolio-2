@@ -8,7 +8,7 @@
     
     </head>
     <body class="body">
-        <form class ="box" method="POST" action="http://localhost:5000/admin/" enctype="multipart/form-data"> 
+        <form class ="box" method="POST" action="https://localhost:5000/admin/" enctype="multipart/form-data"> 
             <h1>Add a new product</h1>
             <input type="file" class="imageChooser" accept="*/, .jpg, .png" name="pictures">
             <div class="subBox">
@@ -44,7 +44,7 @@
         var user = JSON.parse(window.localStorage.getItem("user"));
         if(user == null || user.Access_level != 2){
             window.localStorage.removeItem("user");
-            window.location = "http://localhost:5000/Login/";   
+            window.location = "https://localhost:5000/Login/";   
         }
 
         var times = 0;
@@ -70,7 +70,7 @@
                 }
             }
 
-            request.open("GET", "http://localhost:5000/Categories/");
+            request.open("GET", "https://localhost:5000/Categories/");
             request.send()
         }addCategoriesToSelect();
 
@@ -203,7 +203,7 @@
             }
             
             //Not validating specification since it can be very broad 
-            document.getElementsByClassName("box")[0].action="http://localhost:5000/item/?Name="+productName+"&Price="+productPrice+"&Category_id="+productCategory+ "&Description="+productDescription+"&Specification="+specification;
+            document.getElementsByClassName("box")[0].action="https://localhost:5000/item/?Name="+productName+"&Price="+productPrice+"&Category_id="+productCategory+ "&Description="+productDescription+"&Specification="+specification;
             return true;
         }
     </script>

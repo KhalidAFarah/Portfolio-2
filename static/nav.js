@@ -10,10 +10,10 @@ function loggedin(){
 $(".loginbtn").on("click",function(){
     var user = JSON.parse(window.localStorage.getItem("user"));
     if(user == null){
-        window.location = "http://localhost:5000/Login/";
+        window.location = "https://localhost:5000/Login/";
     }else{
         window.localStorage.removeItem("user");
-        window.location = "http://localhost:5000/";
+        window.location = "https://localhost:5000/";
     }
 })
 //for accessories
@@ -60,7 +60,7 @@ $(document).ready(function(){
                     var img="<div class=\"col-3\"><img src=\"../static/Pictures/"+value.Image+"\" width=80px length=80px></div>";
                     var name = "<div class=\"col-7\"><p>"+value.Name+"</p></div>";
                     var price = "<div class=\"col-2\"><p>"+value.Price+",-</p></div>";
-                    data += "<a class=\"listeditem\" href=\"http://localhost:5000/"+value.Product_id+"\"><li class=\"row\">"+img+" "+name+" "+price+"</li>"; 
+                    data += "<a class=\"listeditem\" href=\"https://localhost:5000/"+value.Product_id+"\"><li class=\"row\">"+img+" "+name+" "+price+"</li>"; 
                     } 
                     else{
                         list.setAttribute("style","display:none;")
@@ -100,7 +100,7 @@ function getcart(){
     
         
     if(user==null){
-        window.location="http://localhost:5000/Login/"
+        window.location="https://localhost:5000/Login/"
     }
 
     function updatecartdata(value){
@@ -121,7 +121,7 @@ function getcart(){
     }
     $.ajax({
         type: "GET",
-        url:"http://localhost:5000/Cart/?User_id="+user.user_id,
+        url:"https://localhost:5000/Cart/?User_id="+user.user_id,
         async:false,
         success: updatecartdata
     });
@@ -150,7 +150,7 @@ if(user != null){
 
 }else{
     $(".cartbtn").on("click", function(){
-        window.location = "http://localhost:5000/Login/"
+        window.location = "https://localhost:5000/Login/"
     })
 }
 function displaycart(){
@@ -166,14 +166,14 @@ function displaycart(){
 
                 var p = document.createElement("a");
                 p.setAttribute("class", "cartdatarowlink")
-                p.setAttribute("href", "http://localhost:5000/"+value.Product_id)
+                p.setAttribute("href", "https://localhost:5000/"+value.Product_id)
 
                 var div = document.createElement("div")
                 div.setAttribute("class", "col1 col-3");
                 
                 var img = document.createElement("img");
                 img.setAttribute("class", "cartdatarowimg");
-                img.setAttribute("src", "../static/Pictures/"+value.Image);
+                img.setAttribute("src", "https://localhost:5000/img/"+value.Image);
                 img.setAttribute("style", "width:100%;")
                 div.appendChild(img);
                 divRow.appendChild(div);
@@ -228,7 +228,7 @@ function displaycart(){
         var btn = document.createElement("a");
         btn.innerHTML = "Go to Cart"
         btn.setAttribute("style", "padding: 2%; color: dodgerblue")
-        btn.setAttribute("href", "http://localhost:5000/cart/")
+        btn.setAttribute("href", "https://localhost:5000/cart/")
         divRow.appendChild(btn);
         cartdata.appendChild(divRow);
         cartdata.setAttribute("style", "max-height: 100%;")

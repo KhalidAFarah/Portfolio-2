@@ -43,23 +43,19 @@ services:
         depends_on:
             - prometheus
     node_exporter:
-        image: quay.io/prometheus/node-exporter:latest
+        image: prom/node-exporter
         ports:
             - 9100:9100
-        restart: always
-        pid: host
+    cadvisor:
+        image: google/cadvisor
+        ports:
+            - 8080:8080
         volumes:
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
             - /:/rootfs:ro
-        command:
-            - '--path.procfs=/host/proc'
-            - '--path.rootfs=/rootfs'
-            - '--path.sysfs=/host/sys'
-            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-        depends_on:
-            - grafana
-
+            - /var/run:/var/run:ro
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+            - /dev/disk:/dev/disk/:ro
 #networks:
 #    nett:
 #        driver: bridge

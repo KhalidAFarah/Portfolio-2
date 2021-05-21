@@ -511,7 +511,8 @@ class Order(Resource):
 api.add_resource(Order, "/Order/")
 if __name__ == "__main__":
     #app.run(debug=True) #comment out for docker
-    app.run(host="0.0.0.0", debug=True, threaded=True) #leave in for docker
+    #https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https ssl_context for self-certificate
+    app.run(host="0.0.0.0", debug=True, ssl_context='adhoc') #leave in for docker
     db.close()
 
     

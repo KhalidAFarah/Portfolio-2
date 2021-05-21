@@ -3,7 +3,7 @@
 
     </head>
     <title>Registration</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://localhost:5000/CSS/style.css">
 
     <meta charset="utf-8">
 </head>
@@ -37,7 +37,7 @@
 <script>
      
 function login(){
-    window.location="http://localhost:5000/Login/"
+    window.location="https://localhost:5000/Login/"
 }
     function submit2(){
         var form = document.getElementById("form");
@@ -70,11 +70,11 @@ function login(){
         }
 
         var request = new XMLHttpRequest();
-        request.open("POST","http://localhost:5000/user/?Firstname="+firstname.value+"&Lastname="+lastname.value+"&Username="+username.value+"&Password="+password.value+"&Email="+email.value,true)
+        request.open("POST","https://localhost:5000/user/?Firstname="+firstname.value+"&Lastname="+lastname.value+"&Username="+username.value+"&Password="+password.value+"&Email="+email.value,true)
         request.onreadystatechange = function(){
             if(this.status === 200 && this.readyState === 4){
                 alert("You account is being created");
-                window.location = "http://localhost:5000/Login/";
+                window.location = "https://localhost:5000/Login/";
             }else if(this.status != 200 && this.readyState === 4){
                 alert("Password or email is already in use!");
             }
