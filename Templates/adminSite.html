@@ -26,13 +26,13 @@
             var user = JSON.parse(window.localStorage.getItem("user"));
             if(user == null || user.Access_level != 2){
                 window.localStorage.removeItem("user");
-                window.location = "http://localhost:5000/Login/";   
+                window.location = "https://localhost:5000/Login/";   
             }
             document.getElementById("usertext").innerHTML="Hello " + user.Firstname;
 
 
             function addproducts(){
-                window.location = "http://localhost:5000/admin/addProduct/"
+                window.location = "https://localhost:5000/admin/addProduct/"
             }
 
             

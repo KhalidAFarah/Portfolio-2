@@ -5,7 +5,7 @@
         <title id="title"> </title>
         
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-        <link rel="stylesheet" href="http://localhost:5000/CSS/nav.css/">
+        <link rel="stylesheet" href="https://localhost:5000/CSS/nav.css/">
 
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,16 +18,16 @@
                 <div class="container-fluid bg-Dark" style="background-color: #212529;">
                     <div class="row">
                     <div class="col-1 align-self-center p-1">
-                        <a class="a navlink" href="http://localhost:5000/category/3/" style="margin-left: 25%;">PC</a>
+                        <a class="a navlink" href="https://localhost:5000/category/3/" style="margin-left: 25%;">PC</a>
                     </div>
                     <div class="col-1 align-self-center p-1">
-                        <a class="a navlink" href="http://localhost:5000/category/4/">Screens</a>
+                        <a class="a navlink" href="https://localhost:5000/category/4/">Screens</a>
                     </div>
                     <div class="col-1 align-self-center ">
-                        <a class="a navlink" href="http://localhost:5000/category/2/"> Graphic Cards</a>
+                        <a class="a navlink" href="https://localhost:5000/category/2/"> Graphic Cards</a>
                     </div>
                     <div class="col-1 align-self-center p-1 " style="margin-left: 4%;">
-                        <a class="a navlink" href="http://localhost:5000/category/1/">Processor</a>
+                        <a class="a navlink" href="https://localhost:5000/category/1/">Processor</a>
                     </div>
                     <div class="col-2 dropdown p-1 align-self-center">
                         
@@ -43,7 +43,7 @@
                     <div class="col-1 align-self-center p-1 loginbtn">
                         <a  class="a col-12 navlink sendto"><div class="row">
                             
-                                <img class="img" src="http://localhost:5000/img/user.png/" style="width: 40%;border-radius: 50%;margin-left: 
+                                <img class="img" src="https://localhost:5000/img/user.png/" style="width: 40%;border-radius: 50%;margin-left: 
                                 30%;margin-top: 5%;">
                             
                         </div>
@@ -55,7 +55,7 @@
                         <div class="row ">
                             <div class="col-8">
                                 <div class="row">
-                                    <img src="http://localhost:5000/img/cart.png/" class="img cartimg" aria-hidden="true" 
+                                    <img src="https://localhost:5000/img/cart.png/" class="img cartimg" aria-hidden="true" 
                                     style="width: 58.5%;border-radius: 50%;margin-left: 22%;margin-top: 5%;">
                                     
                                 </div>
@@ -82,13 +82,13 @@
             </header>
             <div class="cartdata"></div>
             <ul class="accessories-menu">
-                <a href="http://localhost:5000/category/5/"><li class="accessories-item">Headset</li></a>
-                <a href="http://localhost:5000/category/6/"><li class="accessories-item">Mouse</li></a>
-                <a href="http://localhost:5000/category/7/"><li class="accessories-item">Keyboard</li></a>
-                <a href="http://localhost:5000/category/8/"><li class="accessories-item">LED light</li></a>
+                <a href="https://localhost:5000/category/5/"><li class="accessories-item">Headset</li></a>
+                <a href="https://localhost:5000/category/6/"><li class="accessories-item">Mouse</li></a>
+                <a href="https://localhost:5000/category/7/"><li class="accessories-item">Keyboard</li></a>
+                <a href="https://localhost:5000/category/8/"><li class="accessories-item">LED light</li></a>
             </ul>
             <div class="home-btn" style= "margin-top:-10%;">
-                <a href="http://localhost:5000/"> <button style="margin-left:0%; width: 15%; height: 5%; font-family: sans-serif; font-size: initial; color:white;background-color: black;" > Home page <i class="fa fa-home"></i></button></a>
+                <a href="https://localhost:5000/"> <button style="margin-left:0%; width: 15%; height: 5%; font-family: sans-serif; font-size: initial; color:white;background-color: black;" > Home page <i class="fa fa-home"></i></button></a>
                 
               </div>
 
@@ -129,7 +129,7 @@
             }
             </style>
 
-            <script src="http://localhost:5000/JS/nav.js/"></script>
+            <script src="https://localhost:5000/JS/nav.js/"></script>
 
             <script>
                 ready = false;
@@ -155,13 +155,13 @@
                         div.setAttribute("class", "row");
                         div.onclick = function(){
                             console.log(this.parentElement.children[3].children[0].value)
-                            window.location = "http://localhost:5000/"+this.parentElement.children[3].children[0].value;
+                            window.location = "https://localhost:5000/"+this.parentElement.children[3].children[0].value;
                         }
 
 
                         var img  = document.createElement("img");
                         img.setAttribute("class", "img-fluid offset-3 col-8 itemimg");
-                        img.setAttribute("src", "http://localhost:5000/static/Pictures/"+json[keys[i]].Image);
+                        img.setAttribute("src", "https://localhost:5000/img/"+json[keys[i]].Image);
                         div.appendChild(img);
 
                         divC.appendChild(div);
@@ -170,7 +170,7 @@
                         div.setAttribute("class", "row");
                         div.onclick = function(){
                             console.log(this.parentElement.children[3].children[0].value)
-                            window.location = "http://localhost:5000/"+this.parentElement.children[3].children[0].value;
+                            window.location = "https://localhost:5000/"+this.parentElement.children[3].children[0].value;
                         }
 
                         var text = document.createElement("p");
@@ -187,7 +187,7 @@
                         div.setAttribute("class", "row");
                         div.onclick = function(){
                             console.log(this.parentElement.children[3].children[0].value)
-                            window.location = "http://localhost:5000/"+this.parentElement.children[3].children[0].value;
+                            window.location = "https://localhost:5000/"+this.parentElement.children[3].children[0].value;
                         }
 
                         text = document.createElement("p");
@@ -210,22 +210,22 @@
                             var user = JSON.parse(localStorage.getItem("user"))
                             if(user == null){
                                 localStorage.setItem("PrevPage", window.location.href);
-                                window.location = "http://localhost:5000/"
+                                window.location = "https://localhost:5000/"
                             }
 
                             var request = new XMLHttpRequest();
                             var id = this.value;
-                            request.open("POST", "http://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+id+"&Amount="+1, true);
+                            request.open("POST", "https://localhost:5000/Cart/?User_id="+user.user_id+"&Product_id="+id+"&Amount="+1, true);
                             request.onreadystatechange = function(){
                                 if(this.readyState == 4 && this.status === 200){
                                     var answer = window.confirm("Added to cart, would you like to keep shopping?")
                                     getcart();
                                     if(!answer){ //go to Cart
-                                        window.location = "http://localhost:5000/cart/"
+                                        window.location = "https://localhost:5000/cart/"
                                     }
                                 }else if(this.readyState == 4 && this.status != 200){
                             
-                            window.location = "http://localhost:5000/Login/"
+                            window.location = "https://localhost:5000/Login/"
                             
                         }
                             }
@@ -243,19 +243,19 @@
         var http= new XMLHttpRequest()
         var link = window.location.href.split("/")
         var id = link[link.length-2]
-        http.open("GET","http://localhost:5000/Sort/"+id+"/", true)
+        http.open("GET","https://localhost:5000/Sort/"+id+"/", true)
         http.onreadystatechange=function(){
  
             if(this.readyState == 4 && this.status === 200){
                 var json = JSON.parse(this.responseText)
                 var keys = Object.keys(json)
                 if(keys.length == 0){
-                    window.location = "http://localhost:5000/";
+                    window.location = "https://localhost:5000/";
                 }else{
                     displayproducts(json,keys)
                 }
             }else if(this.status != 200 && this.readyState == 4){
-              window.location = "http://localhost:5000/";
+              window.location = "https://localhost:5000/";
             }
         }       
         //while(ready==false){console.log(ready)}

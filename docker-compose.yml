@@ -16,6 +16,7 @@ services:
             - ./Server.py:/var/site/Server.py
             - ./Templates/:/var/site/templates/
             - ./static/:/var/site/static/
+            - ./TLSKeys/:/var/site/TLSKeys/
         ports:
             - 5000:5000
         command: python3 /var/site/Server.py
@@ -30,7 +31,6 @@ services:
             - 9090:9090
         command:  
             --config.file=/etc/prometheus/prometheus.yml
-            #--storage.tsdb.path=/data/prometheus
         restart: always
         depends_on:
             - server
@@ -43,20 +43,20 @@ services:
             - 3000:3000
         depends_on:
             - prometheus
-    node_exporter: #https://github.com/stefanprodan/dockprom/blob/master/docker-compose.yml
-        image: quay.io/prometheus/node-exporter:latest
+    node_exporter:
+        image: prom/node-exporter
         ports:
             - 9100:9100
-        restart: always
-        #network_mode: host
-        pid: host
+    cadvisor:
+        image: google/cadvisor
+        ports:
+            - 8080:8080
         volumes:
-            - /:/host:ro
-        command:
-            - '--path.rootfs=/host'
-        depends_on:
-            - grafana
-
+            - /:/rootfs:ro
+            - /var/run:/var/run:ro
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+            - /dev/disk:/dev/disk/:ro
 #networks:
 #    nett:
 #        driver: bridge

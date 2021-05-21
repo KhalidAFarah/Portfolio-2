@@ -4,3 +4,4 @@ mysql-connector-python
 prometheus_flask_exporter
 requests
 google-api-python-client
+#pyopenssl
