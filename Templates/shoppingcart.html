@@ -264,13 +264,43 @@
                         btnremove.onclick = function(){
                             var request = new XMLHttpRequest();
                             var id = this.value;
+
+                            /*$.ajax({
+                                method: "delete",
+                                url: "https://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id],
+                                async: true,
+                                success:function(){
+                                    getcart()
+                                    
+                                    
+                                    $.each(document.getElementsByClassName("itemrow"), function(){
+                                        this.value--;
+                                    })
+                                    var itemrow = document.getElementsByClassName("itemrow")[id];
+                                    document.getElementsByClassName("items")[0].removeChild(itemrow);
+
+
+                                    var pricerow = document.getElementsByClassName("pricerow")[id];
+                                    document.getElementsByClassName("pricingbox")[0].removeChild(pricerow);
+
+                                    sum -= (json[keys[id]].Price*json[keys[id]].Amount);
+                                    document.getElementsByClassName("sum")[0].innerHTML = "Sum: " + sum;
+                                },
+                                error:function(){
+                                    window.location = "https://localhost:5000/Login/"
+                                }
+                            })*/
                             request.open("DELETE", "https://localhost:5000/Cart/?User_id="+user.user_id+"&Cart_id="+keys[id], "true");
                             request.onreadystatechange = function(){
                                 if(this.status === 200 && this.readyState === 4){
                                     getcart()
+                                    
+                                    $.each(document.getElementsByClassName("itemrow"), function(){
+                                        this.value--;
+                                    })
                                     var itemrow = document.getElementsByClassName("itemrow")[id];
-                                    console.log(itemrow)
                                     document.getElementsByClassName("items")[0].removeChild(itemrow);
+
 
                                     var pricerow = document.getElementsByClassName("pricerow")[id];
                                     document.getElementsByClassName("pricingbox")[0].removeChild(pricerow);

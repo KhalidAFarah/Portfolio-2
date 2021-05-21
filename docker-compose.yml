@@ -16,6 +16,7 @@ services:
             - ./Server.py:/var/site/Server.py
             - ./Templates/:/var/site/templates/
             - ./static/:/var/site/static/
+            - ./TLSKeys/:/var/site/TLSKeys/
         ports:
             - 5000:5000
         command: python3 /var/site/Server.py
