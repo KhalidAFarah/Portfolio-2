@@ -41,11 +41,6 @@ counter = {
     'loggedin':0
 }
 
-#Counter for cart
-#Counter for items
-#Counter for orders
-#Most popular ordered items
-#Most popular carted items
 #CPU usage
 #Memory usage
 
@@ -102,6 +97,25 @@ def server_metrics():
     metrics+= 'item_ordered_request_total %s\n' % (counter['orderitem'],)
     metrics+= 'user_logged_in_request_total %s\n'% (counter['loggedin'],)
 
+    mycursor = db.cursor()
+    mycursor.execute("SELECT Product_id, SUM(Amount) FROM Carts GROUP BY Product_id ORDER BY SUM(Amount) DESC LIMIT 10")
+    result = mycursor.fetchall()
+    mycursor.close()
+    placement = 1
+    for metric in result:
+        metrics += "most_popular_carted_items{Product_id=\"%s\", placement=\"%s\"} %s\n" % (metric[0], placement,  metric[1])
+        placement+=1
+
+    mycursor = db.cursor()
+    mycursor.execute("SELECT Product_id, SUM(Amount) FROM Orders GROUP BY Product_id ORDER BY SUM(Amount) DESC LIMIT 10")
+    result = mycursor.fetchall()
+    mycursor.close()
+    placement = 1
+    for metric in result:
+        metrics += "most_popular_ordered_items{Product_id=\"%s\", placement=\"%s\"} %s\n" % (metric[0], placement,  metric[1])
+        placement+=1
+
+    
     return metrics 
 
 
