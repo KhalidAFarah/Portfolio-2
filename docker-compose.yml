@@ -18,7 +18,8 @@ services:
             - ./static/:/var/site/static/
             - ./TLSKeys/:/var/site/TLSKeys/
         ports:
-            - 5000:5000
+            - "5000:5000"
+            - "5001:5001"
         command: python3 /var/site/Server.py
         depends_on:
             - db
@@ -26,7 +27,7 @@ services:
         image: prom/prometheus
         volumes:
             - ./prometheus:/etc/prometheus
-            - ./prometheus/data:/data/prometheus
+           # - ./prometheus/data:/data/prometheus
         ports:
             - 9090:9090
         command:  
@@ -47,19 +48,4 @@ services:
         image: prom/node-exporter
         ports:
             - 9100:9100
-    cadvisor:
-        image: google/cadvisor
-        ports:
-            - 8080:8080
-        volumes:
-            - /:/rootfs:ro
-            - /var/run:/var/run:ro
-            - /sys:/sys:ro
-            - /var/lib/docker/:/var/lib/docker:ro
-            - /dev/disk:/dev/disk/:ro
-#networks:
-#    nett:
-#        driver: bridge
-    
-
     
