@@ -12,8 +12,17 @@ $(".loginbtn").on("click",function(){
     if(user == null){
         window.location = "https://localhost:5000/Login/";
     }else{
-        window.localStorage.removeItem("user");
-        window.location = "https://localhost:5000/";
+        if (user.Accsess_level<3){
+            window.localStorage.removeItem("user");
+            window.location = "https://localhost:5000/";
+        }
+       else{
+        var auth2=gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function(){
+            window.localStorage.removeItem("user");
+            window.location = "https://localhost:5000/";
+        })
+       }
     }
 })
 //for accessories
