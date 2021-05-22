@@ -118,7 +118,54 @@ def server_metrics():
     
     return metrics 
 
+@app.route("/userg/<token>/")
+def signIn(token):
+    mycursor = db.cursor()
+    global counter
+    try:
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
+    except:
+        abort(404, message="User not found")
+    result = mycursor.fetchall()
+    counter['loggedin']+=1
+    mycursor.close()
+    if len(result)==0:
+         mycursor = db.cursor()
 
+    try:
+        mycursor.execute("INSERT INTO Customers (Firstname, Lastname, Username,Email) VALUES (%s, %s, %s, %s,)",(data['Firstname'], data['Lastname'] ,data['Username'],data['Email']))
+        db.commit()
+    except:
+        abort(401, message = "Error happened server was unable to log in")
+    mycursor.close()
+
+
+    mycursor = db.cursor()
+    try:
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
+    except:
+        abort(404, message="User not found")
+    result = mycursor.fetchall()
+    counter['loggedin']+=1
+    mycursor.close()
+    for user  in result:       
+            response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
+            response = jsonify(response)
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            return response
+
+    abort(404, message="User not found")
+
+def Validate_token(token):
+    try:
+        idinfo=id_token.verify_oauth2_token(token,greq.Request(),ouath_id)
+        print("\nToken Valid. User:{}\nUser Data:\n{}\n"
+        .format(idinfo['given_name'],idinfo))
+        return idinfo
+    except ValueError as err:
+        print(f"Token Validation failed: {err}")
+    return False    
+    
 
 @app.route("/")
 def front_page():

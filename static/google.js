@@ -1,5 +1,5 @@
 function onSignIn(googleUser){
-    var profile = googleUser.getBasicProfile();
+   var profile = googleUser.getBasicProfile();
    id_token= googleUser.getAuthResponse().id_token;
    logged_in=profile;
    remove_users();
@@ -19,7 +19,10 @@ function onSignIn(googleUser){
         }
        })
 
+    
+
 }
+
 function signOut(){
     var auth2=gapi.auth2.getAuthInstance();
     auth2.signOut().then(function(){

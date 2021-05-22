@@ -15,7 +15,7 @@
 </head>
 <body>
         <div class="home-btn">
-          <a href="http://localhost:5000/"> <button style="margin-left:0%; width: 15%; height: 5%; font-family: sans-serif; font-size: initial; color:white;background-color: black;" > Home page <i class="fa fa-home"></i></button></a>
+          <a href="https://localhost:5000/"> <button style="margin-left:0%; width: 15%; height: 5%; font-family: sans-serif; font-size: initial; color:white;background-color: black;" > Home page <i class="fa fa-home"></i></button></a>
           
         </div>
         <div class="container">
@@ -57,7 +57,7 @@
     var interchangeable = document.getElementById("interchangeable");
 
     function Register(){
-        window.location="http://localhost:5000/Register/"
+        window.location="https://localhost:5000/Register/"
     }
 
     function login(){
@@ -97,9 +97,9 @@
         
         var http= new XMLHttpRequest()
         if(regular){
-            http.open("GET","http://localhost:5000/user/"+username.value+"/" +interchangeable.value+"/" );
+            http.open("GET","https://localhost:5000/user/"+username.value+"/" +interchangeable.value+"/" );
         }else{
-            http.open("GET","http://localhost:5000/userM/"+username.value+"/" +interchangeable.value+"/" );
+            http.open("GET","https://localhost:5000/userM/"+username.value+"/" +interchangeable.value+"/" );
         }
         
         http.onreadystatechange=function(){
@@ -109,7 +109,7 @@
                 window.localStorage.setItem("user",JSON.stringify(json));
                 if(json.Access_level == 1){
                     if(window.localStorage.getItem("PrevPage") == null){
-                        window.location = "http://localhost:5000/"
+                        window.location = "https://localhost:5000/"
                     }else{
                         var url = window.localStorage.getItem("PrevPage");
                         window.localStorage.removeItem("PrevPage");
@@ -119,7 +119,7 @@
                     if(window.localStorage.getItem("PrevPage") != null){
                         window.localStorage.removeItem("PrevPage");
                     }
-                    window.location = "http://localhost:5000/admin/"
+                    window.location = "https://localhost:5000/admin/"
                 }
             }else if(this.status != 200 && this.readyState === 4){
                 alert("Invalid values given");
