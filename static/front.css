@@ -165,11 +165,12 @@ input[name="r"]{
     border-bottom: solid;
     border-color:blue;
     position: relative;
-    z-index: 3;
+    z-index: 0;
     
     
 }
 .img-logo img{
     width: 80%;
+
 }
 

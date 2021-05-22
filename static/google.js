@@ -9,7 +9,6 @@ function onSignIn(googleUser){
        method:"GET",
        url:"https://localhost:5000/userg/"+id_token+"/",
        success:function(res){
-           alert("wooo")
         window.localStorage.setItem("user",JSON.stringify(res));
         if(window.localStorage.getItem("PrevPage") == null){
             window.location = "https://localhost:5000/"}
