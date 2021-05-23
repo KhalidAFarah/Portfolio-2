@@ -546,7 +546,7 @@ def metric_server():
 if __name__ == "__main__":
     #t = threading.Thread(target=metric_server)
     #t.start()
-    start_http_server(8001)
+    #start_http_server(8001)
 
     #t = threading.Thread(target=uppdate_data)
     #t.start()
