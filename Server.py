@@ -5,6 +5,12 @@ from flask_restful import Api, Resource, reqparse, abort
 import mysql.connector
 import time
 import os
+import threading
+
+from prometheus_client import start_http_server, Counter
+#from http.server import BaseHTTPRequestHandler, HTTPServer
+
+
 
 
 #sdsds
@@ -13,14 +19,23 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as greq
 
 client_id = "952836639002-aejo8mld9o48v0rrqnruo4jbuisgas2b.apps.googleusercontent.com"
-#from prometheus_flask_exporter import PrometheusMetrics
+
+#try:
+
+#except:
+#    print("oops")
+
+
 
 #app = Flask(__name__)
 app = Flask(__name__, static_folder="/var/site/", static_url_path="")
 api = Api(app)
 #metrics = PrometheusMetrics(app)
+
 db = None
+#start_http_server(5001)
 while db is None:
+    
     try:
         db = mysql.connector.connect(
             #host="127.0.0.1", #comment out for docker
@@ -37,16 +52,25 @@ while db is None:
 
 #mycursor = db.cursor()
 
-counter = {
-    'getitem': 0,
-    'addtocart': 0,
-    'orderitem': 0,
-    'loggedin':0
+cp = Counter('product_page_request_total', 'how many time products page have been viewed')
+cc = Counter('item_added_to_cart_request_total', 'how many item have been carted')
+co = Counter('item_ordered_request_total', 'how  many items have been ordered')
+cl = Counter('user_logged_in_request_total', 'how many customers have logged in')
+ct = Counter('test_re', 'how many customers have logged in')
+
+counters = {
+    "p":0,
+    "c":0,
+    "o":0,
+    "l":0,
+    "t":0
 }
-
-#CPU usage
-#Memory usage
-
+@app.route("/test/")
+def get_test():
+    global ct
+    ct.inc()
+    counters['t']=counters['t'] + 1
+    return "hi"
 
 @app.route("/CSS/<filename>/")
 def get_CSS(filename):
@@ -90,76 +114,6 @@ def renders_site_cart():
 def server_status():
     return 'Online'
 
-#metrics endpoint for prometheus
-@app.route("/metrics")
-def server_metrics():
-    metrics = ""
-    #amount of times user went to the product page
-    metrics+= 'product_page_request_total %s\n' %  (counter['getitem'],)
-    metrics+= 'item_added_to_cart_request_total %s\n' % (counter['addtocart'],)
-    metrics+= 'item_ordered_request_total %s\n' % (counter['orderitem'],)
-    metrics+= 'user_logged_in_request_total %s\n'% (counter['loggedin'],)
-
-    mycursor = db.cursor()
-    mycursor.execute("SELECT Product_id, SUM(Amount) FROM Carts GROUP BY Product_id ORDER BY SUM(Amount) DESC LIMIT 10")
-    result = mycursor.fetchall()
-    mycursor.close()
-    placement = 1
-    for metric in result:
-        metrics += "most_popular_carted_items{Product_id=\"%s\", placement=\"%s\"} %s\n" % (metric[0], placement,  metric[1])
-        placement+=1
-
-    mycursor = db.cursor()
-    mycursor.execute("SELECT Product_id, SUM(Amount) FROM Orders GROUP BY Product_id ORDER BY SUM(Amount) DESC LIMIT 10")
-    result = mycursor.fetchall()
-    mycursor.close()
-    placement = 1
-    for metric in result:
-        metrics += "most_popular_ordered_items{Product_id=\"%s\", placement=\"%s\"} %s\n" % (metric[0], placement,  metric[1])
-        placement+=1
-
-    
-    return metrics 
-
-@app.route("/userg/<token>/")
-def signIn(token):
-    mycursor = db.cursor()
-    global counter
-    user=Validate_token(token)
-   # spli=user["name"].split(" ")
-    try:
-        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(user["name"],user["email"]))
-    except:
-        abort(404, message="User not found")
-    result = mycursor.fetchall()
-    counter['loggedin']+=1
-    mycursor.close()
-    print(str(result))
-    print(len(result))
-    if (len(result)<1):
-        print("hei")
-        mycursor = db.cursor()
-        try:
-            mycursor.execute("INSERT INTO Customers (Firstname, Lastname, Username,Email,Access_level) VALUES (%s, %s, %s, %s,%s)",(user['name'],user['name'],user['name'],user['email'],3))
-            db.commit()
-        except:
-            abort(401, message = "Error happened server was unable to log in")
-        mycursor.close()
-
-        print("tester")
-        mycursor = db.cursor()
-        try:
-            mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(user["name"],user["email"]))
-        except:
-            abort(404, message="User not found")
-        result = mycursor.fetchall()
-        counter['loggedin']+=1
-        mycursor.close()
-    for user  in result:       
-        response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
-        response = jsonify(response)
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        return response
 
     abort(404, message="User not found")
 
@@ -214,7 +168,7 @@ class UserGetAll(Resource):
 
 class Login_with_username_and_password(Resource):
     def get(self, Username, Password):
-        global counter
+        global counters
         mycursor = db.cursor()
         try:
             mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
@@ -222,7 +176,7 @@ class Login_with_username_and_password(Resource):
             abort(404, message="User not found")
 
         result = mycursor.fetchall()
-        counter['loggedin']+=1
+        counters['l']+=1
         mycursor.close()
         for user  in result:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -233,14 +187,14 @@ class Login_with_username_and_password(Resource):
         abort(404, message="User not found")
 class Login_with_username_and_email(Resource):
     def get(self, Username, Email):
-        global counter
+        global counters
         mycursor = db.cursor()
         try:
             mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
         except:
             abort(404, message="User not found")
         result = mycursor.fetchall()
-        counter['loggedin']+=1
+        counters['l'] += 1
         mycursor.close()
         for user  in result:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -249,7 +203,40 @@ class Login_with_username_and_email(Resource):
             return response
 
         abort(404, message="User not found")
+@app.route("/userg/<token>/")
+def signIn(token):
+    mycursor = db.cursor()
+    global counters
+    user=Validate_token(token)
+    try:
+        mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(user["name"],user["email"]))
+    except:
+        abort(404, message="User not found")
+    result = mycursor.fetchall()
+    mycursor.close()
+    if (len(result)<1):
+        mycursor = db.cursor()
+        try:
+            mycursor.execute("INSERT INTO Customers (Firstname, Lastname, Username,Email,Access_level) VALUES (%s, %s, %s, %s,%s)",(user['name'],user['name'],user['name'],user['email'],3))
+            db.commit()
+        except:
+            abort(401, message = "Error happened server was unable to log in")
+        mycursor.close()
 
+        print("tester")
+        mycursor = db.cursor()
+        try:
+            mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(user["name"],user["email"]))
+        except:
+            abort(404, message="User not found")
+        result = mycursor.fetchall()
+        counters['l']+=1
+        mycursor.close()
+    for user  in result:       
+        response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
+        response = jsonify(response)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
 class UserPost(Resource):
     def post(self):
         parser = reqparse.RequestParser()
@@ -276,7 +263,7 @@ api.add_resource(UserGetAll, "/users/")
 
 class item(Resource):
     def get(self, Product_id): # get an item from the db
-        global counter
+        global counters, cp
         mycursor = db.cursor(buffered=True)
         try:
             mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
@@ -284,7 +271,8 @@ class item(Resource):
             abort(404, message="product not found")
         result = mycursor.fetchall()
         mycursor.close()
-        counter['getitem']+=1
+        counters['p']+=1
+        cp.inc()
             
         #response =  {}
         for product in result:
@@ -447,7 +435,7 @@ api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
 
 class Cart(Resource):
     def post(self):
-        global counter
+        global counters
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
         parser.add_argument("Product_id")
@@ -456,15 +444,16 @@ class Cart(Resource):
         data = parser.parse_args()
         mycursor = db.cursor()
         try:#checking if user has the product in their cart
-            mycursor.execute("SELECT Amount FROM Carts WHERE User_id=%s AND Product_id=%s AND Ordered=%s",(int(data['User_id']),int(data['Product_id']), "No"))
+            mycursor.execute("SELECT Amount FROM Carts WHERE User_id=%s AND Product_id=%s",(int(data['User_id']),int(data['Product_id'])))
         except:
             abort(404, message="Unable to check your cart")
         result = mycursor.fetchall()
         
-        counter['addtocart']+=int(data['Amount'])
+        counters['c']+=int(data['Amount'])
+        cc.inc()
         if(len(result) < 1):
             try:
-                mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
+                mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount) VALUES (%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount'])))
                 db.commit()
             except:
                 abort(405, message="Unable to add product to cart")
@@ -481,7 +470,7 @@ class Cart(Resource):
         mycursor = db.cursor(buffered=True)
         result = None
         try:
-            mycursor.execute("SELECT Carts.Cart_id, P.Product_id, P.Category_id, P.Name, P.Price, P.Image, P.Description, Carts.Amount FROM Products as P LEFT JOIN Carts ON P.Product_id = Carts.Product_id WHERE User_id={} AND Carts.Ordered=\"No\"".format(data['User_id']))
+            mycursor.execute("SELECT Carts.Cart_id, P.Product_id, P.Category_id, P.Name, P.Price, P.Image, P.Description, Carts.Amount FROM Products as P LEFT JOIN Carts ON P.Product_id = Carts.Product_id WHERE User_id={}".format(data['User_id']))
             result = mycursor.fetchall()
         except  mysql.connector.errors.DatabaseError:
             if db.is_connected:
@@ -536,19 +525,19 @@ class Cart(Resource):
 api.add_resource(Cart, "/Cart/")
 class Order(Resource):
     def post(self):
-        global counter
+        global counters
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
         data = parser.parse_args()
 
         mycursor = db.cursor()
 
-        mycursor.execute("SELECT Product_id, Amount FROM Carts WHERE User_id={} AND Ordered=\"No\"".format(int(data['User_id'])))
+        mycursor.execute("SELECT Product_id, Amount FROM Carts WHERE User_id={}".format(int(data['User_id'])))
         results = mycursor.fetchall()
         
 
         for Product_id, Amount in results:
-            counter['orderitem']+=Amount
+            counters['o']+=int(Amount)
             mycursor.execute("INSERT INTO Orders (User_id, Product_id, Amount) VALUES ({},{},{})".format(int(data['User_id']), int(Product_id), int(Amount)))
 
         mycursor.execute("DELETE FROM Carts WHERE User_id={}".format(int(data['User_id'])))
@@ -556,17 +545,41 @@ class Order(Resource):
         mycursor.close()
         return 200
 
+api.add_resource(Order, "/Order/")  
 
-
-
+def metric_server():
+    #global cp, cc, cl, co
+    #while True:
+    check = True
+    while check:
+        try:
+            start_http_server(8001)
+            check = False
+        except:
+            check = True
         
 
+#metric_server()
+#due to some issue the counters weren't updating on the metrics endpoint so doing it in here with a counter dictionary
+def uppdate_data():
+    global counters
+    while True:
+        time.sleep(1)
+        ct.inc(counters['t'])
+        
 
-api.add_resource(Order, "/Order/")
 if __name__ == "__main__":
+    #t = threading.Thread(target=metric_server)
+    #t.start()
+
+    #t = threading.Thread(target=uppdate_data)
+    #t.start()
+    
     #app.run(debug=True) #comment out for docker
     #https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https ssl_context for self-certificate
-    app.run(host="0.0.0.0", debug=True, ssl_context=("/var/site/TLSKeys/cert.pem", "/var/site/TLSKeys/key.pem")) #leave in for docker
+
+    #start_http_server(8001)
+    app.run(host="0.0.0.0", debug=True, ssl_context=("/var/site/TLSKeys/cert.pem", "/var/site/TLSKeys/key.pem"))
     db.close()
 
     

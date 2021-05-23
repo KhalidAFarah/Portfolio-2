@@ -1,7 +1,6 @@
 Flask==1.1.2
 flask_restful
 mysql-connector-python
-prometheus_flask_exporter
 requests
 google-api-python-client
-#pyopenssl
+prometheus-client

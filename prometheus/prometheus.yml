@@ -1,35 +1,40 @@
 global:
   scrape_interval: 5s
-  evaluation_interval: 1m
+
 
 scrape_configs:
 - job_name: 'prometheus'
   static_configs:
     - targets: ['localhost:9090']
+
+- job_name: 'py_server'
+  metrics_path: ''
+  static_configs:
+    - targets: ['server:8001']
     
 - job_name: 'product_page_request_total'
   static_configs:
-    - targets: ['server:5000']
+    - targets: ['server:5001']
 
-- job_name: 'item_added_to_cart_request_total'
-  static_configs:
-    - targets: ['server:5000']
+#- job_name: 'item_added_to_cart_request_total'
+#  static_configs:
+#    - targets: ['server:5000']
 
-- job_name: 'item_ordered_request_total'
-  static_configs:
-    - targets: ['server:5000']
+#- job_name: 'item_ordered_request_total'
+#  static_configs:
+#    - targets: ['server:5000']
 
-- job_name: 'user_logged_in_request_total'
-  static_configs:
-    - targets: ['server:5000']
+#- job_name: 'user_logged_in_request_total'
+#  static_configs:
+#    - targets: ['server:5000']
 
-- job_name: 'most_popular_carted_items'
-  static_configs:
-    - targets: ['server:5000']
+#- job_name: 'most_popular_carted_items'
+#  static_configs:
+#    - targets: ['server:5000']
 
-- job_name: 'most_popular_ordered_items'
-  static_configs:
-    - targets: ['server:5000']
+#- job_name: 'most_popular_ordered_items'
+#  static_configs:
+#    - targets: ['server:5000']
 
 - job_name: 'node_exporter'
   static_configs:
