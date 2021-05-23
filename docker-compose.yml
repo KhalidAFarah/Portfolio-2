@@ -19,7 +19,7 @@ services:
             - ./TLSKeys/:/var/site/TLSKeys/
         ports:
             - "5000:5000"
-            - "5001:5001"
+            - "8001:8001"
         command: python3 /var/site/Server.py
         depends_on:
             - db

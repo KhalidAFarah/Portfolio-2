@@ -1,6 +1,6 @@
 global:
   scrape_interval: 5s
-  evaluation_interval: 1m
+
 
 scrape_configs:
 - job_name: 'prometheus'
@@ -10,7 +10,7 @@ scrape_configs:
 - job_name: 'py_server'
   metrics_path: ''
   static_configs:
-    - targets: ['server:5001']
+    - targets: ['server:8001']
     
 - job_name: 'product_page_request_total'
   static_configs:

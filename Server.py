@@ -67,8 +67,9 @@ counters = {
 }
 @app.route("/test/")
 def get_test():
-    global counters
+    global ct
     ct.inc()
+    counters['t']=counters['t'] + 1
     return "hi"
 
 @app.route("/CSS/<filename>/")
@@ -262,7 +263,7 @@ api.add_resource(UserGetAll, "/users/")
 
 class item(Resource):
     def get(self, Product_id): # get an item from the db
-        global counters
+        global counters, cp
         mycursor = db.cursor(buffered=True)
         try:
             mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
@@ -271,6 +272,7 @@ class item(Resource):
         result = mycursor.fetchall()
         mycursor.close()
         counters['p']+=1
+        cp.inc()
             
         #response =  {}
         for product in result:
@@ -442,15 +444,16 @@ class Cart(Resource):
         data = parser.parse_args()
         mycursor = db.cursor()
         try:#checking if user has the product in their cart
-            mycursor.execute("SELECT Amount FROM Carts WHERE User_id=%s AND Product_id=%s AND Ordered=%s",(int(data['User_id']),int(data['Product_id']), "No"))
+            mycursor.execute("SELECT Amount FROM Carts WHERE User_id=%s AND Product_id=%s",(int(data['User_id']),int(data['Product_id'])))
         except:
             abort(404, message="Unable to check your cart")
         result = mycursor.fetchall()
         
         counters['c']+=int(data['Amount'])
+        cc.inc()
         if(len(result) < 1):
             try:
-                mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount, Ordered) VALUES (%s,%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount']), "No"))
+                mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount) VALUES (%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount'])))
                 db.commit()
             except:
                 abort(405, message="Unable to add product to cart")
@@ -467,7 +470,7 @@ class Cart(Resource):
         mycursor = db.cursor(buffered=True)
         result = None
         try:
-            mycursor.execute("SELECT Carts.Cart_id, P.Product_id, P.Category_id, P.Name, P.Price, P.Image, P.Description, Carts.Amount FROM Products as P LEFT JOIN Carts ON P.Product_id = Carts.Product_id WHERE User_id={} AND Carts.Ordered=\"No\"".format(data['User_id']))
+            mycursor.execute("SELECT Carts.Cart_id, P.Product_id, P.Category_id, P.Name, P.Price, P.Image, P.Description, Carts.Amount FROM Products as P LEFT JOIN Carts ON P.Product_id = Carts.Product_id WHERE User_id={}".format(data['User_id']))
             result = mycursor.fetchall()
         except  mysql.connector.errors.DatabaseError:
             if db.is_connected:
@@ -529,7 +532,7 @@ class Order(Resource):
 
         mycursor = db.cursor()
 
-        mycursor.execute("SELECT Product_id, Amount FROM Carts WHERE User_id={} AND Ordered=\"No\"".format(int(data['User_id'])))
+        mycursor.execute("SELECT Product_id, Amount FROM Carts WHERE User_id={}".format(int(data['User_id'])))
         results = mycursor.fetchall()
         
 
@@ -549,9 +552,8 @@ def metric_server():
     #while True:
     check = True
     while check:
-        time.sleep(2)
         try:
-            start_http_server(5001)
+            start_http_server(8001)
             check = False
         except:
             check = True
@@ -563,31 +565,21 @@ def uppdate_data():
     global counters
     while True:
         time.sleep(1)
-        if counters['p'] != 0:
-        
-            cp.inc(counters['p'])
-            counters['p']=0
-        if counters['c'] != 0:
-            cc.inc(counters['c'])
-            counters['c']=0
-        if counters['o'] != 0:
-            co.inc(counters['o'])
-            counters['o']=0
-        if counters['l'] != 0:
-            cl.inc(counters['l'])
-            counters['l']=0
+        ct.inc(counters['t'])
         
 
 if __name__ == "__main__":
-    t = threading.Thread(target=metric_server)
-    t.start()
+    #t = threading.Thread(target=metric_server)
+    #t.start()
 
-    t = threading.Thread(target=uppdate_data)
-    t.start()
+    #t = threading.Thread(target=uppdate_data)
+    #t.start()
     
     #app.run(debug=True) #comment out for docker
     #https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https ssl_context for self-certificate
-    app.run(host="0.0.0.0", debug=True, ssl_context=("/var/site/TLSKeys/cert.pem", "/var/site/TLSKeys/key.pem")) #leave in for docker
+
+    #start_http_server(8001)
+    app.run(host="0.0.0.0", debug=True, ssl_context=("/var/site/TLSKeys/cert.pem", "/var/site/TLSKeys/key.pem"))
     db.close()
 
     
