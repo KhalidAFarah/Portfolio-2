@@ -92,5 +92,17 @@ text-align: center;
     top: 62%;
     left: 48%;
     z-index: 1;
+    margin-top: 3%;
+    margin-left: -6%;
+}
+.abcRioButtonIcon{
+    background-color: white;
+}
+.abcRioButtonContentWrapper{
+    color:white;
+    background-color: #4285f4;
 
+}
+.h{
+    text-align: center;
 }
