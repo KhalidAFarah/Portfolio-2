@@ -235,7 +235,7 @@ function displaycart(){
         var divRow = document.createElement("div");
         divRow.setAttribute("class", "cartdatarow row");
         var btn = document.createElement("a");
-        btn.innerHTML = "Go to Cart"
+        btn.innerHTML = "Go to Cart to see full list of all products added"
         btn.setAttribute("style", "padding: 2%; color: dodgerblue")
         btn.setAttribute("href", "https://localhost:5000/cart/")
         divRow.appendChild(btn);
