@@ -339,7 +339,7 @@ class itemPost(Resource):
                 db.commit()
 
         except:
-            abort(401, message = "Product is already registered.")
+            abort(401, message = "Was unable to add the product.")
         mycursor.close()
 
         url = request.url.split("?")[0].replace("/item/", "/admin/")
