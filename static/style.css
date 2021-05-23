@@ -89,10 +89,9 @@ text-align: center;
 }
 .g-signin2{
     position: absolute;
-    top: 62%;
     left: 48%;
     z-index: 1;
-    margin-top: 3%;
+    margin-top: 20%;
     margin-left: -6%;
 }
 .abcRioButtonIcon{
@@ -105,4 +104,9 @@ text-align: center;
 }
 .h{
     text-align: center;
+}
+.container{
+    position: relative;
+    margin: 5%;
+    padding: 5%;
 }
