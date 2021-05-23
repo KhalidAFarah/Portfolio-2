@@ -159,16 +159,14 @@ input[name="r"]{
 }
 .container{
     position: relative;
-    margin: 0;
-    padding: 0;
+    margin: 5%;
+    padding: 5%;
 }
 .img-logo{
     margin-top: -7%;
     margin-right: 30%;
     margin-left: 34%;
     float: left;
-    border-bottom: solid;
-    border-color:blue;
     z-index: 0;
     
     
