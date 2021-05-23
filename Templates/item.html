@@ -321,10 +321,12 @@
             var request = new XMLHttpRequest();
             request.open("GET", "https://localhost:5000/item/"+id+"/")
             request.onreadystatechange = function (){
-                if(this.readyState == 4 && this.status){
+                if(this.readyState == 4 && this.status === 200){
                     var json = JSON.parse(this.responseText);
                     view(json);
                     //getcart();
+                }else if(this.readyState == 4 && this.status != 200){
+                    window.location = "https://localhost:5000/"
                 }
 
             }

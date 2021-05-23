@@ -291,6 +291,7 @@ class item(Resource):
             response = jsonify(item)
             response.headers.add("Access-Control-Allow-Origin", "*")
             return response
+        abort(404, message="Item not available.")
 
 class itemPost(Resource):
     def get(self):#getting multiple items
