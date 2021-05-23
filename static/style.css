@@ -101,12 +101,11 @@ text-align: center;
     color:white;
     background-color: #4285f4;
 
-}
-.h{
-    text-align: center;
+
+
 }
 .container{
     position: relative;
-    margin: 6%;
     padding: 5%;
+    margin-top: 5%;
 }
