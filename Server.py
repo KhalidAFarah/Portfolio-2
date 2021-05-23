@@ -7,7 +7,7 @@ import time
 import os
 import threading
 
-from prometheus_client import start_http_server, Counter
+from prometheus_client import start_http_server, Counter, Gauge
 #from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
@@ -56,21 +56,7 @@ cp = Counter('product_page_request_total', 'how many time products page have bee
 cc = Counter('item_added_to_cart_request_total', 'how many item have been carted')
 co = Counter('item_ordered_request_total', 'how  many items have been ordered')
 cl = Counter('user_logged_in_request_total', 'how many customers have logged in')
-ct = Counter('test_re', 'how many customers have logged in')
 
-counters = {
-    "p":0,
-    "c":0,
-    "o":0,
-    "l":0,
-    "t":0
-}
-@app.route("/test/")
-def get_test():
-    global ct
-    ct.inc()
-    counters['t']=counters['t'] + 1
-    return "hi"
 
 @app.route("/CSS/<filename>/")
 def get_CSS(filename):
@@ -168,7 +154,7 @@ class UserGetAll(Resource):
 
 class Login_with_username_and_password(Resource):
     def get(self, Username, Password):
-        global counters
+        global cl
         mycursor = db.cursor()
         try:
             mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Password = \"{}\"".format(Username, Password))
@@ -176,7 +162,7 @@ class Login_with_username_and_password(Resource):
             abort(404, message="User not found")
 
         result = mycursor.fetchall()
-        counters['l']+=1
+        cl.inc()
         mycursor.close()
         for user  in result:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -187,14 +173,14 @@ class Login_with_username_and_password(Resource):
         abort(404, message="User not found")
 class Login_with_username_and_email(Resource):
     def get(self, Username, Email):
-        global counters
+        global cl
         mycursor = db.cursor()
         try:
             mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(Username, Email))
         except:
             abort(404, message="User not found")
         result = mycursor.fetchall()
-        counters['l'] += 1
+        cl.inc()
         mycursor.close()
         for user  in result:       
             response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -206,7 +192,7 @@ class Login_with_username_and_email(Resource):
 @app.route("/userg/<token>/")
 def signIn(token):
     mycursor = db.cursor()
-    global counters
+    global cl
     user=Validate_token(token)
     try:
         mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(user["name"],user["email"]))
@@ -223,14 +209,13 @@ def signIn(token):
             abort(401, message = "Error happened server was unable to log in")
         mycursor.close()
 
-        print("tester")
         mycursor = db.cursor()
         try:
             mycursor.execute("SELECT User_id, Firstname, Lastname, Username, Email, Access_level FROM Customers WHERE Username = \"{}\" AND Email = \"{}\"".format(user["name"],user["email"]))
         except:
             abort(404, message="User not found")
         result = mycursor.fetchall()
-        counters['l']+=1
+        cl.inc()
         mycursor.close()
     for user  in result:       
         response = {"user_id": user[0],"Firstname":user[1],"Lastname":user[2],"Username":user[3],"Email":user[4],"Access_level":user[5]}
@@ -263,7 +248,7 @@ api.add_resource(UserGetAll, "/users/")
 
 class item(Resource):
     def get(self, Product_id): # get an item from the db
-        global counters, cp
+        global cp
         mycursor = db.cursor(buffered=True)
         try:
             mycursor.execute("SELECT * FROM Products WHERE Product_id={}".format(int(Product_id)))
@@ -271,7 +256,6 @@ class item(Resource):
             abort(404, message="product not found")
         result = mycursor.fetchall()
         mycursor.close()
-        counters['p']+=1
         cp.inc()
             
         #response =  {}
@@ -436,7 +420,7 @@ api.add_resource(getAllInCategory, "/Sort/<int:Category_id>/")
 
 class Cart(Resource):
     def post(self):
-        global counters
+        global cc
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
         parser.add_argument("Product_id")
@@ -450,8 +434,7 @@ class Cart(Resource):
             abort(404, message="Unable to check your cart")
         result = mycursor.fetchall()
         
-        counters['c']+=int(data['Amount'])
-        cc.inc()
+        cc.inc(int(data['Amount']))
         if(len(result) < 1):
             try:
                 mycursor.execute("INSERT INTO Carts (User_id, Product_id, Amount) VALUES (%s,%s,%s)", (int(data['User_id']), int(data['Product_id']), int(data['Amount'])))
@@ -526,7 +509,7 @@ class Cart(Resource):
 api.add_resource(Cart, "/Cart/")
 class Order(Resource):
     def post(self):
-        global counters
+        global co
         parser = reqparse.RequestParser()
         parser.add_argument("User_id")
         data = parser.parse_args()
@@ -538,7 +521,7 @@ class Order(Resource):
         
 
         for Product_id, Amount in results:
-            counters['o']+=int(Amount)
+            co.inc(int(Amount))
             mycursor.execute("INSERT INTO Orders (User_id, Product_id, Amount) VALUES ({},{},{})".format(int(data['User_id']), int(Product_id), int(Amount)))
 
         mycursor.execute("DELETE FROM Carts WHERE User_id={}".format(int(data['User_id'])))
@@ -549,8 +532,6 @@ class Order(Resource):
 api.add_resource(Order, "/Order/")  
 
 def metric_server():
-    #global cp, cc, cl, co
-    #while True:
     check = True
     while check:
         try:
@@ -559,27 +540,17 @@ def metric_server():
         except:
             check = True
         
-
-#metric_server()
-#due to some issue the counters weren't updating on the metrics endpoint so doing it in here with a counter dictionary
-def uppdate_data():
-    global counters
-    while True:
-        time.sleep(1)
-        ct.inc(counters['t'])
+        
         
 
 if __name__ == "__main__":
     #t = threading.Thread(target=metric_server)
     #t.start()
+    start_http_server(8001)
 
     #t = threading.Thread(target=uppdate_data)
     #t.start()
-    
-    #app.run(debug=True) #comment out for docker
-    #https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https ssl_context for self-certificate
 
-    #start_http_server(8001)
     app.run(host="0.0.0.0", debug=True, ssl_context=("/var/site/TLSKeys/cert.pem", "/var/site/TLSKeys/key.pem"))
     db.close()
 
