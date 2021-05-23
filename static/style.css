@@ -88,9 +88,11 @@ text-align: center;
     padding: 1% 2%;
 }
 .g-signin2{
+    position: absolute;
     left: 48%;
-    margin-top: 20%;
-    margin-left: 42%;
+    margin-top: 18%;
+    margin-left: -6%;
+    z-index: 1;
 }
 .abcRioButtonIcon{
     background-color: white;
@@ -106,6 +108,4 @@ text-align: center;
     position: relative;
     padding: 5%;
     margin-top: 5%;
-    z-index: 1;
-
 }
