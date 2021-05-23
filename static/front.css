@@ -159,8 +159,8 @@ input[name="r"]{
 }
 .container{
     position: relative;
-    margin: 0;
-    padding: 0;
+    margin: 5%;
+    padding: 5%;
 }
 .img-logo{
     margin-top: -7%;
